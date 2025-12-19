@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lok Gitew - Coming Soon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #ff6b35;
+            --deep-teal: #004e64;
+            --cream: #f7f3e9;
+            --charcoal: #1a1a1a;
+            --warm-yellow: #ffb627;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            background: var(--charcoal);
+            color: var(--cream);
+        }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('background.jpg') center/cover no-repeat;
+            filter: brightness(0.3);
+            animation: slowZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); } 
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(0, 78, 100, 0.3) 0%, 
+                rgba(26, 26, 26, 0.4) 50%,
+                rgba(255, 107, 53, 0.2) 100%);
+            mix-blend-mode: multiply;
+        }
+
+        .grain {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            animation: grain 8s steps(10) infinite;
+            z-index: 100;
+        }
+
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            20% { transform: translate(-10%, 5%); }
+            30% { transform: translate(5%, -10%); }
+            40% { transform: translate(-5%, 15%); }
+            50% { transform: translate(-10%, 5%); }
+            60% { transform: translate(15%, 0); }
+            70% { transform: translate(0, 10%); }
+            80% { transform: translate(-15%, 0); }
+            90% { transform: translate(10%, 5%); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 0.5rem 1.5rem;
+            max-width: 1200px;
+            width: 100%;
+            animation: fadeInUp 1.2s ease-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-area {
+            margin-bottom: 0.8rem;
+            animation: fadeInUp 1.2s ease-out 0.2s both;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-image {
+            width: clamp(150px, 25vw, 280px);
+            height: auto;
+            filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.6))
+                    drop-shadow(0 0 60px rgba(126, 126, 126, 0.4))
+                    drop-shadow(0 5px 20px rgba(0, 0, 0, 0.8));
+            transition: filter 0.3s ease;
+        }
+
+        .logo-image:hover {
+            filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.8))
+                    drop-shadow(0 0 80px rgba(138, 138, 138, 0.6))
+                    drop-shadow(0 5px 20px rgba(0, 0, 0, 0.8));
+        }
+
+        .tagline {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            color: var(--warm-yellow);
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .announcement {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: var(--cream);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            animation: fadeInUp 1.2s ease-out 0.4s both;
+        }
+
+        .sub-announcement {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            font-weight: 300;
+            color: var(--cream);
+            opacity: 0.8;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1.2s ease-out 0.6s both;
+        }
+
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: clamp(1rem, 3vw, 3rem);
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 1.2s ease-out 0.8s both;
+        }
+
+        .countdown-block {
+            position: relative;
+            min-width: 100px;
+        }
+
+        .countdown-value {
+            font-family: 'Bebas Neue', cursive;
+            font-size: clamp(3rem, 8vw, 5rem);
+            color: var(--primary-orange);
+            text-shadow: 
+                0 0 20px rgba(255, 107, 53, 0.6),
+                0 5px 10px rgba(0, 0, 0, 0.8);
+            line-height: 1;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-label {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(0.7rem, 1.5vw, 1rem);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--cream);
+            opacity: 0.7;
+        }
+
+        .countdown-separator {
+            font-family: 'Bebas Neue', cursive;
+            font-size: clamp(2rem, 6vw, 4rem);
+            color: var(--warm-yellow);
+            align-self: center;
+            margin-top: -2rem;
+            opacity: 0.5;
+        }
+
+        .location {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-weight: 300;
+            color: var(--cream);
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            animation: fadeInUp 1.2s ease-out 1s both;
+        }
+
+        .location strong {
+            color: var(--warm-yellow);
+            font-weight: 600;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            animation: fadeInUp 1.2s ease-out 1.2s both;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 2rem;
+            background: rgba(247, 243, 233, 0.05);
+            border: 2px solid rgba(247, 243, 233, 0.2);
+            border-radius: 50px;
+            color: var(--cream);
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .social-link:hover {
+            background: rgba(255, 107, 53, 0.2);
+            border-color: var(--primary-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .decorative-line {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--warm-yellow), transparent);
+            margin: 0.5rem auto;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scaleX(1); }
+            50% { opacity: 1; transform: scaleX(1.2); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .countdown-separator {
+                display: none;
+            }
+            
+            .countdown-container {
+                gap: 1.5rem;
+            }
+
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .social-link {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .logo-area {
+                margin-bottom: 2rem;
+            }
+
+            .sub-announcement {
+                margin-bottom: 3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content {
+                padding: 1.5rem;
+            }
+
+            .countdown-block {
+                min-width: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+    
+    <section class="hero">
+        <div class="content">
+            <div class="logo-area">
+                <img src="logo.svg" alt="Lok Gitew Logo" class="logo-image">
+                <br><br><p class="tagline">Fusion Comfort Food</p>
+            </div>
+            <br>
+            <div class="decorative-line"></div>
+
+            <h2 class="announcement">Soft Launch Coming Soon</h2>
+            <p class="sub-announcement">
+                Rasakan perpaduan sempurna cita rasa Singapura dan Malaysia dengan sentuhan khas Indonesia. Dari Lok-Lok hingga XO fried rice, serta beragam comfort food fusion yang bikin nagih.
+                <br><br><b>Destinasi nongkrong larut malammu yang baru—segera hadir.</b>
+            </p>
+
+
+            <div class="countdown-container" id="countdown">
+                <div class="countdown-block">
+                    <span class="countdown-value" id="days">00</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-separator">:</div>
+                <div class="countdown-block">
+                    <span class="countdown-value" id="hours">00</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-separator">:</div>
+                <div class="countdown-block">
+                    <span class="countdown-value" id="minutes">00</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-separator">:</div>
+                <div class="countdown-block">
+                    <span class="countdown-value" id="seconds">00</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
+            </div>
+
+            <p class="location">
+                <strong>📍 Hampton Promenade M18, Gading Serpong</strong>
+            </p>
+
+            <div class="social-links">
+                <a href="https://instagram.com/lokgitew" target="_blank" rel="noopener" class="social-link">
+                    <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                    @lokgitew
+                </a>
+                <a href="https://tiktok.com/@lokgitew" target="_blank" rel="noopener" class="social-link">
+                    <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                    </svg>
+                    @lokgitew
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Set the launch date - January 5, 2026
+        const launchDate = new Date('2026-01-05T00:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+
+            // Calculate time units
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Update the DOM
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+            // If countdown is finished
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = '<h2 style="font-size: 3rem; color: var(--primary-orange);">WE\'RE OPEN!</h2>';
+            }
+        }
+
+        // Update countdown immediately and then every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
