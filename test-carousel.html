@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.gallery-carousel-wrapper {
+    position: relative;
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 80px;
+}
+.gallery-carousel {
+    overflow: hidden;
+    border-radius: 20px;
+    border: 3px solid white;
+}
+.gallery-track {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+.gallery-slide {
+    min-width: 100%;
+    height: 500px;
+}
+.gallery-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 10;
+}
+.gallery-nav.prev { left: 0; }
+.gallery-nav.next { right: 0; }
+.gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+.gallery-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    border: 2px solid white;
+    cursor: pointer;
+}
+.gallery-dot.active {
+    background: white;
+}
+</style>
+</head>
+<body style="background: orange; padding: 50px;">
+<div class="gallery-carousel-wrapper">
+    <button class="gallery-nav prev" onclick="moveGallery(-1)">‹</button>
+    <div class="gallery-carousel">
+        <div class="gallery-track" id="galleryTrack">
+            <div class="gallery-slide"><img src="images/loklok-platter.jpg"></div>
+            <div class="gallery-slide"><img src="images/rice-bowl-top.jpg"></div>
+            <div class="gallery-slide"><img src="images/oreo-shake.jpg"></div>
+        </div>
+    </div>
+    <button class="gallery-nav next" onclick="moveGallery(1)">›</button>
+</div>
+<div class="gallery-dots" id="galleryDots"></div>
+
+<script>
+let currentSlide = 0;
+const totalSlides = 3;
+
+function init() {
+    const dotsContainer = document.getElementById('galleryDots');
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    }
+}
+
+function updateCarousel() {
+    const track = document.getElementById('galleryTrack');
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    
+    document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+    });
+}
+
+function moveGallery(dir) {
+    currentSlide = (currentSlide + dir + totalSlides) % totalSlides;
+    updateCarousel();
+}
+
+function goToSlide(i) {
+    currentSlide = i;
+    updateCarousel();
+}
+
+window.onload = init;
+</script>
+</body>
+</html>

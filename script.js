@@ -4,8 +4,9 @@ const totalGallerySlides = 6;
 
 function initGalleryCarousel() {
     // Create dots
-    const dotsContainer = document.querySelector('.gallery-dots');
+    const dotsContainer = document.getElementById('galleryDots');
     if (dotsContainer) {
+        dotsContainer.innerHTML = ''; // Clear any existing dots
         for (let i = 0; i < totalGallerySlides; i++) {
             const dot = document.createElement('div');
             dot.className = 'gallery-dot';
@@ -17,7 +18,7 @@ function initGalleryCarousel() {
 }
 
 function updateGalleryCarousel() {
-    const track = document.querySelector('.gallery-track');
+    const track = document.getElementById('galleryTrack');
     if (track) {
         track.style.transform = `translateX(-${currentGallerySlide * 100}%)`;
     }
@@ -47,10 +48,12 @@ function goToGallerySlide(index) {
     updateGalleryCarousel();
 }
 
-// Initialize gallery carousel when page loads
-window.addEventListener('load', () => {
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGalleryCarousel);
+} else {
     initGalleryCarousel();
-});
+}
 
 function toggleMenu() {
     const navLinks = document.getElementById('navLinks');
