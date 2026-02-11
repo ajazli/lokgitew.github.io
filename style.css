@@ -373,11 +373,100 @@ nav {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     transition: transform 0.5s;
+    display: block;
 }
 
 .gallery-item:hover img {
     transform: scale(1.15);
+}
+
+/* Mobile Carousel - Hidden by default */
+.gallery-carousel {
+    display: none;
+    margin-top: 3rem;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.carousel-track {
+    display: flex;
+    overflow: hidden;
+    border-radius: 20px;
+    border: 3px solid var(--white);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.carousel-slide {
+    min-width: 100%;
+    height: 400px;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary-orange);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.carousel-btn:hover {
+    background: var(--white);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid var(--white);
+}
+
+.carousel-dot.active {
+    background: var(--white);
+    transform: scale(1.2);
 }
 
 /* Instagram Section */
@@ -581,16 +670,29 @@ footer {
         padding: 1.2rem 2rem;
     }
 
+    .hero-content {
+        padding: 2rem 1.5rem;
+        max-width: 90%;
+    }
+
     .hero-logo {
-        width: 200px;
+        width: 150px;
+        margin-bottom: 1.5rem;
     }
 
     .hero-subtitle {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
     }
 
     .hero p {
-        font-size: 1rem;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cta-button {
+        padding: 0.9rem 2rem;
+        font-size: 1.2rem;
     }
 
     .about-content,
@@ -599,10 +701,139 @@ footer {
     }
 
     .section-title {
-        font-size: 3rem;
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .about-text h3 {
+        font-size: 2rem;
+    }
+
+    .about-text p {
+        font-size: 0.95rem;
+    }
+
+    .about-image img {
+        height: 300px;
+    }
+
+    .feature-card {
+        padding: 2rem;
+    }
+
+    .feature-card h3 {
+        font-size: 1.7rem;
+    }
+
+    .feature-card p {
+        font-size: 0.95rem;
+    }
+
+    .gallery-item {
+        height: 280px;
+    }
+
+    /* Show carousel on mobile, hide grid */
+    .gallery-grid {
+        display: none;
+    }
+
+    .gallery-carousel {
+        display: block;
+    }
+
+    .carousel-slide {
+        height: 350px;
+    }
+
+    .carousel-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+
+    .location-info {
+        padding: 2rem;
+    }
+
+    .info-text p {
+        font-size: 0.95rem;
     }
 
     .logo img {
         height: 50px;
+    }
+
+    .about,
+    .features,
+    .gallery,
+    .location,
+    .instagram-section {
+        padding: 3rem 4%;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content {
+        padding: 1.5rem 1rem;
+        border-width: 2px;
+    }
+
+    .hero-logo {
+        width: 130px;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .hero p {
+        font-size: 0.85rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .cta-button {
+        padding: 0.8rem 1.8rem;
+        font-size: 1.1rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .about-text h3 {
+        font-size: 1.7rem;
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+    }
+
+    .feature-card h3 {
+        font-size: 1.5rem;
+    }
+
+    .gallery-item {
+        height: 250px;
+    }
+
+    .carousel-slide {
+        height: 300px;
+    }
+
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
+    .carousel-btn.prev {
+        left: 5px;
+    }
+
+    .carousel-btn.next {
+        right: 5px;
     }
 }

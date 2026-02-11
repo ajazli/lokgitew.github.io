@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
-    <link rel="icon" type="image/png" href="images/logo.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -36,8 +35,8 @@
     <section class="hero" id="home">
         <div class="hero-content">
             <img src="images/logo.png" alt="Lok Gitew Logo" class="hero-logo">
-            <p style="font-size: 2rem; font-weight: bold; color: var(--tangerine)">Get Poking Good!</p>
-            <p>Experience authentic street food flavors from Singapore and Malaysia with an Indonesian twist</p>
+            <p class="hero-subtitle">Singaporean & Malaysian Street Food</p>
+            <p>Experience authentic street food flavors with a modern twist</p>
             <p style="font-size: 1rem; margin-top: -1rem; color: var(--tangerine); font-weight: 600;">📍 Hampton Promenade, Serpong | 🕒 Sun-Thu: 12PM-10PM, Fri-Sat: 2PM-11PM</p>
             <a href="#location" class="cta-button">Visit Us</a>
         </div>
@@ -55,7 +54,7 @@
                     <p>Every dish is freshly prepared to order, ensuring you get the best quality and taste every single time.</p>
                 </div>
                 <div class="about-image">
-                    <img src="images/loklok-platter.jpg" alt="LokLok Platter" style="display:block; object-position: center;">
+                    <img src="images/loklok-platter.jpg" alt="LokLok Platter">
                 </div>
             </div>
         </div>
@@ -89,6 +88,8 @@
     <section class="gallery" id="gallery">
         <div class="section-container">
             <h2 class="section-title" style="color: var(--white);">Gallery</h2>
+            
+            <!-- Desktop Grid View -->
             <div class="gallery-grid">
                 <div class="gallery-item">
                     <img src="images/loklok-platter.jpg" alt="LokLok Platter">
@@ -102,6 +103,41 @@
                 <div class="gallery-item">
                     <img src="images/loklok-sharing.jpg" alt="Sharing Experience">
                 </div>
+                <div class="gallery-item">
+                    <img src="images/rice-bowl-close.jpg" alt="Fusion Bowl">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/loklok-platter.jpg" alt="LokLok Selection">
+                </div>
+            </div>
+
+            <!-- Mobile Carousel View -->
+            <div class="gallery-carousel">
+                <div class="carousel-container">
+                    <button class="carousel-btn prev" onclick="moveCarousel(-1)">&lt;</button>
+                    <div class="carousel-track">
+                        <div class="carousel-slide">
+                            <img src="images/loklok-platter.jpg" alt="LokLok Platter">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/rice-bowl-top.jpg" alt="Rice Bowl">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/oreo-shake.jpg" alt="Oreo Shake">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/loklok-sharing.jpg" alt="Sharing Experience">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/rice-bowl-close.jpg" alt="Fusion Bowl">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/loklok-platter.jpg" alt="LokLok Selection">
+                        </div>
+                    </div>
+                    <button class="carousel-btn next" onclick="moveCarousel(1)">&gt;</button>
+                </div>
+                <div class="carousel-dots"></div>
             </div>
         </div>
     </section>
