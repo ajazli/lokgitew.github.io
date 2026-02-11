@@ -1,6 +1,6 @@
 // Gallery Carousel functionality
 let currentGallerySlide = 0;
-const totalGallerySlides = 6;
+const totalGallerySlides = 5;
 
 function initGalleryCarousel() {
     // Create dots
