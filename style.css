@@ -124,8 +124,9 @@ nav {
     background: linear-gradient(rgba(26, 26, 26, 0.5), rgba(255, 107, 53, 0.3)), 
                 url('images/storefront.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     background-attachment: fixed;
+    background-repeat: no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -632,6 +633,13 @@ footer {
         max-width: 90%;
     }
 
+    .hero {
+        background-attachment: scroll;
+        background-size: auto 100%;
+        background-position: center center;
+        min-height: 100vh;
+    }
+
     .hero-logo {
         width: 150px;
         margin-bottom: 1.5rem;
@@ -732,6 +740,13 @@ footer {
     .hero-content {
         padding: 1.5rem 1rem;
         border-width: 2px;
+    }
+
+    .hero {
+        background-attachment: scroll;
+        background-size: auto 100%;
+        background-position: 40% center;
+        min-height: 100vh;
     }
 
     .hero-logo {
