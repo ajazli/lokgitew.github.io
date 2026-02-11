@@ -689,13 +689,27 @@ footer {
         font-size: 0.95rem;
     }
 
+    .gallery {
+        padding: 3rem 4%;
+    }
+
     .gallery-slide {
         height: 350px;
+        width: 100%;
     }
 
     .gallery-carousel-wrapper {
-        max-width: 95%;
+        max-width: 100%;
         padding: 0 50px;
+        margin: 2rem auto 0;
+    }
+
+    .gallery-carousel {
+        width: 100%;
+    }
+
+    .gallery-track {
+        width: 100%;
     }
 
     .gallery-nav {
@@ -786,12 +800,23 @@ footer {
         font-size: 1.5rem;
     }
 
+    .gallery {
+        padding: 3rem 3%;
+    }
+
     .gallery-slide {
-        height: 300px;
+        height: 280px;
+        width: 100%;
     }
 
     .gallery-carousel-wrapper {
+        max-width: 100%;
         padding: 0 45px;
+        margin: 2rem auto 0;
+    }
+
+    .gallery-carousel {
+        width: 100%;
     }
 
     .gallery-nav {
