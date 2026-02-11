@@ -53,9 +53,6 @@
                     <p>Our concept takes traditional favorites from the streets of Singapore and Malaysia and serves them with creative twists, all in a cozy, welcoming atmosphere. Whether you're dining in or grabbing takeaway, we've got you covered with authentic flavors and quality ingredients.</p>
                     <p>Every dish is freshly prepared to order, ensuring you get the best quality and taste every single time.</p>
                 </div>
-                <div class="about-image">
-                    <img src="images/loklok-platter.jpg" alt="LokLok Platter">
-                </div>
             </div>
         </div>
     </section>
@@ -88,26 +85,33 @@
     <section class="gallery" id="gallery">
         <div class="section-container">
             <h2 class="section-title" style="color: var(--white);">Gallery</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="images/loklok-platter.jpg" alt="LokLok Platter">
+            <div class="gallery-carousel-wrapper">
+                <button class="gallery-nav prev" onclick="moveGallery(-1)">‹</button>
+                <div class="gallery-carousel">
+                    <div class="gallery-track">
+                        <div class="gallery-slide">
+                            <img src="images/loklok-platter.jpg" alt="LokLok Platter">
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="images/rice-bowl-top.jpg" alt="Rice Bowl">
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="images/oreo-shake.jpg" alt="Oreo Shake">
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="images/loklok-sharing.jpg" alt="Sharing Experience">
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="images/rice-bowl-close.jpg" alt="Fusion Bowl">
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="images/storefront.jpg" alt="Lok Gitew Storefront">
+                        </div>
+                    </div>
                 </div>
-                <div class="gallery-item">
-                    <img src="images/rice-bowl-top.jpg" alt="Rice Bowl">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/oreo-shake.jpg" alt="Oreo Shake">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/loklok-sharing.jpg" alt="Sharing Experience">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/rice-bowl-close.jpg" alt="Fusion Bowl">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/loklok-platter.jpg" alt="LokLok Selection">
-                </div>
+                <button class="gallery-nav next" onclick="moveGallery(1)">›</button>
             </div>
+            <div class="gallery-dots"></div>
         </div>
     </section>
 

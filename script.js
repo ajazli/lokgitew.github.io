@@ -1,3 +1,57 @@
+// Gallery Carousel functionality
+let currentGallerySlide = 0;
+const totalGallerySlides = 6;
+
+function initGalleryCarousel() {
+    // Create dots
+    const dotsContainer = document.querySelector('.gallery-dots');
+    if (dotsContainer) {
+        for (let i = 0; i < totalGallerySlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'gallery-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.onclick = () => goToGallerySlide(i);
+            dotsContainer.appendChild(dot);
+        }
+    }
+}
+
+function updateGalleryCarousel() {
+    const track = document.querySelector('.gallery-track');
+    if (track) {
+        track.style.transform = `translateX(-${currentGallerySlide * 100}%)`;
+    }
+    
+    // Update dots
+    const dots = document.querySelectorAll('.gallery-dot');
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentGallerySlide);
+    });
+}
+
+function moveGallery(direction) {
+    currentGallerySlide += direction;
+    
+    // Loop around
+    if (currentGallerySlide < 0) {
+        currentGallerySlide = totalGallerySlides - 1;
+    } else if (currentGallerySlide >= totalGallerySlides) {
+        currentGallerySlide = 0;
+    }
+    
+    updateGalleryCarousel();
+}
+
+function goToGallerySlide(index) {
+    currentGallerySlide = index;
+    updateGalleryCarousel();
+}
+
+// Initialize gallery carousel when page loads
+window.addEventListener('load', () => {
+    initGalleryCarousel();
+});
+
 function toggleMenu() {
     const navLinks = document.getElementById('navLinks');
     navLinks.classList.toggle('active');
