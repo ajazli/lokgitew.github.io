@@ -218,7 +218,7 @@ nav {
 
 /* About Section */
 .about {
-    padding: 5rem 5%;
+    padding: 4rem 5%;
     background: var(--white);
 }
 
@@ -231,7 +231,7 @@ nav {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 4rem;
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     color: var(--black);
     letter-spacing: 5px;
     position: relative;
@@ -265,8 +265,8 @@ nav {
 
 .about-text p {
     font-size: 1.05rem;
-    line-height: 1.9;
-    margin-bottom: 1.5rem;
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
     color: var(--gray);
     font-weight: 400;
 }
@@ -277,7 +277,7 @@ nav {
 
 /* Features */
 .features {
-    padding: 5rem 5%;
+    padding: 4rem 5%;
     background: var(--black);
     color: var(--white);
 }
@@ -325,7 +325,7 @@ nav {
 
 /* Gallery Carousel */
 .gallery {
-    padding: 5rem 5%;
+    padding: 4rem 5%;
     background: linear-gradient(135deg, var(--primary-orange) 0%, var(--tangerine) 100%);
     color: var(--white);
 }
@@ -333,7 +333,8 @@ nav {
 .gallery-carousel-wrapper {
     position: relative;
     max-width: 900px;
-    margin: 3rem auto 0;
+    margin: 2rem auto 0;
+    padding: 0 60px;
 }
 
 .gallery-carousel {
@@ -341,16 +342,19 @@ nav {
     border-radius: 20px;
     border: 3px solid var(--white);
     box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    position: relative;
 }
 
 .gallery-track {
     display: flex;
     transition: transform 0.5s ease-in-out;
+    will-change: transform;
 }
 
 .gallery-slide {
     min-width: 100%;
-    height: 400px;
+    flex-shrink: 0;
+    height: 450px;
 }
 
 .gallery-slide img {
@@ -368,8 +372,8 @@ nav {
     background: rgba(255, 255, 255, 0.95);
     color: var(--primary-orange);
     border: none;
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     font-size: 2rem;
     font-weight: bold;
@@ -389,11 +393,11 @@ nav {
 }
 
 .gallery-nav.prev {
-    left: -25px;
+    left: 0;
 }
 
 .gallery-nav.next {
-    right: -25px;
+    right: 0;
 }
 
 .gallery-dots {
