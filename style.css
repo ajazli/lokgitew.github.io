@@ -690,11 +690,12 @@ footer {
     }
 
     .gallery-slide {
-        height: 300px;
+        height: 350px;
     }
 
     .gallery-carousel-wrapper {
-        max-width: 90%;
+        max-width: 95%;
+        padding: 0 50px;
     }
 
     .gallery-nav {
@@ -704,11 +705,11 @@ footer {
     }
 
     .gallery-nav.prev {
-        left: -20px;
+        left: 0;
     }
 
     .gallery-nav.next {
-        right: -20px;
+        right: 0;
     }
 
     .location-info {
@@ -786,21 +787,25 @@ footer {
     }
 
     .gallery-slide {
-        height: 250px;
+        height: 300px;
+    }
+
+    .gallery-carousel-wrapper {
+        padding: 0 45px;
     }
 
     .gallery-nav {
         width: 40px;
         height: 40px;
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
 
     .gallery-nav.prev {
-        left: -15px;
+        left: 0;
     }
 
     .gallery-nav.next {
-        right: -15px;
+        right: 0;
     }
 
     .gallery-carousel {
