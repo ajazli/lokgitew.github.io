@@ -204,12 +204,12 @@
                                 <!-- Hidden value field used by form validation -->
                                 <input type="hidden" id="resDate">
                                 <!-- Calendar trigger button -->
-                                <button type="button" id="resDateBtn" class="res-date-btn" onclick="toggleCalendar()">
+                                <button type="button" id="resDateBtn" class="res-date-btn" onclick="toggleCalendar(event)">
                                     <span id="resDateBtnText">Select a date</span>
                                     <span class="res-date-chevron">▾</span>
                                 </button>
                                 <!-- Custom calendar dropdown -->
-                                <div id="resCalendar" class="res-calendar" style="display:none">
+                                <div id="resCalendar" class="res-calendar" style="display:none" onclick="event.stopPropagation()">
                                     <div class="res-cal-header">
                                         <button type="button" class="res-cal-nav" onclick="shiftCalMonth(-1)">‹</button>
                                         <span id="resCalMonthLabel" class="res-cal-month"></span>
@@ -379,4 +379,11 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p
+            <p&copy; 2025 Lok Gitew. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
