@@ -345,7 +345,7 @@ async function loadTimeSlots(dateStr) {
                 <div class="slot-bar" style="width:${fillPct}%;background:${barColor}"></div>
             </div>
             <span class="slot-avail" style="color:${isFull ? '#e53e3e' : barColor}">
-                ${isFull ? 'Full' : paxLeft + ' spots left'}
+                ${isFull ? 'Full' : paxLeft + ' pax left'}
             </span>`;
 
         btn.onclick = () => selectSlot(slotKey, btn);
@@ -454,6 +454,26 @@ function submitReservation() {
         occasion: document.getElementById('resOccasion').value,
         requests: document.getElementById('resRequests').value.trim(),
     };
+
+    // Check that the selected slot still has enough capacity for the requested pax
+    const paxNum = data.pax === '10+' ? 10 : parseInt(data.pax) || 1;
+    const selectedSlotBtn = document.querySelector(`.res-slot[data-slot="${data.time}"]`);
+    if (selectedSlotBtn) {
+        const availText = selectedSlotBtn.querySelector('.slot-avail')?.textContent || '';
+        const match     = availText.match(/(\d+)\s*pax left/);
+        if (match) {
+            const paxLeft = parseInt(match[1]);
+            if (paxNum > paxLeft) {
+                errBox.textContent   = `⚠  Only ${paxLeft} pax left for that slot. Please choose a different time or reduce your group size.`;
+                errBox.style.display = 'flex';
+                errBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                submitBtn.disabled    = false;
+                btnText.style.display = 'inline';
+                loader.style.display  = 'none';
+                return;
+            }
+        }
+    }
 
     saveReservation(data).then(() => {
         showReservationSuccess(data);
