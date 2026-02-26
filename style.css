@@ -852,7 +852,6 @@ footer {
     padding: 5rem 5%;
     background: var(--black);
     position: relative;
-    overflow: hidden;
 }
 
 /* Subtle noise texture overlay */
@@ -991,6 +990,7 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 0.42rem;
+    position: relative;
 }
 
 .res-form-full {
