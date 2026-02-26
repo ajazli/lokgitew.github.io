@@ -26,8 +26,8 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#reservations">Reserve</a></li>
                 <li><a href="#location">Location</a></li>
+                <li><a href="#reservations">Reserve</a></li>
             </ul>
         </div>
     </nav>
@@ -198,17 +198,40 @@
                                 </div>
                             </div>
 
-                            <div class="res-form-row">
-                                <div class="res-form-group">
-                                    <label for="resDate">Date <span class="res-req">*</span></label>
-                                    <input type="date" id="resDate" onchange="updateTimeSlots()">
+                            <!-- Date + Time row: full-width calendar then slot grid -->
+                            <div class="res-form-group res-form-full" style="margin-bottom:1.2rem;">
+                                <label>Date <span class="res-req">*</span></label>
+                                <!-- Hidden value field used by form validation -->
+                                <input type="hidden" id="resDate">
+                                <!-- Calendar trigger button -->
+                                <button type="button" id="resDateBtn" class="res-date-btn" onclick="toggleCalendar()">
+                                    <span id="resDateBtnText">Select a date</span>
+                                    <span class="res-date-chevron">▾</span>
+                                </button>
+                                <!-- Custom calendar dropdown -->
+                                <div id="resCalendar" class="res-calendar" style="display:none">
+                                    <div class="res-cal-header">
+                                        <button type="button" class="res-cal-nav" onclick="shiftCalMonth(-1)">‹</button>
+                                        <span id="resCalMonthLabel" class="res-cal-month"></span>
+                                        <button type="button" class="res-cal-nav" onclick="shiftCalMonth(1)">›</button>
+                                    </div>
+                                    <div class="res-cal-weekdays">
+                                        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span>
+                                        <span class="res-cal-thu">Th</span>
+                                        <span>Fr</span><span>Sa</span>
+                                    </div>
+                                    <div id="resCalGrid" class="res-cal-grid"></div>
+                                    <div class="res-cal-legend">
+                                        <span class="res-cal-legend-closed">● Closed</span>
+                                        <span style="color:var(--gray);font-size:.78rem">● Past / Unavailable</span>
+                                    </div>
                                 </div>
-                                <div class="res-form-group">
-                                    <label for="resTime">Time <span class="res-req">*</span></label>
-                                    <select id="resTime">
-                                        <option value="" disabled selected>Pick a date first</option>
-                                    </select>
-                                </div>
+                            </div>
+
+                            <div class="res-form-group res-form-full" id="resTimeGroup" style="display:none;margin-bottom:1.4rem;">
+                                <label>Time <span class="res-req">*</span></label>
+                                <input type="hidden" id="resTime">
+                                <div id="resTimeSlots" class="res-time-slots"></div>
                             </div>
 
                             <div class="res-form-row">
