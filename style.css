@@ -841,3 +841,419 @@ footer {
         margin-top: 20px;
     }
 }
+
+
+/* ══════════════════════════════════════════════════════
+   RESERVATIONS SECTION
+   Sits on the dark background — matches Features section
+══════════════════════════════════════════════════════ */
+
+.reservations {
+    padding: 5rem 5%;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle noise texture overlay */
+.reservations::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(ellipse 80% 60% at 10% 50%, rgba(255,107,53,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 90% 20%, rgba(255,159,28,0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.res-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    position: relative;
+}
+
+.res-title {
+    color: var(--white) !important;
+}
+
+.res-tagline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 4px;
+    color: var(--tangerine);
+    margin-top: -0.8rem;
+    opacity: 0.85;
+}
+
+/* ── Layout ─────────────────────────────────────────── */
+.reservation-layout {
+    display: grid;
+    grid-template-columns: 310px 1fr;
+    gap: 2.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: start;
+    position: relative;
+}
+
+/* ── Info Panel ─────────────────────────────────────── */
+.reservation-info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.res-info-block {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,159,28,0.18);
+    border-radius: 16px;
+    padding: 1.2rem 1.4rem;
+    transition: border-color 0.3s, background 0.3s;
+}
+
+.res-info-block:hover,
+.res-info-highlight {
+    border-color: rgba(255,159,28,0.45);
+    background: rgba(255,159,28,0.06);
+}
+
+.res-info-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+    line-height: 1;
+}
+
+.res-info-text h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 2px;
+    color: var(--tangerine);
+    margin-bottom: 0.35rem;
+}
+
+.res-info-text p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.res-info-text a {
+    color: var(--primary-orange);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.res-info-text a:hover { color: var(--tangerine); }
+
+.res-info-note {
+    font-size: 0.78rem !important;
+    color: rgba(255,255,255,0.35) !important;
+    font-style: italic;
+    margin-top: 0.3rem !important;
+}
+
+/* ── Form Card ──────────────────────────────────────── */
+.reservation-form-card {
+    background: var(--white);
+    border-radius: 22px;
+    padding: 2.8rem 2.5rem;
+    border: 3px solid var(--tangerine);
+    box-shadow: 0 20px 60px rgba(255,107,53,0.18);
+    position: relative;
+}
+
+/* Orange corner accent */
+.reservation-form-card::before {
+    content: '';
+    position: absolute;
+    top: -3px; right: -3px;
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, var(--tangerine), var(--primary-orange));
+    border-radius: 0 20px 0 80px;
+    opacity: 0.15;
+}
+
+/* ── Form rows / groups ─────────────────────────────── */
+.res-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.res-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.42rem;
+}
+
+.res-form-full {
+    margin-bottom: 1.4rem;
+}
+
+.res-form-group label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1.5px;
+    color: var(--black);
+    user-select: none;
+}
+
+.res-req { color: var(--primary-orange); }
+
+/* Inputs, selects, textarea */
+.reservation-form-card input[type="text"],
+.reservation-form-card input[type="tel"],
+.reservation-form-card input[type="date"],
+.reservation-form-card select,
+.reservation-form-card textarea {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e4e4e4;
+    border-radius: 11px;
+    background: var(--off-white);
+    color: var(--black);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.reservation-form-card input:focus,
+.reservation-form-card select:focus,
+.reservation-form-card textarea:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255,107,53,0.13);
+    background: var(--white);
+}
+
+/* Custom select arrow */
+.reservation-form-card select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23FF9F1C' stroke-width='2.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.8rem;
+    cursor: pointer;
+}
+
+/* Date picker icon tint */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.55;
+    filter: invert(55%) sepia(90%) saturate(600%) hue-rotate(340deg);
+}
+
+.reservation-form-card textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+}
+
+/* Invalid state */
+.reservation-form-card input.res-invalid,
+.reservation-form-card select.res-invalid {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 3px rgba(229,62,62,0.12);
+    background: #fff5f5;
+}
+
+/* ── Error box ───────────────────────────────────────── */
+.res-error-box {
+    background: #fff5f5;
+    border: 2px solid #fc8181;
+    border-radius: 11px;
+    padding: 0.8rem 1.1rem;
+    color: #c53030;
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ── Submit button ───────────────────────────────────── */
+#resSubmitBtn {
+    font-family: 'Bebas Neue', sans-serif;
+    width: 100%;
+    padding: 1.1rem 2rem;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--tangerine) 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 13px;
+    font-size: 1.55rem;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s, opacity 0.2s;
+    position: relative;
+    overflow: hidden;
+    display: block;
+}
+
+#resSubmitBtn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0));
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+
+#resSubmitBtn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(255,107,53,0.5);
+}
+
+#resSubmitBtn:hover::after { opacity: 1; }
+#resSubmitBtn:active { transform: translateY(-1px); }
+
+#resSubmitBtn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ── Success screen ─────────────────────────────────── */
+.res-success {
+    text-align: center;
+    padding: 1.5rem 1rem 1rem;
+    animation: resFadeUp 0.5s ease-out;
+}
+
+@keyframes resFadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.res-success-burst {
+    font-size: 4.5rem;
+    margin-bottom: 0.8rem;
+    animation: resBounce 0.7s cubic-bezier(0.34,1.56,0.64,1);
+    display: block;
+}
+
+@keyframes resBounce {
+    0%   { transform: scale(0.3); opacity: 0; }
+    70%  { transform: scale(1.2); }
+    100% { transform: scale(1);   opacity: 1; }
+}
+
+.res-success h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--primary-orange);
+    letter-spacing: 4px;
+    margin-bottom: 1.2rem;
+}
+
+.res-success-card {
+    background: var(--off-white);
+    border: 2px solid var(--tangerine);
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.2rem;
+    text-align: left;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--black);
+}
+
+.res-success-card .sc-row {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+}
+
+.res-success-card .sc-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    color: var(--gray);
+    min-width: 80px;
+}
+
+.res-success-card .sc-val {
+    font-weight: 600;
+    color: var(--black);
+}
+
+.res-success-note {
+    font-size: 0.88rem;
+    color: var(--gray);
+    margin-bottom: 0 !important;
+    line-height: 1.7;
+}
+
+.res-new-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    margin-top: 1.5rem;
+    padding: 0.75rem 2.5rem;
+    background: transparent;
+    border: 3px solid var(--primary-orange);
+    color: var(--primary-orange);
+    border-radius: 11px;
+    font-size: 1.25rem;
+    letter-spacing: 2.5px;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-block;
+}
+
+.res-new-btn:hover {
+    background: var(--primary-orange);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 968px) {
+    .reservation-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .reservation-info-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 680px) {
+    .reservation-info-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .reservation-form-card {
+        padding: 2rem 1.4rem;
+        border-radius: 16px;
+    }
+
+    .res-form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .reservations {
+        padding: 3rem 4%;
+    }
+
+    .reservation-form-card {
+        padding: 1.6rem 1.1rem;
+    }
+
+    .res-success h3 { font-size: 2.2rem; }
+}

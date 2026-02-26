@@ -27,6 +27,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#gallery">Gallery</a></li>
                 <li><a href="#location">Location</a></li>
+                <li><a href="#reservations">Reserve</a></li>
             </ul>
         </div>
     </nav>
@@ -128,6 +129,149 @@
         </div>
     </section>
 
+
+    <!-- Reservation Section -->
+    <section class="reservations" id="reservations">
+        <div class="section-container">
+
+            <div class="res-header">
+                <h2 class="section-title res-title">Reserve a Table</h2>
+                <p class="res-tagline">Book your seat. We'll handle the rest.</p>
+            </div>
+
+            <div class="reservation-layout">
+
+                <!-- Left: info panel -->
+                <div class="reservation-info-panel">
+
+                    <div class="res-info-block">
+                        <div class="res-info-icon">🕒</div>
+                        <div class="res-info-text">
+                            <h4>Opening Hours</h4>
+                            <p>Sun – Thu &nbsp;&nbsp;12:00 PM – 10:00 PM</p>
+                            <p>Fri – Sat &nbsp;&nbsp;&nbsp;2:00 PM – 11:00 PM</p>
+                            <p class="res-info-note">Last booking 1 hr before closing</p>
+                        </div>
+                    </div>
+
+                    <div class="res-info-block">
+                        <div class="res-info-icon">📍</div>
+                        <div class="res-info-text">
+                            <h4>Where to Find Us</h4>
+                            <p>Ruko Hampton Promenade<br>Blk. M No.18, Serpong, Tangerang</p>
+                        </div>
+                    </div>
+
+                    <div class="res-info-block">
+                        <div class="res-info-icon">💬</div>
+                        <div class="res-info-text">
+                            <h4>Prefer WhatsApp?</h4>
+                            <p><a href="https://wa.me/6285122333769" target="_blank">+62 851-2233-3769</a></p>
+                            <p class="res-info-note">We reply within 1 hour</p>
+                        </div>
+                    </div>
+
+                    <div class="res-info-block res-info-highlight">
+                        <div class="res-info-icon">ℹ️</div>
+                        <div class="res-info-text">
+                            <h4>Good to Know</h4>
+                            <p>Walk-ins always welcome.<br>Tables held 15 min after your booking.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right: form card -->
+                <div class="reservation-form-card">
+
+                    <div id="reservationFormWrap">
+                        <form id="reservationForm" novalidate>
+
+                            <div class="res-form-row">
+                                <div class="res-form-group">
+                                    <label for="resName">Full Name <span class="res-req">*</span></label>
+                                    <input type="text" id="resName" placeholder="Your name" autocomplete="name">
+                                </div>
+                                <div class="res-form-group">
+                                    <label for="resPhone">WhatsApp / Phone <span class="res-req">*</span></label>
+                                    <input type="tel" id="resPhone" placeholder="+62 8xx xxxx xxxx" autocomplete="tel">
+                                </div>
+                            </div>
+
+                            <div class="res-form-row">
+                                <div class="res-form-group">
+                                    <label for="resDate">Date <span class="res-req">*</span></label>
+                                    <input type="date" id="resDate" onchange="updateTimeSlots()">
+                                </div>
+                                <div class="res-form-group">
+                                    <label for="resTime">Time <span class="res-req">*</span></label>
+                                    <select id="resTime">
+                                        <option value="" disabled selected>Pick a date first</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="res-form-row">
+                                <div class="res-form-group">
+                                    <label for="resPax">Number of Guests <span class="res-req">*</span></label>
+                                    <select id="resPax">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="1">1 person</option>
+                                        <option value="2">2 people</option>
+                                        <option value="3">3 people</option>
+                                        <option value="4">4 people</option>
+                                        <option value="5">5 people</option>
+                                        <option value="6">6 people</option>
+                                        <option value="7">7 people</option>
+                                        <option value="8">8 people</option>
+                                        <option value="9">9 people</option>
+                                        <option value="10+">10 or more</option>
+                                    </select>
+                                </div>
+                                <div class="res-form-group">
+                                    <label for="resOccasion">Occasion</label>
+                                    <select id="resOccasion">
+                                        <option value="">Just dining 🍽️</option>
+                                        <option value="Birthday">Birthday 🎂</option>
+                                        <option value="Anniversary">Anniversary 💑</option>
+                                        <option value="Date Night">Date Night 🌹</option>
+                                        <option value="Business Meal">Business Meal 💼</option>
+                                        <option value="Group Gathering">Group Gathering 🎉</option>
+                                        <option value="Other">Other ✨</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="res-form-group res-form-full">
+                                <label for="resRequests">Special Requests</label>
+                                <textarea id="resRequests" rows="3" placeholder="Dietary needs, seating preferences, decorations, cakes…"></textarea>
+                            </div>
+
+                            <div id="resErrorBox" class="res-error-box" style="display:none"></div>
+
+                            <button type="button" id="resSubmitBtn" onclick="submitReservation()">
+                                <span id="resBtnText">Confirm My Reservation</span>
+                                <span id="resBtnLoader" style="display:none">Sending…</span>
+                            </button>
+
+                        </form>
+                    </div>
+
+                    <!-- Success screen (hidden by default) -->
+                    <div id="reservationSuccess" class="res-success" style="display:none">
+                        <div class="res-success-burst">🎉</div>
+                        <h3>You're on the list!</h3>
+                        <div id="resSuccessCard" class="res-success-card"></div>
+                        <p class="res-success-note">We'll confirm via WhatsApp within 1 hour. Can't wait to see you!</p>
+                        <button class="res-new-btn" onclick="resetReservationForm()">Make Another Booking</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- Location Section -->
     <section class="location" id="location">
         <div class="section-container">
@@ -161,7 +305,7 @@
                         <div class="info-icon">📱</div>
                         <div class="info-text">
                             <h4>Contact</h4>
-                            <p>Phone/WhatsApp: <a href="https://wa.me/6285122333769" target="_blank">+62 851-2233-3769</a><br>Email: <a href="mailto:lokgitew@gmail.com">lokgitew@gmail.com</a></p>
+                            <p>Phone/WhatsApp: <a href="https://wa.me/6285122333769" target="_blank">+62 851-2233-3769</a><br>Email: <a href="/cdn-cgi/l/email-protection#066a696d616f72637146616b676f6a2865696b"><span class="__cf_email__" data-cfemail="197576727e706d7c6e597e74787075377a7674">[email&#160;protected]</span></a></p>
                         </div>
                     </div>
 
@@ -195,6 +339,7 @@
                 <a href="#about">About</a>
                 <a href="#gallery">Gallery</a>
                 <a href="#location">Location</a>
+                <a href="#reservations">Reserve a Table</a>
             </div>
             <div class="footer-section">
                 <h3>Connect With Us</h3>
@@ -211,10 +356,4 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2025 Lok Gitew. All Rights Reserved.</p>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
+            <p
