@@ -153,8 +153,8 @@ function _isThursday(y, m, d) {
     return new Date(y, m, d).getDay() === 4;
 }
 
-// ── Init calendar on page load ─────────────────────────────────────────────────
-(function initCalendar() {
+// ── Init calendar after DOM ready ─────────────────────────────────────────────
+function initCalendar() {
     const today = _today();
     _calYear  = today.y;
     _calMonth = today.m;
@@ -169,9 +169,16 @@ function _isThursday(y, m, d) {
             if (btn) btn.removeAttribute('aria-expanded');
         }
     });
-})();
+}
 
-function toggleCalendar() {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCalendar);
+} else {
+    initCalendar();
+}
+
+function toggleCalendar(e) {
+    if (e) e.stopPropagation();
     const cal = document.getElementById('resCalendar');
     const btn = document.getElementById('resDateBtn');
     if (!cal) return;
