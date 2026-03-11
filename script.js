@@ -49,17 +49,52 @@ function goToGallerySlide(index) {
 }
 
 // Initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGalleryCarousel);
-} else {
+function initAll() {
     initGalleryCarousel();
+    initMenuBook();
 }
 
-function switchMenuTab(btn, category) {
-    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.menu-category').forEach(c => c.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('menu-' + category).classList.add('active');
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+} else {
+    initAll();
+}
+
+// Menu Book / Page Viewer
+let currentMenuPage = 0;
+const totalMenuPages = 10;
+
+function initMenuBook() {
+    const dotsContainer = document.getElementById('menuBookDots');
+    if (!dotsContainer) return;
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < totalMenuPages; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'menu-book-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Go to menu page ' + (i + 1));
+        dot.onclick = () => goToMenuPage(i);
+        dotsContainer.appendChild(dot);
+    }
+}
+
+function updateMenuBook() {
+    const track = document.getElementById('menuBookTrack');
+    if (track) track.style.transform = `translateX(-${currentMenuPage * 100}%)`;
+    const counter = document.getElementById('menuCurrentPage');
+    if (counter) counter.textContent = currentMenuPage + 1;
+    document.querySelectorAll('.menu-book-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentMenuPage);
+    });
+}
+
+function moveMenuPage(dir) {
+    currentMenuPage = Math.max(0, Math.min(totalMenuPages - 1, currentMenuPage + dir));
+    updateMenuBook();
+}
+
+function goToMenuPage(index) {
+    currentMenuPage = index;
+    updateMenuBook();
 }
 
 function toggleMenu() {
