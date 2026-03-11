@@ -997,12 +997,12 @@ footer {
 
 /* ══════════════════════════════════════════════════════
    RESERVATIONS SECTION
-   Sits on the dark background — matches Features section
 ══════════════════════════════════════════════════════ */
 
 .reservations {
     padding: 5rem 5%;
-    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--tangerine) 100%);
+    background-color: #FF6B35;
+    background: linear-gradient(135deg, #FF6B35 0%, #FF9F1C 100%);
     position: relative;
 }
 
@@ -1685,5 +1685,282 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
     .res-calendar {
         max-width: 100%;
+    }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   MENU SECTION
+══════════════════════════════════════════════════════ */
+
+.menu-section {
+    padding: 5rem 5%;
+    background: var(--black);
+    color: var(--white);
+}
+
+.menu-tagline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 4px;
+    color: var(--tangerine);
+    text-align: center;
+    margin-top: -2rem;
+    margin-bottom: 3rem;
+}
+
+/* ── Tabs ─────────────────────────────────────────── */
+.menu-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 3rem;
+}
+
+.menu-tab {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    padding: 0.55rem 1.4rem;
+    border: 2px solid rgba(255,255,255,0.25);
+    border-radius: 50px;
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    transition: all 0.25s;
+}
+
+.menu-tab:hover {
+    border-color: var(--tangerine);
+    color: var(--tangerine);
+}
+
+.menu-tab.active {
+    background: linear-gradient(135deg, var(--primary-orange), var(--tangerine));
+    border-color: transparent;
+    color: var(--white);
+}
+
+/* ── Category panels ─────────────────────────────── */
+.menu-category {
+    display: none;
+}
+
+.menu-category.active {
+    display: block;
+}
+
+/* ── Menu grid ───────────────────────────────────── */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ── Menu item card ──────────────────────────────── */
+.menu-item {
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    position: relative;
+    transition: border-color 0.25s, background 0.25s;
+}
+
+.menu-item:hover {
+    border-color: rgba(255,159,28,0.45);
+    background: rgba(255,255,255,0.09);
+}
+
+.menu-item.featured {
+    border-color: var(--tangerine);
+    background: rgba(255,159,28,0.08);
+}
+
+.menu-badge {
+    position: absolute;
+    top: -10px;
+    left: 1.4rem;
+    background: linear-gradient(135deg, var(--primary-orange), var(--tangerine));
+    color: var(--white);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    padding: 0.2rem 0.75rem;
+    border-radius: 20px;
+}
+
+.menu-item-body {
+    flex: 1;
+}
+
+.menu-item-body h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.35rem;
+}
+
+.menu-item-body p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.menu-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+    color: var(--tangerine);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* ── LokLok Section ──────────────────────────────── */
+.loklok-deal {
+    background: linear-gradient(135deg, var(--primary-orange), var(--tangerine));
+    border-radius: 14px;
+    padding: 1rem 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+}
+
+.loklok-deal-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    background: rgba(255,255,255,0.2);
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    white-space: nowrap;
+    color: var(--white);
+}
+
+.loklok-deal p {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--white);
+    margin: 0;
+}
+
+.loklok-intro {
+    text-align: center;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+}
+
+.loklok-tiers {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.loklok-tier {
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.25s;
+}
+
+.loklok-tier:hover {
+    border-color: rgba(255,159,28,0.4);
+}
+
+.loklok-tier.premium {
+    border-color: rgba(255,159,28,0.35);
+}
+
+.loklok-tier-header {
+    background: rgba(255,255,255,0.08);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1.5px solid rgba(255,255,255,0.08);
+}
+
+.loklok-tier.premium .loklok-tier-header {
+    background: rgba(255,159,28,0.1);
+    border-bottom-color: rgba(255,159,28,0.25);
+}
+
+.loklok-tier-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+}
+
+.loklok-tier-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+    color: var(--tangerine);
+}
+
+.loklok-items {
+    list-style: none;
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.loklok-items li {
+    font-size: 0.83rem;
+    color: rgba(255,255,255,0.8);
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.loklok-items li:last-child {
+    border-bottom: none;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 968px) {
+    .menu-section {
+        padding: 3rem 4%;
+    }
+    .menu-grid {
+        grid-template-columns: 1fr;
+    }
+    .loklok-tiers {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-tabs {
+        gap: 0.4rem;
+    }
+    .menu-tab {
+        font-size: 0.88rem;
+        padding: 0.45rem 1rem;
+    }
+    .loklok-tiers {
+        grid-template-columns: 1fr 1fr;
+    }
+    .loklok-deal {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
     }
 }

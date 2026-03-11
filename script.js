@@ -55,6 +55,13 @@ if (document.readyState === 'loading') {
     initGalleryCarousel();
 }
 
+function switchMenuTab(btn, category) {
+    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.menu-category').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('menu-' + category).classList.add('active');
+}
+
 function toggleMenu() {
     const navLinks = document.getElementById('navLinks');
     navLinks.classList.toggle('active');
