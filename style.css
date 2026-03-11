@@ -1727,11 +1727,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     margin: 0 auto;
 }
 
+/* ── Side-nav layout: [Prev] [Book] [Next] ───────── */
+.menu-book-layout {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
 /* ── The physical book ───────────────────────────── */
 .menu-book-stage {
     position: relative;
-    height: calc(100vh - 260px);
-    max-height: 750px;
+    height: calc(90vh - 234px);
+    max-height: 675px;
     aspect-ratio: 1191 / 1685;
 }
 
@@ -1811,22 +1818,26 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .menu-book-controls {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-top: 1.6rem;
-    padding: 0 2px;
+    justify-content: center;
+    margin-top: 1rem;
 }
 
 .menu-flip-btn {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
     background: var(--black);
     border: 2px solid var(--black);
     color: var(--white);
-    padding: 0.55rem 1.4rem;
-    border-radius: 50px;
+    width: 48px;
+    height: 80px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .menu-flip-btn:hover {
@@ -1873,13 +1884,26 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         padding: 2rem 4%;
     }
     .menu-book-stage {
-        height: calc(100vh - 240px);
+        height: calc(90vh - 220px);
+    }
+    .menu-flip-btn {
+        width: 40px;
+        height: 64px;
+        font-size: 1.5rem;
     }
 }
 
 @media (max-width: 480px) {
     .menu-book-stage {
-        height: calc(100vh - 220px);
+        height: calc(90vh - 200px);
+    }
+    .menu-book-layout {
+        gap: 0.75rem;
+    }
+    .menu-flip-btn {
+        width: 34px;
+        height: 52px;
+        font-size: 1.3rem;
     }
     .menu-book-stage::before {
         right: -5px;

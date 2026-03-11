@@ -176,29 +176,31 @@
             <p class="menu-tagline">Fresh. Bold. Authentic.</p>
 
             <div class="menu-book-container">
-                <!-- The book -->
-                <div class="menu-book-stage">
-                    <div class="menu-book-spine"></div>
-                    <div class="menu-book-viewport">
-                        <div class="menu-book-track" id="menuBookTrack">
-                            <div class="menu-book-slide"><img src="images/menu-page-1.jpg" alt="Menu Page 1"></div>
-                            <div class="menu-book-slide"><img src="images/menu-page-2.jpg" alt="Menu Page 2" loading="lazy"></div>
-                            <div class="menu-book-slide"><img src="images/menu-page-3.jpg" alt="Menu Page 3" loading="lazy"></div>
-                            <div class="menu-book-slide"><img src="images/menu-page-4.jpg" alt="Menu Page 4" loading="lazy"></div>
-                            <div class="menu-book-slide"><img src="images/menu-page-5.jpg" alt="Menu Page 5" loading="lazy"></div>
-                            <div class="menu-book-slide"><img src="images/menu-page-6.jpg" alt="Menu Page 6" loading="lazy"></div>
-                            <div class="menu-book-slide"><img src="images/menu-page-7.jpg" alt="Menu Page 7" loading="lazy"></div>
-                            <div class="menu-book-slide"><img src="images/menu-page-8.jpg" alt="Menu Page 8" loading="lazy"></div>
-                            <div class="menu-book-slide"><img src="images/menu-page-9.jpg" alt="Menu Page 9" loading="lazy"></div>
-                            <div class="menu-book-slide"><img src="images/menu-page-10.jpg" alt="Menu Page 10" loading="lazy"></div>
+                <!-- Book + side buttons -->
+                <div class="menu-book-layout">
+                    <button class="menu-flip-btn" onclick="moveMenuPage(-1)" aria-label="Previous page">&#8249;</button>
+                    <div class="menu-book-stage">
+                        <div class="menu-book-spine"></div>
+                        <div class="menu-book-viewport">
+                            <div class="menu-book-track" id="menuBookTrack">
+                                <div class="menu-book-slide"><img src="images/menu-page-1.jpg" alt="Menu Page 1"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-2.jpg" alt="Menu Page 2" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-3.jpg" alt="Menu Page 3" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-4.jpg" alt="Menu Page 4" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-5.jpg" alt="Menu Page 5" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-6.jpg" alt="Menu Page 6" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-7.jpg" alt="Menu Page 7" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-8.jpg" alt="Menu Page 8" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-9.jpg" alt="Menu Page 9" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-10.jpg" alt="Menu Page 10" loading="lazy"></div>
+                            </div>
                         </div>
                     </div>
+                    <button class="menu-flip-btn" onclick="moveMenuPage(1)" aria-label="Next page">&#8250;</button>
                 </div>
-                <!-- Controls -->
+                <!-- Counter + dots below -->
                 <div class="menu-book-controls">
-                    <button class="menu-flip-btn" onclick="moveMenuPage(-1)">&#8249; Prev</button>
                     <span class="menu-book-counter"><span id="menuCurrentPage">1</span> / 10</span>
-                    <button class="menu-flip-btn" onclick="moveMenuPage(1)">Next &#8250;</button>
                 </div>
                 <div class="menu-book-dots" id="menuBookDots"></div>
             </div>
