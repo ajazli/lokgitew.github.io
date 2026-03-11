@@ -1722,7 +1722,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* ── Book container ──────────────────────────────── */
 .menu-book-container {
-    max-width: 360px;
+    max-width: 450px;
     margin: 0 auto;
 }
 
@@ -1863,7 +1863,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         padding: 3rem 4%;
     }
     .menu-book-container {
-        max-width: 320px;
+        max-width: 400px;
     }
 }
 
