@@ -1701,9 +1701,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 ══════════════════════════════════════════════════════ */
 
 .menu-section {
-    padding: 2.5rem 5%;
+    padding: 2rem 5%;
     background: var(--white);
     color: var(--black);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.menu-section .section-container {
+    width: 100%;
 }
 
 .menu-section .section-title {
@@ -1717,29 +1724,33 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     color: var(--primary-orange);
     text-align: center;
     margin-top: -1.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
 }
 
 /* ── Book container ──────────────────────────────── */
 .menu-book-container {
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
-/* ── Side-nav layout: [Prev] [Book] [Next] ───────── */
+/* ── Desktop layout: [Prev] [Book] [Next] in a row ── */
 .menu-book-layout {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
 }
 
 /* ── The physical book ───────────────────────────── */
 .menu-book-stage {
     position: relative;
-    height: calc(90vh - 234px);
-    max-height: 675px;
+    height: calc(100vh - 270px);
+    max-height: 700px;
     aspect-ratio: 1191 / 1685;
+    flex-shrink: 0;
 }
 
 /* Page stack (pages behind current) */
@@ -1814,23 +1825,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     pointer-events: none;
 }
 
-/* ── Controls below book ─────────────────────────── */
-.menu-book-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1rem;
-}
-
+/* ── Side nav buttons (desktop) ──────────────────── */
 .menu-flip-btn {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 2rem;
     letter-spacing: 1px;
     background: var(--black);
     border: 2px solid var(--black);
     color: var(--white);
-    width: 48px;
-    height: 80px;
+    width: 52px;
+    align-self: stretch;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.25s;
@@ -1843,7 +1847,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .menu-flip-btn:hover {
     background: var(--primary-orange);
     border-color: var(--primary-orange);
-    color: var(--white);
+}
+
+/* ── Counter below ───────────────────────────────── */
+.menu-book-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.8rem;
 }
 
 .menu-book-counter {
@@ -1858,7 +1869,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: flex;
     gap: 0.45rem;
     justify-content: center;
-    margin-top: 1.2rem;
+    margin-top: 0.8rem;
     flex-wrap: wrap;
 }
 
@@ -1878,32 +1889,31 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     transform: scale(1.4);
 }
 
-/* ── Responsive ──────────────────────────────────── */
-@media (max-width: 968px) {
+/* ── Mobile: book on top, buttons below in a row ─── */
+@media (max-width: 768px) {
     .menu-section {
-        padding: 2rem 4%;
-    }
-    .menu-book-stage {
-        height: calc(90vh - 220px);
-    }
-    .menu-flip-btn {
-        width: 40px;
-        height: 64px;
-        font-size: 1.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .menu-book-stage {
-        height: calc(90vh - 200px);
+        min-height: auto;
+        padding: 2.5rem 5%;
     }
     .menu-book-layout {
-        gap: 0.75rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    .menu-book-stage {
+        order: 1;
+        flex: 0 0 100%;
+        height: calc(100vw * 1685 / 1191);
+        max-height: 68vh;
+        aspect-ratio: unset;
     }
     .menu-flip-btn {
-        width: 34px;
-        height: 52px;
-        font-size: 1.3rem;
+        order: 2;
+        align-self: auto;
+        width: auto;
+        height: 44px;
+        padding: 0 1.4rem;
+        font-size: 1.1rem;
+        border-radius: 50px;
     }
     .menu-book-stage::before {
         right: -5px;
@@ -1912,9 +1922,5 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     .menu-book-stage::after {
         right: -9px;
         top: 6px;
-    }
-    .menu-flip-btn {
-        font-size: 0.88rem;
-        padding: 0.45rem 1rem;
     }
 }
