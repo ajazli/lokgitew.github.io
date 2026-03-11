@@ -75,6 +75,23 @@ function initMenuBook() {
         dot.onclick = () => goToMenuPage(i);
         dotsContainer.appendChild(dot);
     }
+
+    // Swipe support for mobile
+    const viewport = document.querySelector('.menu-book-viewport');
+    if (!viewport) return;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    viewport.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    viewport.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+            moveMenuPage(dx < 0 ? 1 : -1);
+        }
+    }, { passive: true });
 }
 
 function updateMenuBook() {
