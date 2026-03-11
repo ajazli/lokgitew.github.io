@@ -283,7 +283,7 @@ nav {
 /* Features */
 .features {
     padding: 4rem 5%;
-    background: var(--black);
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--tangerine) 100%);
     color: var(--white);
 }
 
@@ -331,19 +331,19 @@ nav {
 /* GitewGang Loyalty Section */
 .loyalty {
     padding: 5rem 5%;
-    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--tangerine) 100%);
-    color: var(--white);
+    background: var(--white);
+    color: var(--black);
 }
 
 .loyalty-tagline {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.4rem;
     letter-spacing: 3px;
-    color: var(--white);
+    color: var(--primary-orange);
     text-align: center;
     margin-top: -1rem;
     margin-bottom: 3.5rem;
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 .loyalty-steps {
@@ -418,11 +418,11 @@ nav {
 }
 
 .loyalty-highlight {
-    background: rgba(0,0,0,0.15);
+    background: rgba(255,107,53,0.07);
     border-radius: 24px;
     padding: 3rem 3.5rem;
     text-align: center;
-    border: 2px solid rgba(255,255,255,0.3);
+    border: 2px solid rgba(255,107,53,0.3);
     max-width: 720px;
     margin: 0 auto;
 }
@@ -440,7 +440,7 @@ nav {
 }
 
 .loyalty-highlight p {
-    color: rgba(255,255,255,0.8);
+    color: var(--gray);
     font-size: 1.05rem;
     line-height: 1.8;
     max-width: 520px;
@@ -483,8 +483,12 @@ nav {
 /* Gallery Carousel */
 .gallery {
     padding: 4rem 5%;
-    background: var(--white);
-    color: var(--black);
+    background: var(--black);
+    color: var(--white);
+}
+
+.gallery .section-title {
+    color: var(--white);
 }
 
 .gallery-carousel-wrapper {
@@ -586,7 +590,7 @@ nav {
 /* Instagram Section */
 .instagram-section {
     padding: 5rem 5%;
-    background: var(--black);
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--tangerine) 100%);
 }
 
 /* Location Section */
@@ -1005,8 +1009,7 @@ footer {
 
 .reservations {
     padding: 5rem 5%;
-    background-color: #FF6B35;
-    background: linear-gradient(135deg, #FF6B35 0%, #FF9F1C 100%);
+    background: var(--black);
     position: relative;
 }
 
@@ -1062,8 +1065,8 @@ footer {
     display: flex;
     gap: 1rem;
     align-items: flex-start;
-    background: rgba(0,0,0,0.1);
-    border: 1.5px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.15);
     border-radius: 16px;
     padding: 1.2rem 1.4rem;
     transition: border-color 0.3s, background 0.3s;
@@ -1071,8 +1074,8 @@ footer {
 
 .res-info-block:hover,
 .res-info-highlight {
-    border-color: rgba(255,255,255,0.45);
-    background: rgba(0,0,0,0.15);
+    border-color: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.1);
 }
 
 .res-info-icon {
@@ -1699,15 +1702,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .menu-section {
     padding: 5rem 5%;
-    background: var(--black);
-    color: var(--white);
+    background: var(--white);
+    color: var(--black);
+}
+
+.menu-section .section-title {
+    color: var(--black);
 }
 
 .menu-tagline {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.4rem;
     letter-spacing: 4px;
-    color: var(--tangerine);
+    color: var(--primary-orange);
     text-align: center;
     margin-top: -2rem;
     margin-bottom: 3rem;
@@ -1715,7 +1722,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* ── Book container ──────────────────────────────── */
 .menu-book-container {
-    max-width: 430px;
+    max-width: 360px;
     margin: 0 auto;
 }
 
@@ -1753,9 +1760,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     overflow: hidden;
     border-radius: 4px 14px 14px 4px;
     box-shadow:
-        -3px 0 10px rgba(0,0,0,0.5),
-        6px 8px 30px rgba(0,0,0,0.55),
-        14px 14px 55px rgba(0,0,0,0.4);
+        -3px 0 10px rgba(0,0,0,0.25),
+        6px 8px 25px rgba(0,0,0,0.3),
+        14px 14px 45px rgba(0,0,0,0.2);
 }
 
 .menu-book-track {
@@ -1781,8 +1788,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 22px;
     background: linear-gradient(
         to right,
-        rgba(0,0,0,0.55) 0%,
-        rgba(0,0,0,0.18) 55%,
+        rgba(0,0,0,0.45) 0%,
+        rgba(0,0,0,0.12) 55%,
         transparent 100%
     );
     z-index: 2;
@@ -1803,10 +1810,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1rem;
     letter-spacing: 2px;
-    background: transparent;
-    border: 2px solid rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.7);
-    padding: 0.45rem 1.2rem;
+    background: var(--black);
+    border: 2px solid var(--black);
+    color: var(--white);
+    padding: 0.55rem 1.4rem;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.25s;
@@ -1822,7 +1829,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1rem;
     letter-spacing: 3px;
-    color: rgba(255,255,255,0.4);
+    color: rgba(0,0,0,0.4);
 }
 
 /* ── Dot indicators ──────────────────────────────── */
@@ -1838,7 +1845,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.18);
     cursor: pointer;
     transition: all 0.25s;
     border: none;
@@ -1846,7 +1853,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .menu-book-dot.active {
-    background: var(--tangerine);
+    background: var(--primary-orange);
     transform: scale(1.4);
 }
 
@@ -1856,13 +1863,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         padding: 3rem 4%;
     }
     .menu-book-container {
-        max-width: 380px;
+        max-width: 320px;
     }
 }
 
 @media (max-width: 480px) {
     .menu-book-container {
-        max-width: 100%;
+        max-width: calc(100vw - 3rem);
     }
     .menu-book-stage::before {
         right: -5px;
@@ -1874,6 +1881,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
     .menu-flip-btn {
         font-size: 0.88rem;
-        padding: 0.4rem 0.9rem;
+        padding: 0.45rem 1rem;
     }
 }
