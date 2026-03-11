@@ -1747,8 +1747,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* ── The physical book ───────────────────────────── */
 .menu-book-stage {
     position: relative;
-    height: calc(100vh - 50px);
-    max-height: calc(100vh - 50px);
+    height: calc(85vh);
+    max-height: calc(85vh);
     aspect-ratio: 1191 / 1685;
     flex-shrink: 0;
 }
