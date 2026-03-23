@@ -26,10 +26,13 @@ nav {
     position: fixed;
     top: 0;
     width: 100%;
-    background: var(--black);
+    background: rgba(20, 20, 20, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     padding: 0;
     z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 30px rgba(0,0,0,0.4);
+    border-bottom: 1px solid rgba(255,107,53,0.18);
 }
 
 .nav-container {
@@ -152,35 +155,52 @@ nav {
 .hero-content {
     position: relative;
     z-index: 1;
-    max-width: 900px;
-    padding: 3rem;
-    background: rgba(26, 26, 26, 0.7);
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-    border: 3px solid var(--tangerine);
+    max-width: 820px;
+    padding: 2rem;
+    text-align: center;
 }
 
 .hero-logo {
-    width: 300px;
-    max-width: 80%;
-    margin-bottom: 2rem;
+    width: 220px;
+    max-width: 70%;
+    margin-bottom: 1.8rem;
     animation: fadeInUp 1s ease-out;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5));
 }
 
 .hero-subtitle {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: var(--tangerine);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     animation: fadeInUp 1s ease-out 0.2s backwards;
-    letter-spacing: 3px;
+    letter-spacing: 6px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
 
-.hero p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    animation: fadeInUp 1s ease-out 0.4s backwards;
+.hero-desc {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.88);
+    margin-bottom: 0.8rem;
+    animation: fadeInUp 1s ease-out 0.35s backwards;
     font-weight: 400;
+}
+
+.hero-meta {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 2.2rem;
+    animation: fadeInUp 1s ease-out 0.45s backwards;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 1s ease-out 0.6s backwards;
 }
 
 @keyframes fadeInUp {
@@ -249,15 +269,23 @@ nav {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
-    height: 5px;
+    width: 60px;
+    height: 4px;
     background: linear-gradient(90deg, var(--primary-orange), var(--tangerine));
+    border-radius: 2px;
+    transition: width 0.6s ease 0.4s;
+}
+
+.section-title.revealed::after {
+    width: 120px;
 }
 
 .about-content {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-top: 2rem;
 }
 
 .about-text h3 {
@@ -277,7 +305,22 @@ nav {
 }
 
 .about-image {
-    display: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 8px 8px 0 var(--primary-orange);
+    aspect-ratio: 4/3;
+}
+
+.about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.about-image:hover img {
+    transform: scale(1.05);
 }
 
 /* Features */
@@ -769,19 +812,24 @@ footer {
 
     .nav-links {
         position: fixed;
-        right: -100%;
-        top: 80px;
+        top: 76px;
+        left: 0;
+        right: 0;
         flex-direction: column;
-        background: var(--black);
+        background: rgba(15, 15, 15, 0.97);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         width: 100%;
         text-align: center;
-        padding: 2rem 0;
-        transition: right 0.3s;
-        border-top: 3px solid var(--tangerine);
+        padding: 1.5rem 0 2rem;
+        transform: translateY(-110%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-bottom: 2px solid rgba(255,107,53,0.3);
+        gap: 0;
     }
 
     .nav-links.active {
-        right: 0;
+        transform: translateY(0);
     }
 
     .nav-links a {
@@ -2156,4 +2204,124 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     .lightbox-prev { left: 0.5rem; }
     .lightbox-next { right: 0.5rem; }
     #backToTop { bottom: 1.2rem; right: 1.2rem; width: 42px; height: 42px; font-size: 1.1rem; }
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   REVAMP ADDITIONS
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Hero scroll indicator ───────────────────────────── */
+.hero-scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(255,255,255,0.55);
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+    animation: scrollBounce 2.2s ease-in-out infinite;
+    z-index: 2;
+}
+.hero-scroll-line {
+    width: 1px;
+    height: 36px;
+    background: linear-gradient(to bottom, rgba(255,107,53,0.9), transparent);
+}
+@keyframes scrollBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+    50%       { transform: translateX(-50%) translateY(8px); opacity: 1; }
+}
+
+/* ── CTA outline variant ─────────────────────────────── */
+.cta-outline {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.7);
+    color: var(--white);
+}
+.cta-outline:hover {
+    background: var(--white);
+    color: var(--primary-orange);
+    border-color: var(--white);
+}
+
+/* ── Feature card background number ─────────────────── */
+.feature-card {
+    position: relative;
+    overflow: hidden;
+}
+.feature-card-number {
+    position: absolute;
+    top: -8px;
+    right: 4px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5.5rem;
+    color: rgba(0,0,0,0.05);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 0;
+}
+
+/* ── GitewGang step watermark ────────────────────────── */
+.loyalty-step {
+    position: relative;
+    overflow: hidden;
+}
+.step-watermark {
+    position: absolute;
+    top: -12px;
+    right: -4px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 6rem;
+    color: rgba(255,107,53,0.07);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ── Loyalty highlight badge gradient text ───────────── */
+.loyalty-highlight-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--primary-orange), var(--tangerine));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.8rem;
+    display: block;
+}
+
+/* ── Footer top border ───────────────────────────────── */
+footer {
+    border-top: 3px solid var(--primary-orange);
+}
+
+/* ── About responsive ────────────────────────────────── */
+@media (max-width: 768px) {
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .about-image {
+        max-height: 260px;
+        box-shadow: 5px 5px 0 var(--primary-orange);
+    }
+    .about-text {
+        text-align: center;
+    }
+}
+
+/* ── Hero responsive ─────────────────────────────────── */
+@media (max-width: 768px) {
+    .hero-scroll-indicator { display: none; }
+    .hero-actions { flex-direction: column; align-items: center; }
+    .hero-meta { font-size: 0.8rem; }
 }

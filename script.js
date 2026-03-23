@@ -6,7 +6,7 @@ function initGalleryCarousel() {
     // Create dots
     const dotsContainer = document.getElementById('galleryDots');
     if (dotsContainer) {
-        dotsContainer.innerHTML = ''; // Clear any existing dots
+        dotsContainer.innerHTML = '';
         for (let i = 0; i < totalGallerySlides; i++) {
             const dot = document.createElement('div');
             dot.className = 'gallery-dot';
@@ -14,6 +14,15 @@ function initGalleryCarousel() {
             dot.onclick = () => goToGallerySlide(i);
             dotsContainer.appendChild(dot);
         }
+    }
+    // Auto-play: advance every 4s, pause on hover
+    let autoPlay = setInterval(() => moveGallery(1), 4000);
+    const wrapper = document.querySelector('.gallery-carousel-wrapper');
+    if (wrapper) {
+        wrapper.addEventListener('mouseenter', () => clearInterval(autoPlay));
+        wrapper.addEventListener('mouseleave', () => {
+            autoPlay = setInterval(() => moveGallery(1), 4000);
+        });
     }
 }
 
@@ -71,11 +80,17 @@ if (document.readyState === 'loading') {
 function initSplash() {
     const splash = document.getElementById('splash');
     if (!splash) return;
-    window.addEventListener('load', () => {
-        setTimeout(() => splash.classList.add('hidden'), 800);
-    });
-    // Fallback: remove after 2.5s even if load is slow
-    setTimeout(() => splash.classList.add('hidden'), 2500);
+    document.body.style.overflow = 'hidden';
+    const hideSplash = () => {
+        splash.classList.add('hidden');
+        document.body.style.overflow = '';
+    };
+    if (document.readyState === 'complete') {
+        setTimeout(hideSplash, 700);
+    } else {
+        window.addEventListener('load', () => setTimeout(hideSplash, 700), { once: true });
+    }
+    setTimeout(hideSplash, 4000); // safety fallback
 }
 
 /* ── Scroll Progress Bar ─────────────────────────────── */
