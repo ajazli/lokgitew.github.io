@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lok Gitew | Singaporean & Malaysian Street Food</title>
+    <link rel="icon" type="image/x-icon" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="images/logo.png" alt="Lok Gitew Logo">
+            </a>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#loyalty">GitewGang</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#reservations">Reserve</a></li>
+                <li><a href="#location">Location</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <img src="images/logo.png" alt="Lok Gitew Logo" class="hero-logo">
+            <p class="hero-subtitle">Singaporean & Malaysian Street Food</p>
+            <p>Experience authentic street food flavors with a modern twist</p>
+            <p style="font-size: 1rem; margin-top: -1rem; color: var(--tangerine); font-weight: 600;">📍 Hampton Promenade, Serpong | 🕒 Sun-Thu: 12PM-10PM, Fri-Sat: 2PM-11PM</p>
+            <a href="#location" class="cta-button">Visit Us</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="section-container">
+            <h2 class="section-title">Welcome to Lok Gitew</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Your Street Food Destination in Serpong</h3>
+                    <p>Lok Gitew brings the vibrant flavors of Singaporean and Malaysian street food to Hampton Promenade, Serpong, Tangerang. We're more than just a café – we're your go-to spot for authentic street food that hits different, whether it's a casual weekday lunch or a weekend night out.</p>
+                    <p>Our concept takes traditional favorites from the streets of Singapore and Malaysia and serves them with creative twists, all in a cozy, welcoming atmosphere. Whether you're dining in or grabbing takeaway, we've got you covered with authentic flavors and quality ingredients.</p>
+                    <p>Every dish is freshly prepared to order, ensuring you get the best quality and taste every single time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-container">
+            <h2 class="section-title" style="color: var(--white);">What Makes Us Special</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🍢</div>
+                    <h3>Authentic LokLok</h3>
+                    <p>Traditional street food skewers with signature sauces that'll transport you straight to the hawker centers of Singapore and Malaysia.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Fusion Flavors</h3>
+                    <p>Creative combinations that respect tradition while bringing something new to your plate.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍🍳</div>
+                    <h3>Fresh & Hot</h3>
+                    <p>Everything made to order, ensuring you get the freshest, most flavorful experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GitewGang Loyalty Programme -->
+    <section class="loyalty" id="loyalty">
+        <div class="section-container">
+            <h2 class="section-title" style="color: var(--black);">GitewGang</h2>
+            <p class="loyalty-tagline">Our Loyalty Programme — Dine More, Earn More</p>
+
+            <div class="loyalty-steps">
+                <div class="loyalty-step">
+                    <div class="loyalty-step-icon">🍽️</div>
+                    <div class="loyalty-step-number">01</div>
+                    <h3>Dine In With Us</h3>
+                    <p>Visit Lok Gitew and enjoy your meal with us in-café. Dine-in orders are eligible for points.</p>
+                </div>
+                <div class="loyalty-step-arrow">→</div>
+                <div class="loyalty-step">
+                    <div class="loyalty-step-icon">⭐</div>
+                    <div class="loyalty-step-number">02</div>
+                    <h3>Earn Points</h3>
+                    <p>Rack up <strong>1 point for every Rp 1,000</strong> you spend. The more you eat, the more you earn.</p>
+                </div>
+                <div class="loyalty-step-arrow">→</div>
+                <div class="loyalty-step">
+                    <div class="loyalty-step-icon">🎁</div>
+                    <div class="loyalty-step-number">03</div>
+                    <h3>Redeem Rewards</h3>
+                    <p>Use your accumulated points on your next visit to redeem free items straight from our menu.</p>
+                </div>
+            </div>
+
+            <div class="loyalty-highlight">
+                <div class="loyalty-highlight-badge">Rp 1,000 = 1 pt</div>
+                <p>Join the gang, earn with every bite, and treat yourself on your next visit. It's our way of saying thank you for choosing Lok Gitew.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery" id="gallery">
+        <div class="section-container">
+            <h2 class="section-title">Gallery</h2>
+            <div class="gallery-carousel-wrapper">
+                <button class="gallery-nav prev" onclick="moveGallery(-1)">‹</button>
+                <div class="gallery-carousel">
+                    <div class="gallery-track" id="galleryTrack">
+                        <div class="gallery-slide">
+                            <img src="images/loklok-platter.jpg" alt="LokLok Platter">
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="images/rice-bowl-top.jpg" alt="Rice Bowl">
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="images/oreo-shake.jpg" alt="Oreo Shake">
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="images/loklok-sharing.jpg" alt="Sharing Experience">
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="images/rice-bowl-close.jpg" alt="Fusion Bowl">
+                        </div>
+                    </div>
+                </div>
+                <button class="gallery-nav next" onclick="moveGallery(1)">›</button>
+            </div>
+            <div class="gallery-dots" id="galleryDots"></div>
+        </div>
+    </section>
+
+    <!-- Instagram Feed Section -->
+    <section class="instagram-section">
+        <div class="section-container">
+            <h2 class="section-title" style="color: var(--white);">Follow Us on Instagram</h2>
+            <p style="text-align: center; color: rgba(255,255,255,0.9); font-size: 1.2rem; margin-bottom: 3rem; font-weight: 500;">
+                Join our community <a href="https://instagram.com/lokgitew" target="_blank" style="color: var(--tangerine); text-decoration: none; font-weight: 700;">@lokgitew</a> for daily food inspiration, behind-the-scenes content, and exclusive promos!
+            </p>
+            <div style="max-width: 1200px; margin: 0 auto; background: var(--white); padding: 2rem; border-radius: 20px; border: 3px solid var(--tangerine);">
+                <iframe onload="iFrameSetup(this)" src="https://app.mirror-app.com/feed-instagram/c8e9ef9b-2363-4b23-a7d4-340379952349/preview" style="width:100%;border:none;overflow:hidden;min-height:500px;" scrolling="no"></iframe>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="https://instagram.com/lokgitew" target="_blank" class="cta-button">Follow @lokgitew</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Menu Section -->
+    <section class="menu-section" id="menu">
+        <div class="section-container">
+            <h2 class="section-title" style="color: var(--black);">Our Menu</h2>
+            <p class="menu-tagline">Fresh. Bold. Authentic.</p>
+
+            <div class="menu-book-container">
+                <!-- Book + side buttons -->
+                <div class="menu-book-layout">
+                    <button class="menu-flip-btn" onclick="moveMenuPage(-1)" aria-label="Previous page">&#8249;</button>
+                    <div class="menu-book-stage">
+                        <div class="menu-book-spine"></div>
+                        <div class="menu-book-viewport">
+                            <div class="menu-book-track" id="menuBookTrack">
+                                <div class="menu-book-slide"><img src="images/menu-page-1.jpg" alt="Menu Page 1"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-2.jpg" alt="Menu Page 2" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-3.jpg" alt="Menu Page 3" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-4.jpg" alt="Menu Page 4" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-5.jpg" alt="Menu Page 5" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-6.jpg" alt="Menu Page 6" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-7.jpg" alt="Menu Page 7" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-8.jpg" alt="Menu Page 8" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-9.jpg" alt="Menu Page 9" loading="lazy"></div>
+                                <div class="menu-book-slide"><img src="images/menu-page-10.jpg" alt="Menu Page 10" loading="lazy"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="menu-flip-btn" onclick="moveMenuPage(1)" aria-label="Next page">&#8250;</button>
+                </div>
+                <!-- Counter + dots below -->
+                <div class="menu-book-controls">
+                    <span class="menu-book-counter"><span id="menuCurrentPage">1</span> / 10</span>
+                </div>
+                <div class="menu-book-dots" id="menuBookDots"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section class="reservations" id="reservations">
+        <div class="section-container">
+
+            <div class="res-header">
+                <h2 class="section-title res-title">Reserve a Table</h2>
+                <p class="res-tagline">Book your seat. We'll handle the rest.</p>
+            </div>
+
+            <div class="reservation-layout">
+
+                <!-- Left: info panel -->
+                <div class="reservation-info-panel">
+
+                    <div class="res-info-block">
+                        <div class="res-info-icon">🕒</div>
+                        <div class="res-info-text">
+                            <h4>Opening Hours</h4>
+                            <p>Sun – Wed &nbsp;&nbsp;12:00 PM – 10:00 PM</p>
+                            <p>Fri – Sat &nbsp;&nbsp;&nbsp;2:00 PM – 11:00 PM</p>
+                            <p class="res-info-note">Last booking 1 hr before closing</p>
+                        </div>
+                    </div>
+
+                    <div class="res-info-block">
+                        <div class="res-info-icon">📍</div>
+                        <div class="res-info-text">
+                            <h4>Where to Find Us</h4>
+                            <p>Ruko Hampton Promenade<br>Blk. M No.18, Serpong, Tangerang</p>
+                        </div>
+                    </div>
+
+                    <div class="res-info-block">
+                        <div class="res-info-icon">💬</div>
+                        <div class="res-info-text">
+                            <h4>Prefer WhatsApp?</h4>
+                            <p><a href="https://wa.me/6285122333769" target="_blank">+62 851-2233-3769</a></p>
+                            <p class="res-info-note">We reply within 1 hour</p>
+                        </div>
+                    </div>
+
+                    <div class="res-info-block res-info-highlight">
+                        <div class="res-info-icon">ℹ️</div>
+                        <div class="res-info-text">
+                            <h4>Good to Know</h4>
+                            <p>Walk-ins always welcome.<br>Tables held 15 min after your booking.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right: form card -->
+                <div class="reservation-form-card">
+
+                    <div id="reservationFormWrap">
+                        <form id="reservationForm" novalidate>
+
+                            <div class="res-form-row">
+                                <div class="res-form-group">
+                                    <label for="resName">Full Name <span class="res-req">*</span></label>
+                                    <input type="text" id="resName" placeholder="Your name" autocomplete="name">
+                                </div>
+                                <div class="res-form-group">
+                                    <label for="resPhone">WhatsApp / Phone <span class="res-req">*</span></label>
+                                    <input type="tel" id="resPhone" placeholder="+62 8xx xxxx xxxx" autocomplete="tel">
+                                </div>
+                            </div>
+
+                            <!-- Date + Time row: full-width calendar then slot grid -->
+                            <div class="res-form-group res-form-full" style="margin-bottom:1.2rem;">
+                                <label>Date <span class="res-req">*</span></label>
+                                <!-- Hidden value field used by form validation -->
+                                <input type="hidden" id="resDate">
+                                <!-- Calendar trigger button -->
+                                <button type="button" id="resDateBtn" class="res-date-btn" onclick="toggleCalendar(event)">
+                                    <span id="resDateBtnText">Select a date</span>
+                                    <span class="res-date-chevron">▾</span>
+                                </button>
+                                <!-- Custom calendar dropdown -->
+                                <div id="resCalendar" class="res-calendar" style="display:none" onclick="event.stopPropagation()">
+                                    <div class="res-cal-header">
+                                        <button type="button" class="res-cal-nav" onclick="shiftCalMonth(-1)">‹</button>
+                                        <span id="resCalMonthLabel" class="res-cal-month"></span>
+                                        <button type="button" class="res-cal-nav" onclick="shiftCalMonth(1)">›</button>
+                                    </div>
+                                    <div class="res-cal-weekdays">
+                                        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span>
+                                        <span class="res-cal-thu">Th</span>
+                                        <span>Fr</span><span>Sa</span>
+                                    </div>
+                                    <div id="resCalGrid" class="res-cal-grid"></div>
+                                    <div class="res-cal-legend">
+                                        <span class="res-cal-legend-closed">● Closed</span>
+                                        <span style="color:var(--gray);font-size:.78rem">● Past / Unavailable</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="res-form-group res-form-full" id="resTimeGroup" style="display:none;margin-bottom:1.4rem;">
+                                <label>Time <span class="res-req">*</span></label>
+                                <input type="hidden" id="resTime">
+                                <div id="resTimeSlots" class="res-time-slots"></div>
+                            </div>
+
+                            <div class="res-form-row">
+                                <div class="res-form-group">
+                                    <label for="resPax">Number of Guests <span class="res-req">*</span></label>
+                                    <select id="resPax">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="1">1 person</option>
+                                        <option value="2">2 people</option>
+                                        <option value="3">3 people</option>
+                                        <option value="4">4 people</option>
+                                        <option value="5">5 people</option>
+                                        <option value="6">6 people</option>
+                                        <option value="7">7 people</option>
+                                        <option value="8">8 people</option>
+                                        <option value="9">9 people</option>
+                                        <option value="10+">10 or more</option>
+                                    </select>
+                                </div>
+                                <div class="res-form-group">
+                                    <label for="resOccasion">Occasion</label>
+                                    <select id="resOccasion">
+                                        <option value="">Just dining 🍽️</option>
+                                        <option value="Birthday">Birthday 🎂</option>
+                                        <option value="Anniversary">Anniversary 💑</option>
+                                        <option value="Date Night">Date Night 🌹</option>
+                                        <option value="Business Meal">Business Meal 💼</option>
+                                        <option value="Group Gathering">Group Gathering 🎉</option>
+                                        <option value="Other">Other ✨</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="res-form-group res-form-full">
+                                <label for="resRequests">Special Requests</label>
+                                <textarea id="resRequests" rows="3" placeholder="Dietary needs, seating preferences, decorations, cakes…"></textarea>
+                            </div>
+
+                            <div id="resErrorBox" class="res-error-box" style="display:none"></div>
+
+                            <button type="button" id="resSubmitBtn" onclick="submitReservation()">
+                                <span id="resBtnText">Confirm My Reservation</span>
+                                <span id="resBtnLoader" style="display:none">Sending…</span>
+                            </button>
+
+                        </form>
+                    </div>
+
+                    <!-- Success screen (hidden by default) -->
+                    <div id="reservationSuccess" class="res-success" style="display:none">
+                        <div class="res-success-burst">🎉</div>
+                        <h3>You're on the list!</h3>
+                        <div id="resSuccessCard" class="res-success-card"></div>
+                        <p class="res-success-note">We'll confirm via WhatsApp within 1 hour. Can't wait to see you!</p>
+                        <button class="res-new-btn" onclick="resetReservationForm()">Make Another Booking</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section class="location" id="location">
+        <div class="section-container">
+            <h2 class="section-title">Find Us</h2>
+            <div class="location-content">
+                <div class="location-info">
+                    <h3>Visit Our Outlet</h3>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">📍</div>
+                        <div class="info-text">
+                            <h4>Address</h4>
+                            <p>Ruko Hampton Promenade<br>Blk. M No.18<br>Serpong, Tangerang<br>Indonesia</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">🕒</div>
+                        <div class="info-text">
+                            <h4>Opening Hours</h4>
+                            <div class="hours-grid">
+                                <span class="day">Sunday - Thursday</span>
+                                <span class="time">12:00 PM - 10:00 PM</span>
+                                <span class="day">Friday - Saturday</span>
+                                <span class="time">2:00 PM - 11:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">📱</div>
+                        <div class="info-text">
+                            <h4>Contact</h4>
+                            <p>Phone/WhatsApp: <a href="https://wa.me/6285122333769" target="_blank">+62 851-2233-3769</a><br>Email: <a href="/cdn-cgi/l/email-protection#066a696d616f72637146616b676f6a2865696b"><span class="__cf_email__" data-cfemail="197576727e706d7c6e597e74787075377a7674">[email&#160;protected]</span></a></p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">🍽️</div>
+                        <div class="info-text">
+                            <h4>Service Options</h4>
+                            <p>Dine-In & Takeaway Available<br>Come experience the full Lok Gitew atmosphere or grab your favorites to go!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.9600316080187!2d106.61585237589186!3d-6.268986993719703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69fde7677cc4f1%3A0xe01e2db8689bc972!2sLOK%20GITEW!5e0!3m2!1sen!2ssg!4v1770541117502!5m2!1sen!2ssg" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <img src="images/logo.png" alt="Lok Gitew Logo" class="footer-logo">
+                <p>Singaporean & Malaysian Street Food</p>
+                <p>Sun-Wed: 12PM-10PM | Fri-Sat: 2PM-11PM</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#menu">Menu</a>
+                <a href="#loyalty">GitewGang</a>
+                <a href="#reservations">Reserve a Table</a>
+                <a href="#location">Location</a>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <p>Follow us on social media for updates and promos!</p>
+                <p style="margin-top: 0.5rem; color: var(--tangerine); font-weight: 600;">@lokgitew</p>
+                <div class="social-links">
+                    <a href="https://instagram.com/lokgitew" target="_blank" title="Instagram @lokgitew">
+                        <img src="images/instagram.svg" alt="Instagram">
+                    </a>
+                    <a href="https://tiktok.com/@lokgitew" target="_blank" title="TikTok @lokgitew">
+                        <img src="images/tiktok.svg" alt="TikTok">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p&copy; 2025 Lok Gitew. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
