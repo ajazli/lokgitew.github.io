@@ -52,12 +52,157 @@ function goToGallerySlide(index) {
 function initAll() {
     initGalleryCarousel();
     initMenuBook();
+    initSplash();
+    initScrollProgress();
+    initActiveNav();
+    initScrollReveal();
+    initBackToTop();
+    initLightbox();
+    initGallerySwipe();
 }
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAll);
 } else {
     initAll();
+}
+
+/* ── Splash Screen ───────────────────────────────────── */
+function initSplash() {
+    const splash = document.getElementById('splash');
+    if (!splash) return;
+    window.addEventListener('load', () => {
+        setTimeout(() => splash.classList.add('hidden'), 800);
+    });
+    // Fallback: remove after 2.5s even if load is slow
+    setTimeout(() => splash.classList.add('hidden'), 2500);
+}
+
+/* ── Scroll Progress Bar ─────────────────────────────── */
+function initScrollProgress() {
+    const bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (scrolled / total * 100) + '%';
+    }, { passive: true });
+}
+
+/* ── Active Nav Highlighting ─────────────────────────── */
+function initActiveNav() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(a => a.classList.remove('nav-active'));
+                const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+                if (active) active.classList.add('nav-active');
+            }
+        });
+    }, { threshold: 0.4 });
+    sections.forEach(s => observer.observe(s));
+}
+
+/* ── Scroll Reveal (all sections) ───────────────────── */
+function initScrollReveal() {
+    const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                revealObs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .title-reveal').forEach(el => {
+        revealObs.observe(el);
+    });
+}
+
+/* ── Back to Top ─────────────────────────────────────── */
+function initBackToTop() {
+    const btn = document.getElementById('backToTop');
+    if (!btn) return;
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+/* ── Gallery Lightbox ────────────────────────────────── */
+const galleryImages = [
+    { src: 'images/loklok-platter.jpg',  alt: 'LokLok Platter' },
+    { src: 'images/rice-bowl-top.jpg',   alt: 'Rice Bowl' },
+    { src: 'images/oreo-shake.jpg',      alt: 'Oreo Shake' },
+    { src: 'images/loklok-sharing.jpg',  alt: 'Sharing Experience' },
+    { src: 'images/rice-bowl-close.jpg', alt: 'Fusion Bowl' },
+];
+let lightboxIndex = 0;
+
+function initLightbox() {
+    const box    = document.getElementById('lightbox');
+    const img    = document.getElementById('lightboxImg');
+    const close  = document.getElementById('lightboxClose');
+    const prev   = document.getElementById('lightboxPrev');
+    const next   = document.getElementById('lightboxNext');
+    if (!box) return;
+
+    function openLightbox(index) {
+        lightboxIndex = index;
+        img.src = galleryImages[lightboxIndex].src;
+        img.alt = galleryImages[lightboxIndex].alt;
+        box.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        box.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    function shiftLightbox(dir) {
+        lightboxIndex = (lightboxIndex + dir + galleryImages.length) % galleryImages.length;
+        img.src = galleryImages[lightboxIndex].src;
+        img.alt = galleryImages[lightboxIndex].alt;
+    }
+
+    document.querySelectorAll('.lightbox-trigger').forEach(el => {
+        el.addEventListener('click', () => openLightbox(parseInt(el.dataset.index)));
+    });
+    close.addEventListener('click', closeLightbox);
+    prev.addEventListener('click',  () => shiftLightbox(-1));
+    next.addEventListener('click',  () => shiftLightbox(1));
+    box.addEventListener('click', e => { if (e.target === box) closeLightbox(); });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', e => {
+        if (!box.classList.contains('open')) return;
+        if (e.key === 'Escape')      closeLightbox();
+        if (e.key === 'ArrowLeft')   shiftLightbox(-1);
+        if (e.key === 'ArrowRight')  shiftLightbox(1);
+    });
+
+    // Touch swipe on lightbox
+    let lbTouchX = 0;
+    box.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+    box.addEventListener('touchend',   e => {
+        const dx = e.changedTouches[0].clientX - lbTouchX;
+        if (Math.abs(dx) > 40) shiftLightbox(dx < 0 ? 1 : -1);
+    }, { passive: true });
+}
+
+/* ── Gallery Swipe (mobile) ─────────────────────────── */
+function initGallerySwipe() {
+    const carousel = document.querySelector('.gallery-carousel');
+    if (!carousel) return;
+    let startX = 0;
+    carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    carousel.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) moveGallery(dx < 0 ? 1 : -1);
+    }, { passive: true });
 }
 
 // Menu Book / Page Viewer
@@ -145,28 +290,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Intersection Observer for fade-in animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe all cards and sections
-document.querySelectorAll('.feature-card, .gallery-item').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'all 0.6s ease-out';
-    observer.observe(el);
-});
+// Scroll reveal is now handled by initScrollReveal() above
 
 
 /* ════════════════════════════════════════════════════════

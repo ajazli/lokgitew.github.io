@@ -1924,3 +1924,236 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         top: 6px;
     }
 }
+
+/* ═══════════════════════════════════════════════════════
+   INTERACTIVE MAKEOVER — Scroll animations, lightbox,
+   splash screen, back-to-top, micro-interactions
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Splash Screen ───────────────────────────────────── */
+#splash {
+    position: fixed;
+    inset: 0;
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#splash img {
+    width: 160px;
+    animation: splashPulse 1s ease-in-out infinite alternate;
+}
+@keyframes splashPulse {
+    from { transform: scale(0.95); opacity: 0.8; }
+    to   { transform: scale(1.05); opacity: 1; }
+}
+#splash.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* ── Scroll Progress Bar ─────────────────────────────── */
+#scrollProgress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary-orange), var(--tangerine));
+    transition: width 0.1s linear;
+    z-index: 1000;
+}
+
+/* ── Active Nav Link ─────────────────────────────────── */
+.nav-links a.nav-active {
+    color: var(--tangerine) !important;
+}
+.nav-links a.nav-active::after {
+    width: 100% !important;
+}
+
+/* ── Hero: Ken Burns zoom ────────────────────────────── */
+@keyframes kenBurns {
+    0%   { background-size: 110%; background-position: 50% 50%; }
+    100% { background-size: 120%; background-position: 55% 45%; }
+}
+.hero {
+    animation: kenBurns 20s ease-in-out infinite alternate;
+}
+
+/* ── Scroll Reveal — base states ─────────────────────── */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition-delay: var(--delay, 0s);
+}
+.reveal.reveal-left {
+    transform: translateX(-50px);
+}
+.reveal.reveal-right {
+    transform: translateX(50px);
+}
+.reveal.revealed {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+/* ── Stagger items ───────────────────────────────────── */
+.stagger-item {
+    transition-delay: calc(var(--stagger, 0) * 0.12s) !important;
+}
+
+/* ── Section Title Clip-path Reveal ─────────────────── */
+.title-reveal {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.85s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.title-reveal.revealed {
+    clip-path: inset(0 0% 0 0);
+}
+
+/* ── Feature Card icon micro-interaction ─────────────── */
+.feature-card:hover .feature-icon {
+    animation: iconBounce 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    30%       { transform: translateY(-10px) rotate(-8deg); }
+    60%       { transform: translateY(-5px) rotate(5deg); }
+}
+
+/* ── Loyalty step hover glow ─────────────────────────── */
+.loyalty-step:hover .loyalty-step-icon {
+    animation: stepGlow 0.6s ease forwards;
+}
+@keyframes stepGlow {
+    0%   { text-shadow: none; transform: scale(1); }
+    50%  { text-shadow: 0 0 20px rgba(255, 107, 53, 0.8); transform: scale(1.2); }
+    100% { text-shadow: 0 0 10px rgba(255, 107, 53, 0.4); transform: scale(1.1); }
+}
+
+/* ── Social icon hover micro-interaction ─────────────── */
+.social-links a:hover img {
+    animation: socialSpin 0.4s ease;
+}
+@keyframes socialSpin {
+    0%   { transform: rotate(0deg) scale(1); }
+    50%  { transform: rotate(-15deg) scale(1.2); }
+    100% { transform: rotate(0deg) scale(1.1); }
+}
+
+/* ── Reservation slot bar fill animation ─────────────── */
+.res-slot-bar-fill {
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ── Back to Top Button ──────────────────────────────── */
+#backToTop {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary-orange), var(--tangerine));
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    pointer-events: none;
+    z-index: 500;
+}
+#backToTop.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+#backToTop:hover {
+    box-shadow: 0 6px 28px rgba(255, 107, 53, 0.6);
+    transform: translateY(-3px);
+}
+
+/* ── Gallery Lightbox ────────────────────────────────── */
+.lightbox-trigger {
+    cursor: zoom-in;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+.lightbox-trigger:hover {
+    transform: scale(1.02);
+    filter: brightness(1.08);
+}
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 8000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.lightbox.open {
+    opacity: 1;
+    visibility: visible;
+}
+.lightbox-img {
+    max-width: 88vw;
+    max-height: 88vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    transform: scale(0.92);
+    transition: transform 0.3s ease;
+}
+.lightbox.open .lightbox-img {
+    transform: scale(1);
+}
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+    position: absolute;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: var(--white);
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+.lightbox-close  { top: 1.5rem; right: 1.5rem; font-size: 1.2rem; }
+.lightbox-prev   { left: 1.5rem; top: 50%; transform: translateY(-50%); }
+.lightbox-next   { right: 1.5rem; top: 50%; transform: translateY(-50%); }
+.lightbox-close:hover,
+.lightbox-prev:hover,
+.lightbox-next:hover {
+    background: var(--primary-orange);
+}
+.lightbox-prev:hover { transform: translateY(-50%) scale(1.1); }
+.lightbox-next:hover { transform: translateY(-50%) scale(1.1); }
+
+@media (max-width: 480px) {
+    .lightbox-prev { left: 0.5rem; }
+    .lightbox-next { right: 0.5rem; }
+    #backToTop { bottom: 1.2rem; right: 1.2rem; width: 42px; height: 42px; font-size: 1.1rem; }
+}
