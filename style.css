@@ -539,9 +539,9 @@ nav {
     background: #000;
 }
 
-/* Each product chapter: 300vh tall — animation plays in first 80%, black breathing room last 20% */
+/* Each product chapter: 210vh tall — animation plays in first 85%, short black gap last 15% */
 .product-scroll-wrapper {
-    height: 300vh;
+    height: 210vh;
     position: relative;
     background: #000;
 }
