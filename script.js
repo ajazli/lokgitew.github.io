@@ -4,6 +4,7 @@ function initAllProductParallax() {
         const folder   = wrapper.dataset.folder;
         const total    = parseInt(wrapper.dataset.total, 10);
         const canvas   = wrapper.querySelector('.product-canvas');
+        const blackout = wrapper.querySelector('.product-blackout');
         const label    = wrapper.querySelector('.product-label');
         const ctx      = canvas.getContext('2d');
         const frames   = new Array(total).fill(null);
@@ -63,10 +64,21 @@ function initAllProductParallax() {
                 }
             }
 
-            // Label: rises in 2%–9%, fades out 88%–96%
+            // Blur: 88%–96%
+            const blurVal = lerp(0, 16, invlerp(0.88, 0.96, prog));
+            canvas.style.filter = blurVal > 0 ? `blur(${blurVal}px)` : '';
+
+            // Blackout: fades IN 93%–100% (hits black right at wrapper end)
+            //           fades OUT 0%–3% on this wrapper (quick reveal from previous)
+            let blackOp = 0;
+            if      (prog < 0.03)  blackOp = 1 - invlerp(0, 0.03, prog);
+            else if (prog >= 0.93) blackOp = invlerp(0.93, 1.0, prog);
+            if (blackout) blackout.style.opacity = blackOp;
+
+            // Label: rises in 3%–10%, fades out 82%–90%
             if (label) {
-                const fadeIn  = invlerp(0.02, 0.09, prog);
-                const fadeOut = 1 - invlerp(0.88, 0.96, prog);
+                const fadeIn  = invlerp(0.03, 0.10, prog);
+                const fadeOut = 1 - invlerp(0.82, 0.90, prog);
                 label.style.opacity   = fadeIn * fadeOut;
                 label.style.transform =
                     `translateX(-50%) translateY(${lerp(20, 0, fadeIn)}px)`;

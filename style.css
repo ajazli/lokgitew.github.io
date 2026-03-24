@@ -606,7 +606,15 @@ nav {
     font-weight: 500;
 }
 
-/* No blackout overlay — transitions are instant cuts */
+/* Blackout — full-black flash layer for transition */
+.product-blackout {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background: #000;
+    opacity: 0;
+    pointer-events: none;
+}
 
 /* Instagram Section */
 .instagram-section {
