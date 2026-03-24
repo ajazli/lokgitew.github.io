@@ -59,6 +59,7 @@ function goToGallerySlide(index) {
 
 // Initialize when DOM is ready
 function initAll() {
+    initHeroParallax();
     initGalleryCarousel();
     initMenuBook();
     initSplash();
@@ -74,6 +75,91 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAll);
 } else {
     initAll();
+}
+
+/* ── Hero Parallax (scroll-driven canvas animation) ─── */
+function initHeroParallax() {
+    const canvas = document.getElementById('heroCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const wrapper = document.querySelector('.hero-scroll-wrapper');
+    const content = document.querySelector('.hero-content');
+    const indicator = document.querySelector('.hero-scroll-indicator');
+
+    const TOTAL = 192;
+    const frames = new Array(TOTAL).fill(null);
+    let currentFrame = -1;
+
+    /* ── Resize canvas to fill viewport ── */
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const idx = Math.max(0, currentFrame);
+        if (frames[idx]) drawFrame(frames[idx]);
+    }
+
+    /* ── Draw a frame scaled to cover + 18% extra crop to hide watermark ── */
+    function drawFrame(img) {
+        const cw = canvas.width, ch = canvas.height;
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        const scale = Math.max(cw / iw, ch / ih) * 1.18;
+        const dw = iw * scale, dh = ih * scale;
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    }
+
+    /* ── Load all frames ── */
+    function loadFrame(i) {
+        const img = new Image();
+        img.onload = () => {
+            frames[i] = img;
+            if (i === 0) { resize(); }
+        };
+        img.src = `images/hero-frames/f${String(i).padStart(3, '0')}.webp`;
+    }
+    for (let i = 0; i < TOTAL; i++) loadFrame(i);
+
+    /* ── Scroll handler ── */
+    function onScroll() {
+        if (!wrapper) return;
+        const wrapperH = wrapper.offsetHeight;
+        const vh = window.innerHeight;
+        const scrolled = Math.max(0, -wrapper.getBoundingClientRect().top);
+        const progress = Math.min(1, scrolled / (wrapperH - vh));
+
+        // Advance frame
+        const idx = Math.min(TOTAL - 1, Math.floor(progress * TOTAL));
+        if (idx !== currentFrame && frames[idx]) {
+            currentFrame = idx;
+            drawFrame(frames[idx]);
+        } else if (idx !== currentFrame && !frames[idx]) {
+            // Frame not yet loaded — find closest loaded frame
+            for (let d = 1; d < 10; d++) {
+                const fallback = idx - d;
+                if (fallback >= 0 && frames[fallback]) {
+                    drawFrame(frames[fallback]);
+                    break;
+                }
+            }
+        }
+
+        // Fade & lift content as user scrolls
+        if (content) {
+            const fade = Math.max(0, 1 - progress / 0.3);
+            content.style.opacity = fade;
+            content.style.transform = `translateY(${-progress * 60}px)`;
+        }
+
+        // Fade out scroll indicator
+        if (indicator) {
+            indicator.style.opacity = Math.max(0, 1 - progress * 10);
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', resize);
+    resize();
+    onScroll();
 }
 
 /* ── Splash Screen ───────────────────────────────────── */
