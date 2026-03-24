@@ -1,74 +1,106 @@
-// Gallery Carousel functionality
-let currentGallerySlide = 0;
-const totalGallerySlides = 5;
+/* ── Signature Dishes — Scroll-driven product parallax ─── */
+function initAllProductParallax() {
+    document.querySelectorAll('.product-scroll-wrapper').forEach(wrapper => {
+        const folder   = wrapper.dataset.folder;
+        const total    = parseInt(wrapper.dataset.total, 10);
+        const canvas   = wrapper.querySelector('.product-canvas');
+        const blackout = wrapper.querySelector('.product-blackout');
+        const label    = wrapper.querySelector('.product-label');
+        const ctx      = canvas.getContext('2d');
+        const frames   = new Array(total).fill(null);
+        let current    = -1;
 
-function initGalleryCarousel() {
-    // Create dots
-    const dotsContainer = document.getElementById('galleryDots');
-    if (dotsContainer) {
-        dotsContainer.innerHTML = '';
-        for (let i = 0; i < totalGallerySlides; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'gallery-dot';
-            if (i === 0) dot.classList.add('active');
-            dot.onclick = () => goToGallerySlide(i);
-            dotsContainer.appendChild(dot);
+        /* ── Helpers ── */
+        function clamp01(v)         { return Math.min(1, Math.max(0, v)); }
+        function invlerp(a, b, v)   { return clamp01((v - a) / (b - a)); }
+        function lerp(a, b, t)      { return a + (b - a) * clamp01(t); }
+
+        /* ── Resize canvas to fill viewport ── */
+        function resize() {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const idx = Math.max(0, current);
+            if (frames[idx]) draw(frames[idx]);
         }
-    }
-    // Auto-play: advance every 4s, pause on hover
-    let autoPlay = setInterval(() => moveGallery(1), 4000);
-    const wrapper = document.querySelector('.gallery-carousel-wrapper');
-    if (wrapper) {
-        wrapper.addEventListener('mouseenter', () => clearInterval(autoPlay));
-        wrapper.addEventListener('mouseleave', () => {
-            autoPlay = setInterval(() => moveGallery(1), 4000);
-        });
-    }
-}
 
-function updateGalleryCarousel() {
-    const track = document.getElementById('galleryTrack');
-    if (track) {
-        track.style.transform = `translateX(-${currentGallerySlide * 100}%)`;
-    }
-    
-    // Update dots
-    const dots = document.querySelectorAll('.gallery-dot');
-    dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentGallerySlide);
+        /* ── Draw frame scaled to cover + 18% extra crop (hides watermark) ── */
+        function draw(img) {
+            const cw = canvas.width, ch = canvas.height;
+            const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight) * 1.18;
+            const dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+            ctx.clearRect(0, 0, cw, ch);
+            ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+        }
+
+        /* ── Load all frames ── */
+        function loadFrame(i) {
+            const img = new Image();
+            img.onload = () => {
+                frames[i] = img;
+                if (i === 0) resize(); // draw first frame immediately
+            };
+            img.src = `images/product-frames/${folder}/f${String(i).padStart(3, '0')}.webp`;
+        }
+        for (let i = 0; i < total; i++) loadFrame(i);
+
+        /* ── Scroll handler ── */
+        function onScroll() {
+            const scrolled = Math.max(0, -wrapper.getBoundingClientRect().top);
+            const prog     = clamp01(scrolled / (wrapper.offsetHeight - window.innerHeight));
+
+            // Frames advance from 0% to 80% of scroll
+            const animProg = invlerp(0, 0.80, prog);
+            const idx = Math.min(total - 1, Math.floor(animProg * total));
+            if (idx !== current) {
+                if (frames[idx]) {
+                    current = idx;
+                    draw(frames[idx]);
+                } else {
+                    // Frame not yet loaded — use closest available
+                    for (let d = 1; d < 15; d++) {
+                        const fb = idx - d;
+                        if (fb >= 0 && frames[fb]) { draw(frames[fb]); break; }
+                    }
+                }
+            }
+
+            // Blur ramps up 72%–80%
+            const blurVal = lerp(0, 20, invlerp(0.72, 0.80, prog));
+            canvas.style.filter = blurVal > 0 ? `blur(${blurVal}px)` : '';
+
+            // Blackout: starts at 1 (full black), fades OUT 0%–5%, fades IN 80%–88%
+            let blackOp = 0;
+            if      (prog < 0.05)  blackOp = 1 - invlerp(0, 0.05, prog);
+            else if (prog >= 0.80) blackOp = invlerp(0.80, 0.88, prog);
+            if (blackout) blackout.style.opacity = blackOp;
+
+            // Label: rises in 5%–12%, fades out 67%–74%
+            if (label) {
+                const fadeIn  = invlerp(0.05, 0.12, prog);
+                const fadeOut = 1 - invlerp(0.67, 0.74, prog);
+                label.style.opacity   = fadeIn * fadeOut;
+                label.style.transform =
+                    `translateX(-50%) translateY(${lerp(20, 0, fadeIn)}px)`;
+            }
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', resize);
+        resize();
+        onScroll();
     });
-}
-
-function moveGallery(direction) {
-    currentGallerySlide += direction;
-    
-    // Loop around
-    if (currentGallerySlide < 0) {
-        currentGallerySlide = totalGallerySlides - 1;
-    } else if (currentGallerySlide >= totalGallerySlides) {
-        currentGallerySlide = 0;
-    }
-    
-    updateGalleryCarousel();
-}
-
-function goToGallerySlide(index) {
-    currentGallerySlide = index;
-    updateGalleryCarousel();
 }
 
 // Initialize when DOM is ready
 function initAll() {
     initHeroParallax();
-    initGalleryCarousel();
+    initAllProductParallax();
     initMenuBook();
     initSplash();
     initScrollProgress();
     initActiveNav();
     initScrollReveal();
     initBackToTop();
-    initLightbox();
-    initGallerySwipe();
 }
 
 if (document.readyState === 'loading') {
@@ -236,76 +268,7 @@ function initBackToTop() {
 }
 
 /* ── Gallery Lightbox ────────────────────────────────── */
-const galleryImages = [
-    { src: 'images/loklok-platter.jpg',  alt: 'LokLok Platter' },
-    { src: 'images/rice-bowl-top.jpg',   alt: 'Rice Bowl' },
-    { src: 'images/oreo-shake.jpg',      alt: 'Oreo Shake' },
-    { src: 'images/loklok-sharing.jpg',  alt: 'Sharing Experience' },
-    { src: 'images/rice-bowl-close.jpg', alt: 'Fusion Bowl' },
-];
-let lightboxIndex = 0;
-
-function initLightbox() {
-    const box    = document.getElementById('lightbox');
-    const img    = document.getElementById('lightboxImg');
-    const close  = document.getElementById('lightboxClose');
-    const prev   = document.getElementById('lightboxPrev');
-    const next   = document.getElementById('lightboxNext');
-    if (!box) return;
-
-    function openLightbox(index) {
-        lightboxIndex = index;
-        img.src = galleryImages[lightboxIndex].src;
-        img.alt = galleryImages[lightboxIndex].alt;
-        box.classList.add('open');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeLightbox() {
-        box.classList.remove('open');
-        document.body.style.overflow = '';
-    }
-    function shiftLightbox(dir) {
-        lightboxIndex = (lightboxIndex + dir + galleryImages.length) % galleryImages.length;
-        img.src = galleryImages[lightboxIndex].src;
-        img.alt = galleryImages[lightboxIndex].alt;
-    }
-
-    document.querySelectorAll('.lightbox-trigger').forEach(el => {
-        el.addEventListener('click', () => openLightbox(parseInt(el.dataset.index)));
-    });
-    close.addEventListener('click', closeLightbox);
-    prev.addEventListener('click',  () => shiftLightbox(-1));
-    next.addEventListener('click',  () => shiftLightbox(1));
-    box.addEventListener('click', e => { if (e.target === box) closeLightbox(); });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', e => {
-        if (!box.classList.contains('open')) return;
-        if (e.key === 'Escape')      closeLightbox();
-        if (e.key === 'ArrowLeft')   shiftLightbox(-1);
-        if (e.key === 'ArrowRight')  shiftLightbox(1);
-    });
-
-    // Touch swipe on lightbox
-    let lbTouchX = 0;
-    box.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
-    box.addEventListener('touchend',   e => {
-        const dx = e.changedTouches[0].clientX - lbTouchX;
-        if (Math.abs(dx) > 40) shiftLightbox(dx < 0 ? 1 : -1);
-    }, { passive: true });
-}
-
-/* ── Gallery Swipe (mobile) ─────────────────────────── */
-function initGallerySwipe() {
-    const carousel = document.querySelector('.gallery-carousel');
-    if (!carousel) return;
-    let startX = 0;
-    carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
-    carousel.addEventListener('touchend', e => {
-        const dx = e.changedTouches[0].clientX - startX;
-        if (Math.abs(dx) > 40) moveGallery(dx < 0 ? 1 : -1);
-    }, { passive: true });
-}
+/* Lightbox and gallery carousel removed — replaced by scroll-driven product showcase */
 
 // Menu Book / Page Viewer
 let currentMenuPage = 0;

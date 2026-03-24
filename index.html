@@ -145,34 +145,61 @@
     </section>
 
     <!-- Gallery -->
-    <section class="gallery" id="gallery">
-        <div class="section-container">
-            <h2 class="section-title title-reveal">Gallery</h2>
-            <div class="gallery-carousel-wrapper reveal">
-                <button class="gallery-nav prev" onclick="moveGallery(-1)">‹</button>
-                <div class="gallery-carousel">
-                    <div class="gallery-track" id="galleryTrack">
-                        <div class="gallery-slide">
-                            <img src="images/loklok-platter.jpg" alt="LokLok Platter" class="lightbox-trigger" data-index="0">
-                        </div>
-                        <div class="gallery-slide">
-                            <img src="images/rice-bowl-top.jpg" alt="Rice Bowl" class="lightbox-trigger" data-index="1">
-                        </div>
-                        <div class="gallery-slide">
-                            <img src="images/oreo-shake.jpg" alt="Oreo Shake" class="lightbox-trigger" data-index="2">
-                        </div>
-                        <div class="gallery-slide">
-                            <img src="images/loklok-sharing.jpg" alt="Sharing Experience" class="lightbox-trigger" data-index="3">
-                        </div>
-                        <div class="gallery-slide">
-                            <img src="images/rice-bowl-close.jpg" alt="Fusion Bowl" class="lightbox-trigger" data-index="4">
-                        </div>
-                    </div>
+    <!-- Signature Dishes — Scroll-driven parallax showcase (replaces gallery) -->
+    <section id="gallery">
+
+        <!-- 1. Matcha Latte -->
+        <div class="product-scroll-wrapper" data-folder="matcha" data-total="192">
+            <div class="product-pin">
+                <canvas class="product-canvas"></canvas>
+                <div class="product-overlay"></div>
+                <div class="product-label">
+                    Matcha Latte
+                    <span class="label-sub">Signature Drink</span>
                 </div>
-                <button class="gallery-nav next" onclick="moveGallery(1)">›</button>
+                <div class="product-blackout"></div>
             </div>
-            <div class="gallery-dots" id="galleryDots"></div>
         </div>
+
+        <!-- 2. Kacang Pool -->
+        <div class="product-scroll-wrapper" data-folder="kacang-pool" data-total="192">
+            <div class="product-pin">
+                <canvas class="product-canvas"></canvas>
+                <div class="product-overlay"></div>
+                <div class="product-label">
+                    Kacang Pool
+                    <span class="label-sub">Street Food Classic</span>
+                </div>
+                <div class="product-blackout"></div>
+            </div>
+        </div>
+
+        <!-- 3. Lychee Mojito -->
+        <div class="product-scroll-wrapper" data-folder="lychee-mojito" data-total="192">
+            <div class="product-pin">
+                <canvas class="product-canvas"></canvas>
+                <div class="product-overlay"></div>
+                <div class="product-label">
+                    Lychee Mojito
+                    <span class="label-sub">Refreshing Mocktail</span>
+                </div>
+                <div class="product-blackout"></div>
+            </div>
+        </div>
+
+        <!-- 4. Nasi Goreng -->
+        <div class="product-scroll-wrapper" data-folder="nasi-goreng" data-total="192">
+            <div class="product-pin">
+                <canvas class="product-canvas"></canvas>
+                <div class="product-overlay"></div>
+                <div class="product-label">
+                    Nasi Goreng
+                    <span class="label-sub">House Favourite</span>
+                </div>
+                <div class="product-blackout"></div>
+            </div>
+        </div>
+
     </section>
 
 
@@ -475,13 +502,7 @@
     <!-- Back to Top -->
     <button id="backToTop" aria-label="Back to top">↑</button>
 
-    <!-- Gallery Lightbox -->
-    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true">
-        <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
-        <button class="lightbox-prev" id="lightboxPrev" aria-label="Previous">‹</button>
-        <img class="lightbox-img" id="lightboxImg" src="" alt="">
-        <button class="lightbox-next" id="lightboxNext" aria-label="Next">›</button>
-    </div>
+    <!-- Lightbox removed (replaced by scroll-driven product showcase) -->
 
 <script src="script.js"></script>
 </body>
