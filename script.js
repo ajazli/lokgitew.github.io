@@ -4,7 +4,6 @@ function initAllProductParallax() {
         const folder   = wrapper.dataset.folder;
         const total    = parseInt(wrapper.dataset.total, 10);
         const canvas   = wrapper.querySelector('.product-canvas');
-        const blackout = wrapper.querySelector('.product-blackout');
         const label    = wrapper.querySelector('.product-label');
         const ctx      = canvas.getContext('2d');
         const frames   = new Array(total).fill(null);
@@ -64,21 +63,10 @@ function initAllProductParallax() {
                 }
             }
 
-            // Blur ramps up 80%–88%
-            const blurVal = lerp(0, 20, invlerp(0.80, 0.88, prog));
-            canvas.style.filter = blurVal > 0 ? `blur(${blurVal}px)` : '';
-
-            // Blackout: fades OUT 0%–2% (quick reveal), fades IN 88%–96% (quick exit)
-            // Full black only in last 4% ≈ 2vh — the gap between chapters
-            let blackOp = 0;
-            if      (prog < 0.02)  blackOp = 1 - invlerp(0, 0.02, prog);
-            else if (prog >= 0.88) blackOp = invlerp(0.88, 0.96, prog);
-            if (blackout) blackout.style.opacity = blackOp;
-
-            // Label: rises in 2%–9%, fades out 72%–80%
+            // Label: rises in 2%–9%, fades out 88%–96%
             if (label) {
                 const fadeIn  = invlerp(0.02, 0.09, prog);
-                const fadeOut = 1 - invlerp(0.72, 0.80, prog);
+                const fadeOut = 1 - invlerp(0.88, 0.96, prog);
                 label.style.opacity   = fadeIn * fadeOut;
                 label.style.transform =
                     `translateX(-50%) translateY(${lerp(20, 0, fadeIn)}px)`;

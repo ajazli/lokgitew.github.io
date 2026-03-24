@@ -606,15 +606,7 @@ nav {
     font-weight: 500;
 }
 
-/* Full-black overlay for fade-in / fade-to-black transitions */
-.product-blackout {
-    position: absolute;
-    inset: 0;
-    z-index: 4;
-    background: #000;
-    opacity: 1; /* starts opaque — JS fades it out at scroll start */
-    pointer-events: none;
-}
+/* No blackout overlay — transitions are instant cuts */
 
 /* Instagram Section */
 .instagram-section {
