@@ -122,18 +122,19 @@ function initActiveNav() {
 
 /* ── Scroll Reveal (all sections) ───────────────────── */
 function initScrollReveal() {
-    const revealObs = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('revealed');
-                revealObs.unobserve(entry.target);
+    const els = Array.from(document.querySelectorAll('.reveal, .title-reveal'));
+    function check() {
+        els.forEach(el => {
+            if (el.classList.contains('revealed')) return;
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.88) {
+                el.classList.add('revealed');
             }
         });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.reveal, .title-reveal').forEach(el => {
-        revealObs.observe(el);
-    });
+    }
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check, { passive: true });
+    setTimeout(check, 150);
 }
 
 /* ── Back to Top ─────────────────────────────────────── */
