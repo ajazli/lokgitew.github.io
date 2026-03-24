@@ -539,9 +539,9 @@ nav {
     background: #000;
 }
 
-/* Each product chapter: 210vh tall — animation plays in first 85%, short black gap last 15% */
+/* Each product chapter: 150vh tall — 50vh scroll, ~2vh full-black gap between chapters */
 .product-scroll-wrapper {
-    height: 210vh;
+    height: 150vh;
     position: relative;
     background: #000;
 }
