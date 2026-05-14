@@ -48,6 +48,11 @@
                 <p class="hero-subtitle">Singaporean & Malaysian Street Food</p>
                 <p class="hero-desc">Experience authentic street food flavors with a modern twist</p>
                 <p class="hero-meta">📍 Hampton Promenade, Serpong &nbsp;|&nbsp; 🕒 Mon–Sun: 10AM–1AM &nbsp;|&nbsp; Thu: Closed</p>
+                <div class="hero-status-card" aria-live="polite">
+                    <span class="hero-status-dot" id="heroStatusDot"></span>
+                    <span class="hero-status-text" id="heroStatusText">Open Fri-Wed, 10AM-1AM</span>
+                    <span class="hero-status-note">Closed every Thursday</span>
+                </div>
                 <div class="hero-actions">
                     <a href="#reservations" class="cta-button">Reserve a Table</a>
                     <a href="#menu" class="cta-button cta-outline">View Menu</a>
@@ -196,6 +201,12 @@
         <div class="section-container">
             <h2 class="section-title" style="color: var(--black);">Our Menu</h2>
             <p class="menu-tagline">Fresh. Bold. Authentic.</p>
+            <div class="menu-shortcuts" aria-label="Menu shortcuts">
+                <button type="button" onclick="goToMenuPage(0)">Signatures</button>
+                <button type="button" onclick="goToMenuPage(2)">Lok Lok</button>
+                <button type="button" onclick="goToMenuPage(4)">Rice & Noodles</button>
+                <button type="button" onclick="goToMenuPage(7)">Drinks</button>
+            </div>
 
             <div class="menu-book-container reveal">
                 <!-- Book + side buttons -->
@@ -275,7 +286,12 @@
                         <div class="res-info-icon">ℹ️</div>
                         <div class="res-info-text">
                             <h4>Good to Know</h4>
-                            <p>Walk-ins always welcome.<br>Tables held 15 min after your booking.</p>
+                            <ul class="res-guidance-list">
+                                <li>We confirm reservations via WhatsApp within 1 hour.</li>
+                                <li>Last booking is 1 hour before closing.</li>
+                                <li>Tables are held for 15 minutes after your booking time.</li>
+                                <li>Thursday bookings are closed.</li>
+                            </ul>
                         </div>
                     </div>
 
@@ -484,6 +500,13 @@
         </div>
     </div>
 </footer>
+
+    <div class="mobile-action-bar" aria-label="Quick actions">
+        <a href="#menu">Menu</a>
+        <a href="#reservations">Reserve</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=LOK%20GITEW%20Hampton%20Promenade%20Serpong" target="_blank" rel="noopener">Directions</a>
+        <a href="https://wa.me/6285122333769" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
 
     <!-- Back to Top -->
     <button id="backToTop" aria-label="Back to top">↑</button>

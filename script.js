@@ -97,6 +97,7 @@ function initAll() {
     initHeroParallax();
     initAllProductParallax();
     initMenuBook();
+    initHeroOpenStatus();
     initSplash();
     initScrollProgress();
     initActiveNav();
@@ -270,6 +271,25 @@ function initBackToTop() {
 
 /* ── Gallery Lightbox ────────────────────────────────── */
 /* Lightbox and gallery carousel removed — replaced by scroll-driven product showcase */
+
+/* ── Hero open status ────────────────────────────────── */
+function initHeroOpenStatus() {
+    const statusText = document.getElementById('heroStatusText');
+    const statusDot = document.getElementById('heroStatusDot');
+    if (!statusText || !statusDot) return;
+
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours() + (now.getMinutes() / 60);
+    const isThursday = day === 4;
+    const isOpen = !isThursday && (hour < 1 || hour >= 10);
+
+    statusDot.classList.toggle('is-open', isOpen);
+    statusDot.classList.toggle('is-closed', !isOpen);
+    statusText.textContent = isOpen
+        ? 'Open now until 1AM'
+        : (isThursday ? 'Closed today' : 'Opens today at 10AM');
+}
 
 // Menu Book / Page Viewer
 let currentMenuPage = 0;

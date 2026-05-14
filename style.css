@@ -199,10 +199,58 @@ nav {
 .hero-meta {
     font-size: 0.9rem;
     color: rgba(255,255,255,0.7);
-    margin-bottom: 2.2rem;
+    margin-bottom: 1rem;
     animation: fadeInUp 1s ease-out 0.45s backwards;
     font-weight: 500;
     letter-spacing: 0.5px;
+}
+
+.hero-status-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.65rem 1rem;
+    margin-bottom: 1.8rem;
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 999px;
+    background: rgba(0,0,0,0.36);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--white);
+    animation: fadeInUp 1s ease-out 0.52s backwards;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.24);
+}
+
+.hero-status-dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: var(--tangerine);
+    box-shadow: 0 0 0 4px rgba(255,159,28,0.16);
+    flex: 0 0 auto;
+}
+
+.hero-status-dot.is-open {
+    background: #48bb78;
+    box-shadow: 0 0 0 4px rgba(72,187,120,0.18);
+}
+
+.hero-status-dot.is-closed {
+    background: #e53e3e;
+    box-shadow: 0 0 0 4px rgba(229,62,62,0.18);
+}
+
+.hero-status-text {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.hero-status-note {
+    padding-left: 0.65rem;
+    border-left: 1px solid rgba(255,255,255,0.24);
+    color: rgba(255,255,255,0.72);
+    font-size: 0.78rem;
+    font-weight: 500;
 }
 
 .hero-actions {
@@ -1138,6 +1186,33 @@ footer {
     margin-top: 0.3rem !important;
 }
 
+.res-guidance-list {
+    list-style: none;
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding: 0;
+}
+
+.res-guidance-list li {
+    position: relative;
+    padding-left: 1rem;
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.88);
+}
+
+.res-guidance-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.68em;
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 50%;
+    background: var(--tangerine);
+}
+
 /* ── Form Card ──────────────────────────────────────── */
 .reservation-form-card {
     background: var(--white);
@@ -1749,6 +1824,38 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     margin-bottom: 1.2rem;
 }
 
+.menu-shortcuts {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin: 0 auto 1.4rem;
+    max-width: 760px;
+}
+
+.menu-shortcuts button {
+    font-family: 'Bebas Neue', sans-serif;
+    min-height: 42px;
+    padding: 0.55rem 1.05rem;
+    border: 1.5px solid rgba(26,26,26,0.16);
+    border-radius: 999px;
+    background: rgba(255,107,53,0.08);
+    color: var(--black);
+    font-size: 1rem;
+    letter-spacing: 1.6px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.menu-shortcuts button:hover,
+.menu-shortcuts button:focus-visible {
+    background: var(--primary-orange);
+    border-color: var(--primary-orange);
+    color: var(--white);
+    transform: translateY(-2px);
+    outline: none;
+}
+
 /* ── Book container ──────────────────────────────── */
 .menu-book-container {
     display: flex;
@@ -2107,6 +2214,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     transform: translateY(-3px);
 }
 
+.mobile-action-bar {
+    display: none;
+}
+
 /* Lightbox removed — replaced by scroll-driven product showcase */
 
 @media (max-width: 480px) {
@@ -2227,6 +2338,88 @@ footer {
 /* ── Hero responsive ─────────────────────────────────── */
 @media (max-width: 768px) {
     .hero-scroll-indicator { display: none; }
+    .hero-content {
+        width: 100%;
+        max-width: calc(100vw - 1.5rem);
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
     .hero-actions { flex-direction: column; align-items: center; }
-    .hero-meta { font-size: 0.8rem; }
+    .hero-subtitle {
+        font-size: 1.1rem;
+        letter-spacing: 4px;
+        line-height: 1.45;
+        max-width: 100%;
+    }
+    .hero-desc,
+    .hero-meta {
+        max-width: 100%;
+    }
+    .hero-meta {
+        font-size: 0.78rem;
+        line-height: 1.55;
+    }
+    .hero-status-card {
+        width: min(100%, 330px);
+        flex-wrap: wrap;
+        justify-content: center;
+        border-radius: 18px;
+        padding: 0.7rem 0.85rem;
+    }
+    .hero-status-note {
+        width: 100%;
+        padding-left: 0;
+        border-left: 0;
+        color: rgba(255,255,255,0.68);
+    }
+    .menu-shortcuts {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 0.25rem;
+        -webkit-overflow-scrolling: touch;
+    }
+    .menu-shortcuts button {
+        flex: 0 0 auto;
+    }
+    body {
+        padding-bottom: 72px;
+    }
+    .mobile-action-bar {
+        position: fixed;
+        left: 0.5rem;
+        right: auto;
+        bottom: 0.75rem;
+        z-index: 1200;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.35rem;
+        width: min(calc(100vw - 1rem), 374px);
+        padding: 0.45rem;
+        border: 1px solid rgba(255,255,255,0.16);
+        border-radius: 18px;
+        background: rgba(20,20,20,0.92);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 14px 36px rgba(0,0,0,0.36);
+    }
+    .mobile-action-bar a {
+        min-width: 0;
+        padding: 0.65rem 0.35rem;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.08);
+        color: var(--white);
+        text-align: center;
+        text-decoration: none;
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 0.86rem;
+        letter-spacing: 0.6px;
+        line-height: 1;
+    }
+    .mobile-action-bar a:nth-child(2) {
+        background: linear-gradient(135deg, var(--primary-orange), var(--tangerine));
+    }
+    #backToTop {
+        display: none;
+    }
 }
