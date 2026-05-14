@@ -373,13 +373,13 @@ const PAX_CAP        = 10;   // max pax per hourly slot
 // Opening hours by JS day-of-week (0=Sun … 6=Sat)
 // Thursday (4) is CLOSED — handled via disabling
 const RES_HOURS = {
-  0: { open: 12, close: 22 },  // Sunday
-  1: { open: 12, close: 22 },  // Monday
-  2: { open: 12, close: 22 },  // Tuesday
-  3: { open: 12, close: 22 },  // Wednesday
+  0: { open: 10, close: 25 },  // Sunday
+  1: { open: 10, close: 25 },  // Monday
+  2: { open: 10, close: 25 },  // Tuesday
+  3: { open: 10, close: 25 },  // Wednesday
   4: null,                      // Thursday – CLOSED
-  5: { open: 14, close: 23 },  // Friday
-  6: { open: 14, close: 23 },  // Saturday
+  5: { open: 10, close: 25 },  // Friday
+  6: { open: 10, close: 25 },  // Saturday
 };
 
 // ── Calendar state ────────────────────────────────────────────────────────────
@@ -574,7 +574,7 @@ async function loadTimeSlots(dateStr) {
     for (let h = hours.open; h <= lastSlot; h++) {
         if (isToday && h <= now.getHours()) continue; // skip past slots
 
-        const slotKey  = _pad(h) + ':00';
+        const slotKey  = _pad(h % 24) + ':00';
         const paxTaken = booked[slotKey] || 0;
         const paxLeft  = PAX_CAP - paxTaken;
         const isFull   = paxLeft <= 0;
@@ -621,6 +621,7 @@ function selectSlot(slotKey, btnEl) {
 
 // ── Format 24h int → "12:00 PM" ───────────────────────────────────────────────
 function fmtHour(h) {
+    h = h % 24;
     if (h === 0)  return '12:00 AM';
     if (h === 12) return '12:00 PM';
     return h < 12 ? h + ':00 AM' : (h - 12) + ':00 PM';
