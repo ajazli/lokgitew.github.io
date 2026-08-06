@@ -55,6 +55,19 @@ nav {
     isolation: isolate;
 }
 
+/* Keep section headings clear of the fixed nav when jumped to via
+   anchor links (nav menu clicks, "Reserve a Table", etc.) — without
+   this, scrollIntoView() aligns the section's top edge with the
+   viewport's top edge, which the fixed nav then covers. */
+section[id] {
+    scroll-margin-top: 90px;
+}
+@media (max-width: 480px) {
+    section[id] {
+        scroll-margin-top: 80px;
+    }
+}
+
 .nav-container {
     max-width: 1400px;
     margin: 0 auto;
