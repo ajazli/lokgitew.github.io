@@ -45,6 +45,14 @@ nav {
     z-index: 1000;
     box-shadow: 0 2px 30px rgba(0,0,0,0.4);
     border-bottom: 1px solid rgba(255,107,53,0.18);
+    /* Force the fixed+blurred nav onto its own stable compositor layer —
+       prevents the logo/backdrop from visibly glitching on iOS Safari
+       during scroll, when the address bar collapses/expands. */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    isolation: isolate;
 }
 
 .nav-container {
