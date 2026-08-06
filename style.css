@@ -1628,7 +1628,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     color: var(--gray);
     padding: 0.2rem 0;
 }
-.res-cal-thu {
+.res-cal-closed-day {
     color: #e53e3e !important;
 }
 
