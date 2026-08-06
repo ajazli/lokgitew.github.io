@@ -10,12 +10,7 @@ lokgitew-website/
 ├── style.css           # All CSS styles
 ├── script.js           # JavaScript functionality
 ├── images/             # All images folder
-│   ├── logo.png        # Lok Gitew logo (transparent background)
-│   ├── loklok-platter.jpg
-│   ├── rice-bowl-top.jpg
-│   ├── oreo-shake.jpg
-│   ├── loklok-sharing.jpg
-│   └── rice-bowl-close.jpg
+│   └── logo.png        # Lok Gitew logo (transparent background)
 └── README.md           # This file
 ```
 

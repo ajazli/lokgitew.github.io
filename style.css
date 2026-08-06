@@ -14,6 +14,18 @@
     --gray: #666666;
 }
 
+/* Respect visitors who've asked for reduced motion: collapse all CSS
+   animations/transitions to near-instant instead of removing them, so
+   end states (revealed content, open calendar, etc.) still apply. */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     color: var(--black);
@@ -601,6 +613,20 @@ nav {
     height: 100vh;
     overflow: hidden;
     background: #000;
+}
+
+/* Reduced motion: collapse the scroll-scrubbed hero/product sections down
+   to plain full-height banners instead of several screens' worth of pinned
+   scroll distance driving a frame-by-frame animation. */
+@media (prefers-reduced-motion: reduce) {
+    .hero-scroll-wrapper,
+    .product-scroll-wrapper {
+        height: 100vh;
+    }
+    .hero-pin,
+    .product-pin {
+        position: relative;
+    }
 }
 
 /* Canvas fills the sticky frame */
@@ -1334,6 +1360,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.res-error-wa-link {
+    color: #c53030;
+    font-weight: 700;
+    text-decoration: underline;
+    white-space: nowrap;
+}
+.res-error-wa-link:hover {
+    color: var(--primary-orange);
 }
 
 /* ── Submit button ───────────────────────────────────── */
@@ -1655,10 +1691,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 100%;
     outline: none;
 }
-.res-cal-day:not(:disabled):hover {
+.res-cal-day:not(:disabled):hover,
+.res-cal-day:not(:disabled):focus-visible {
     background: rgba(255,107,53,0.1);
     border-color: var(--primary-orange);
     color: var(--primary-orange);
+}
+.res-cal-day:not(:disabled):focus-visible {
+    box-shadow: 0 0 0 3px rgba(255,107,53,0.25);
 }
 .res-cal-day.cal-today {
     border-color: rgba(255,159,28,0.5);
@@ -1709,6 +1749,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     gap: 0.6rem;
     margin-top: 0.3rem;
+    border-radius: 11px;
+    transition: box-shadow 0.2s;
+}
+.res-time-slots.res-invalid {
+    box-shadow: 0 0 0 3px rgba(229,62,62,0.35);
 }
 
 .res-slot {
@@ -1725,9 +1770,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     gap: 0.3rem;
     outline: none;
 }
-.res-slot:not(:disabled):hover {
+.res-slot:not(:disabled):hover,
+.res-slot:not(:disabled):focus-visible {
     border-color: var(--primary-orange);
     background: rgba(255,107,53,0.06);
+}
+.res-slot:not(:disabled):focus-visible {
+    box-shadow: 0 0 0 3px rgba(255,107,53,0.25);
 }
 .res-slot.slot-selected {
     background: linear-gradient(135deg, var(--primary-orange), var(--tangerine));
