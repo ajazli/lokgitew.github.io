@@ -1,3 +1,13 @@
+/* ── Reduced motion helper ───────────────────────────── */
+// Visitors who've asked the OS/browser to minimize motion get static
+// content instead of scroll-scrubbed canvas animation and smooth-scrolling.
+function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+function scrollBehavior() {
+    return prefersReducedMotion() ? 'auto' : 'smooth';
+}
+
 /* ── Signature Dishes — Scroll-driven product parallax ─── */
 function initAllProductParallax() {
     document.querySelectorAll('.product-scroll-wrapper').forEach(wrapper => {
@@ -85,10 +95,27 @@ function initAllProductParallax() {
             }
         }
 
-        window.addEventListener('scroll', onScroll, { passive: true });
         window.addEventListener('resize', resize);
         resize();
-        onScroll();
+        if (prefersReducedMotion()) {
+            // Static banner: draw a representative mid-sequence frame once,
+            // no scroll-driven scrubbing, blur, or blackout transition.
+            const idx = Math.floor(total / 2);
+            if (frames[idx]) { current = idx; draw(frames[idx]); }
+            else {
+                const check = setInterval(() => {
+                    if (frames[idx]) { current = idx; draw(frames[idx]); clearInterval(check); }
+                }, 100);
+            }
+            if (blackout) blackout.style.opacity = 0;
+            if (label) {
+                label.style.opacity   = 1;
+                label.style.transform = 'translateX(-50%) translateY(0)';
+            }
+        } else {
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        }
     });
 }
 
@@ -190,10 +217,22 @@ function initHeroParallax() {
         }
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', resize);
     resize();
-    onScroll();
+    if (prefersReducedMotion()) {
+        // Static hero: draw a representative frame, keep content fully
+        // visible, no scroll-driven scrubbing/fade/lift.
+        const idx = Math.floor(TOTAL / 2);
+        if (frames[idx]) { currentFrame = idx; drawFrame(frames[idx]); }
+        else {
+            const check = setInterval(() => {
+                if (frames[idx]) { currentFrame = idx; drawFrame(frames[idx]); clearInterval(check); }
+            }, 100);
+        }
+    } else {
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
 }
 
 /* ── Splash Screen ───────────────────────────────────── */
@@ -265,7 +304,7 @@ function initBackToTop() {
         btn.classList.toggle('visible', window.scrollY > 400);
     }, { passive: true });
     btn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: scrollBehavior() });
     });
 }
 
@@ -273,22 +312,40 @@ function initBackToTop() {
 /* Lightbox and gallery carousel removed — replaced by scroll-driven product showcase */
 
 /* ── Hero open status ────────────────────────────────── */
+// Get the current day-of-week (0=Sun…6=Sat) and hour-of-day in WIB
+// (Asia/Jakarta), regardless of the visitor's own device timezone/clock.
+function getJakartaNow() {
+    const dayMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    try {
+        const parts = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'Asia/Jakarta',
+            weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false
+        }).formatToParts(new Date());
+        const map = {};
+        parts.forEach(p => { map[p.type] = p.value; });
+        let hour = parseInt(map.hour, 10) % 24; // some locales report midnight as "24"
+        return { day: dayMap[map.weekday], hour: hour + parseInt(map.minute, 10) / 60 };
+    } catch (e) {
+        // Intl/timeZone unsupported — fall back to the visitor's local clock
+        const now = new Date();
+        return { day: now.getDay(), hour: now.getHours() + now.getMinutes() / 60 };
+    }
+}
+
 function initHeroOpenStatus() {
     const statusText = document.getElementById('heroStatusText');
     const statusDot = document.getElementById('heroStatusDot');
     if (!statusText || !statusDot) return;
 
-    const now = new Date();
-    const day = now.getDay();
-    const hour = now.getHours() + (now.getMinutes() / 60);
+    const { day, hour } = getJakartaNow();
     const isMonday = day === 1;
     const isOpen = !isMonday && (hour < 3 || hour >= 15);
 
     statusDot.classList.toggle('is-open', isOpen);
     statusDot.classList.toggle('is-closed', !isOpen);
     statusText.textContent = isOpen
-        ? 'Open now until 3AM'
-        : (isMonday ? 'Closed today' : 'Opens today at 3PM');
+        ? 'Open now until 3AM WIB'
+        : (isMonday ? 'Closed today' : 'Opens today at 3PM WIB');
 }
 
 // Menu Book / Page Viewer
@@ -357,7 +414,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
             target.scrollIntoView({
-                behavior: 'smooth',
+                behavior: scrollBehavior(),
                 block: 'start'
             });
             // Close mobile menu if open
@@ -633,6 +690,7 @@ function selectSlot(slotKey, btnEl) {
     _selectedSlot = slotKey;
     const hiddenTime = document.getElementById('resTime');
     if (hiddenTime) { hiddenTime.value = slotKey; hiddenTime.classList.remove('res-invalid'); }
+    document.getElementById('resTimeSlots')?.classList.remove('res-invalid');
 
     // Update visual selection
     document.querySelectorAll('.res-slot').forEach(b => b.classList.remove('slot-selected'));
@@ -668,9 +726,7 @@ function validateResForm() {
         if (id === 'resDate') {
             document.getElementById('resDateBtn')?.classList.toggle('res-invalid', empty);
         } else if (id === 'resTime') {
-            document.getElementById('resTimeSlots')?.querySelectorAll('.res-slot').forEach(b => {
-                // just a soft error hint, no highlight needed on buttons
-            });
+            document.getElementById('resTimeSlots')?.classList.toggle('res-invalid', empty);
         } else {
             el.classList.toggle('res-invalid', empty);
         }
@@ -707,7 +763,7 @@ function submitReservation() {
     if (err) {
         errBox.textContent   = '⚠  ' + err;
         errBox.style.display = 'flex';
-        errBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        errBox.scrollIntoView({ behavior: scrollBehavior(), block: 'nearest' });
         return;
     }
 
@@ -736,7 +792,7 @@ function submitReservation() {
             if (paxNum > paxLeft) {
                 errBox.textContent   = `⚠  Only ${paxLeft} pax left for that slot. Please choose a different time or reduce your group size.`;
                 errBox.style.display = 'flex';
-                errBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                errBox.scrollIntoView({ behavior: scrollBehavior(), block: 'nearest' });
                 submitBtn.disabled    = false;
                 btnText.style.display = 'inline';
                 loader.style.display  = 'none';
@@ -748,7 +804,10 @@ function submitReservation() {
     saveReservation(data).then(() => {
         showReservationSuccess(data);
     }).catch(() => {
-        errBox.textContent   = '⚠  Could not reach our booking system. Please WhatsApp us directly.';
+        const timeStr = fmtHour(parseInt(data.time, 10));
+        const waText = `Hi! I'd like to book a table.\nName: ${data.name}\nDate: ${data.date}\nTime: ${timeStr}\nGuests: ${data.pax}`;
+        const waLink = `https://wa.me/6285122333769?text=${encodeURIComponent(waText)}`;
+        errBox.innerHTML = `⚠&nbsp; Could not reach our booking system. <a href="${waLink}" target="_blank" rel="noopener" class="res-error-wa-link">WhatsApp us directly &rarr;</a>`;
         errBox.style.display = 'flex';
         submitBtn.disabled    = false;
         btnText.style.display = 'inline';
@@ -757,6 +816,13 @@ function submitReservation() {
 }
 
 // ── Success screen ─────────────────────────────────────────────────────────────
+// Escape user-supplied text before inserting into innerHTML
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+}
+
 function showReservationSuccess(data) {
     document.getElementById('reservationFormWrap').style.display = 'none';
     document.getElementById('reservationSuccess').style.display  = 'block';
@@ -766,15 +832,18 @@ function showReservationSuccess(data) {
     const dateStr   = new Date(y, m - 1, d).toLocaleDateString('en-GB',
         { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     const timeStr   = fmtHour(hh);
-    const occasion  = data.occasion ? `<div class="sc-row"><span class="sc-label">Occasion</span><span class="sc-val">${data.occasion}</span></div>` : '';
-    const requests  = data.requests ? `<div class="sc-row"><span class="sc-label">Requests</span><span class="sc-val">${data.requests}</span></div>` : '';
+    const name      = escapeHtml(data.name);
+    const phone     = escapeHtml(data.phone);
+    const pax       = escapeHtml(data.pax);
+    const occasion  = data.occasion ? `<div class="sc-row"><span class="sc-label">Occasion</span><span class="sc-val">${escapeHtml(data.occasion)}</span></div>` : '';
+    const requests  = data.requests ? `<div class="sc-row"><span class="sc-label">Requests</span><span class="sc-val">${escapeHtml(data.requests)}</span></div>` : '';
 
     document.getElementById('resSuccessCard').innerHTML = `
-        <div class="sc-row"><span class="sc-label">Name</span><span class="sc-val">${data.name}</span></div>
-        <div class="sc-row"><span class="sc-label">Phone</span><span class="sc-val">${data.phone}</span></div>
+        <div class="sc-row"><span class="sc-label">Name</span><span class="sc-val">${name}</span></div>
+        <div class="sc-row"><span class="sc-label">Phone</span><span class="sc-val">${phone}</span></div>
         <div class="sc-row"><span class="sc-label">Date</span><span class="sc-val">${dateStr}</span></div>
         <div class="sc-row"><span class="sc-label">Time</span><span class="sc-val">${timeStr}</span></div>
-        <div class="sc-row"><span class="sc-label">Guests</span><span class="sc-val">${data.pax} ${data.pax == 1 ? 'person' : 'people'}</span></div>
+        <div class="sc-row"><span class="sc-label">Guests</span><span class="sc-val">${pax} ${data.pax == 1 ? 'person' : 'people'}</span></div>
         ${occasion}${requests}`;
 }
 
