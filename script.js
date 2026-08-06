@@ -281,14 +281,14 @@ function initHeroOpenStatus() {
     const now = new Date();
     const day = now.getDay();
     const hour = now.getHours() + (now.getMinutes() / 60);
-    const isThursday = day === 4;
-    const isOpen = !isThursday && (hour < 1 || hour >= 10);
+    const isMonday = day === 1;
+    const isOpen = !isMonday && (hour < 3 || hour >= 15);
 
     statusDot.classList.toggle('is-open', isOpen);
     statusDot.classList.toggle('is-closed', !isOpen);
     statusText.textContent = isOpen
-        ? 'Open now until 1AM'
-        : (isThursday ? 'Closed today' : 'Opens today at 10AM');
+        ? 'Open now until 3AM'
+        : (isMonday ? 'Closed today' : 'Opens today at 3PM');
 }
 
 // Menu Book / Page Viewer
@@ -381,7 +381,7 @@ window.addEventListener('scroll', () => {
 
 /* ════════════════════════════════════════════════════════
    RESERVATION SYSTEM — Customer form logic
-   • Custom calendar picker: past dates + Thursdays disabled
+   • Custom calendar picker: past dates + Mondays disabled
    • Time slots fetched from POS server with live pax counts
    • Each slot capped at PAX_CAP (10) across pending+confirmed
    Update POS_SERVER_URL to your POS server address.
@@ -390,16 +390,16 @@ window.addEventListener('scroll', () => {
 const POS_SERVER_URL = 'https://pos.lokgitew.com';
 const PAX_CAP        = 10;   // max pax per hourly slot
 
-// Opening hours by JS day-of-week (0=Sun … 6=Sat)
-// Thursday (4) is CLOSED — handled via disabling
+// Opening hours by JS day-of-week (0=Sun … 6=Sat), times in WIB
+// Monday (1) is CLOSED — handled via disabling
 const RES_HOURS = {
-  0: { open: 10, close: 25 },  // Sunday
-  1: { open: 10, close: 25 },  // Monday
-  2: { open: 10, close: 25 },  // Tuesday
-  3: { open: 10, close: 25 },  // Wednesday
-  4: null,                      // Thursday – CLOSED
-  5: { open: 10, close: 25 },  // Friday
-  6: { open: 10, close: 25 },  // Saturday
+  0: { open: 15, close: 27 },  // Sunday    3PM – 3AM
+  1: null,                      // Monday   – CLOSED
+  2: { open: 15, close: 27 },  // Tuesday   3PM – 3AM
+  3: { open: 15, close: 27 },  // Wednesday 3PM – 3AM
+  4: { open: 15, close: 27 },  // Thursday  3PM – 3AM
+  5: { open: 15, close: 27 },  // Friday    3PM – 3AM
+  6: { open: 15, close: 27 },  // Saturday  3PM – 3AM
 };
 
 // ── Calendar state ────────────────────────────────────────────────────────────
@@ -418,8 +418,8 @@ function _dateStr(y, m, d) {
     return `${y}-${_pad(m + 1)}-${_pad(d)}`;
 }
 
-function _isThursday(y, m, d) {
-    return new Date(y, m, d).getDay() === 4;
+function _isMonday(y, m, d) {
+    return new Date(y, m, d).getDay() === 1;
 }
 
 // ── Init calendar after DOM ready ─────────────────────────────────────────────
@@ -497,14 +497,14 @@ function renderCalendarGrid() {
         btn.textContent = d;
 
         const isPast = new Date(_calYear, _calMonth, d) < new Date(today.y, today.m, today.d);
-        const isThu  = _isThursday(_calYear, _calMonth, d);
+        const isMon  = _isMonday(_calYear, _calMonth, d);
         const isFutureCap = new Date(_calYear, _calMonth, d) > maxDate;
         const dateStr = _dateStr(_calYear, _calMonth, d);
         const isToday = (_calYear === today.y && _calMonth === today.m && d === today.d);
 
-        if (isPast || isThu || isFutureCap) {
+        if (isPast || isMon || isFutureCap) {
             btn.disabled  = true;
-            btn.className = 'res-cal-day' + (isThu ? ' cal-closed' : '');
+            btn.className = 'res-cal-day' + (isMon ? ' cal-closed' : '');
         } else {
             btn.className = 'res-cal-day';
             if (isToday) btn.classList.add('cal-today');
@@ -569,7 +569,7 @@ async function loadTimeSlots(dateStr) {
     const hours = RES_HOURS[dow];
 
     if (!hours) {
-        slotsDiv.innerHTML = '<div class="res-slots-loading" style="color:#e53e3e;">We are closed on Thursdays. Please pick another day.</div>';
+        slotsDiv.innerHTML = '<div class="res-slots-loading" style="color:#e53e3e;">We are closed on Mondays. Please pick another day.</div>';
         return;
     }
 
