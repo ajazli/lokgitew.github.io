@@ -470,9 +470,13 @@ section[id] {
 }
 
 .feature-card-accent {
-    background: linear-gradient(160deg, var(--primary-orange), var(--bright-orange));
+    /* Black instead of another orange gradient — the surrounding section
+       is already a full-bleed orange gradient, so an orange card just
+       blends into it instead of standing out as the accent. */
+    background: linear-gradient(160deg, #232323, var(--black));
     border-color: transparent;
     transform: translateY(-14px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.35);
 }
 @media (min-width: 640px) {
     .feature-card-accent:hover { transform: translateY(-20px); }
@@ -488,9 +492,6 @@ section[id] {
     justify-content: center;
     margin-bottom: 1.6rem;
     transform: rotate(-4deg);
-}
-.feature-card-accent .feature-icon-wrap {
-    background: var(--black);
 }
 
 .feature-icon-svg {
@@ -522,7 +523,7 @@ section[id] {
 /* GitewGang Loyalty Section */
 .loyalty {
     padding: 5rem 5%;
-    background: var(--white);
+    background: var(--off-white);
     color: var(--black);
 }
 
