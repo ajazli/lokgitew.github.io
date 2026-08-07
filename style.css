@@ -474,8 +474,6 @@ section[id] {
     border-color: transparent;
     transform: translateY(-14px);
 }
-.feature-card-accent p { color: rgba(255,255,255,0.9); }
-.feature-card-accent h3 { color: var(--white); }
 @media (min-width: 640px) {
     .feature-card-accent:hover { transform: translateY(-20px); }
 }
@@ -514,6 +512,12 @@ section[id] {
     line-height: 1.7;
     font-weight: 400;
 }
+
+/* Higher-specificity overrides so these always win regardless of source
+   order — the accent card sits on a dark orange gradient and needs
+   light text for contrast, unlike the white feature cards. */
+.feature-card.feature-card-accent h3 { color: var(--white); }
+.feature-card.feature-card-accent p { color: rgba(255,255,255,0.92); }
 
 /* GitewGang Loyalty Section */
 .loyalty {
@@ -572,9 +576,8 @@ section[id] {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1rem;
     letter-spacing: 3px;
-    color: var(--tangerine);
+    color: var(--primary-orange);
     margin-bottom: 0.8rem;
-    opacity: 0.7;
 }
 
 .loyalty-step h3 {
