@@ -46,12 +46,16 @@ const LOK_LOVE_CONFIG = {
     apiEndpoint:          'https://lokgitew.gitew.com/pos/api/lok-love/apply',
 
     /* The gateway routes public requests to a specific outlet and rejects
-       them with 400 "Outlet is required" without one. It reads ?outlet=
-       (also an X-Outlet-Code header, or outletCode in the body), and the
-       POS server strips the parameter again before the route sees it.
-       The key must match an available outlet in the POS database — the
-       outlet picker on the POS login screen lists the valid values. */
-    outletKey:            'lg-ha-01'
+       them without one — 400 "Outlet is required", or 403 "Outlet
+       unavailable" if the key is not an active outlet. It reads ?outlet=,
+       and the POS server strips the parameter again before the route sees
+       it.
+
+       Left blank on purpose: the key is looked up at submit time from the
+       gateway's own public outlet list, so it cannot drift out of sync
+       with the POS. Set it to pin a specific outlet instead. */
+    outletKey:            '',
+    outletsEndpoint:      'https://lokgitew.gitew.com/pos/api/v1/auth/outlets'
 };
 
 /* ── Ticket inclusions (landing page) ─────────────────────────────────── */
@@ -986,6 +990,39 @@ function setSubmitting(isSubmitting) {
     if (backBtn) backBtn.disabled = isSubmitting;
 }
 
+/**
+ * Which outlet the gateway should route this submission to.
+ *
+ * Hardcoding the key means a rename or a re-provision silently breaks the
+ * form, and the failure surfaces to an applicant as a generic error. The
+ * gateway publishes its own active outlets on an unauthenticated endpoint
+ * it serves directly (no outlet needed to ask), so ask it.
+ *
+ * Cached for the page's lifetime. A pinned LOK_LOVE_CONFIG.outletKey wins,
+ * for the case where several outlets exist and the event belongs to one.
+ */
+let _outletKeyPromise = null;
+function resolveOutletKey() {
+    if (LOK_LOVE_CONFIG.outletKey) return Promise.resolve(LOK_LOVE_CONFIG.outletKey);
+    if (_outletKeyPromise) return _outletKeyPromise;
+
+    _outletKeyPromise = fetch(LOK_LOVE_CONFIG.outletsEndpoint)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+            const first = data && Array.isArray(data.outlets) ? data.outlets[0] : null;
+            if (!first || !first.outletKey) throw new Error('no active outlet');
+            return first.outletKey;
+        })
+        .catch((err) => {
+            // Let the caller fail through the normal error path, and allow a
+            // retry to look it up again rather than caching the failure.
+            _outletKeyPromise = null;
+            throw err;
+        });
+
+    return _outletKeyPromise;
+}
+
 async function submitApplication() {
     // Guard against double submits from fast double-taps (PRD §24).
     if (formState.submitting || formState.submitted) return;
@@ -1006,9 +1043,10 @@ async function submitApplication() {
     try {
         /* The POS gateway parses application/json and answers the CORS
            preflight, the same path the reservation form already uses. */
+        const outletKey = await resolveOutletKey();
         const endpoint = LOK_LOVE_CONFIG.apiEndpoint +
             (LOK_LOVE_CONFIG.apiEndpoint.indexOf('?') === -1 ? '?' : '&') +
-            'outlet=' + encodeURIComponent(LOK_LOVE_CONFIG.outletKey);
+            'outlet=' + encodeURIComponent(outletKey);
 
         const res = await fetch(endpoint, {
             method: 'POST',
