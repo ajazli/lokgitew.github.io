@@ -470,6 +470,17 @@ function trackEvent(name, params) {
    SMALL HELPERS
 ═══════════════════════════════════════════════════════════════════════ */
 function el(id)      { return document.getElementById(id); }
+
+/* Has the Apps Script endpoint actually been deployed and filled in?
+   Until it has, the form can be walked but not submitted — see
+   applySoftLaunchState(). This reverts to normal behaviour on its own the
+   moment a real /exec URL is set in LOK_LOVE_CONFIG; there is nothing to
+   undo at launch. */
+function isEndpointConfigured() {
+    const url = String(LOK_LOVE_CONFIG.apiEndpoint || '');
+    return url.indexOf('REPLACE_WITH_DEPLOYMENT_ID') === -1 &&
+           /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(url);
+}
 function escapeHtml(str) {
     const d = document.createElement('div');
     d.textContent = str == null ? '' : String(str);
@@ -1024,6 +1035,14 @@ async function submitApplication() {
     // Guard against double submits from fast double-taps (PRD §24).
     if (formState.submitting || formState.submitted) return;
 
+    // Soft launch: the page is live but the intake endpoint is not deployed
+    // yet. Say so plainly instead of firing a request that can only fail and
+    // showing the applicant a generic "something went wrong".
+    if (!isEndpointConfigured()) {
+        showNotOpenYet();
+        return;
+    }
+
     setSubmitting(true);
     clearFormError();
 
@@ -1101,6 +1120,32 @@ function showSuccess(applicationId) {
     success.setAttribute('tabindex', '-1');
     success.focus({ preventScroll: true });
     success.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
+}
+
+/* Shown instead of the success/error screens while the endpoint is unset.
+   The applicant's answers stay in the draft, so when applications do open
+   they can come back and submit without retyping. */
+function showNotOpenYet() {
+    const form = el('llFormCard');
+    const panel = el('llNotOpen');
+    if (form) form.hidden = true;
+    if (!panel) return;
+
+    saveDraft();
+    panel.hidden = false;
+    panel.setAttribute('tabindex', '-1');
+    panel.focus({ preventScroll: true });
+    panel.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
+}
+
+/* Banner above the form during soft launch, so nobody spends three minutes
+   filling it in before discovering it cannot be sent. */
+function applySoftLaunchState() {
+    if (isEndpointConfigured()) return;
+    const banner = el('llSoftLaunch');
+    if (banner) banner.hidden = false;
+    const nextBtn = el('llNextBtn');
+    if (nextBtn) nextBtn.dataset.softLaunch = 'true';
 }
 
 function showDuplicate() {
@@ -1192,6 +1237,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadDraft();
     renderStep();
+    applySoftLaunchState();
 
     const nextBtn = el('llNextBtn');
     const backBtn = el('llBackBtn');

@@ -391,6 +391,22 @@ a:focus-visible {
 }
 @media (min-width: 700px) { .ll-form-card { padding: 2.2rem 2.2rem 2rem; } }
 
+/* ── Soft-launch banner ────────────────────────────────────────────── */
+.ll-soft-launch {
+    display: block;
+    background: rgba(255, 159, 28, 0.13);
+    border: 1px solid rgba(255, 159, 28, 0.42);
+    border-radius: var(--ll-radius-sm);
+    padding: .9rem 1rem;
+    margin-bottom: 1.4rem;
+    font-size: .9rem;
+    line-height: 1.6;
+    color: var(--ll-cream);
+}
+.ll-soft-launch strong { display: block; color: var(--tangerine); margin-bottom: .15rem; }
+
+.ll-result-soft { border-color: rgba(255, 159, 28, 0.45); }
+
 /* ── Progress ──────────────────────────────────────────────────────── */
 .ll-progress { margin-bottom: 1.8rem; }
 .ll-progress-meta {
