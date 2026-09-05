@@ -1,21 +1,22 @@
 # LOK & LOVE — Question → Field → Sheet Column Mapping
 
 Required by PRD §11. This is the contract between the original Google Form,
-the website form, the API payload and the Google Sheet. **No existing Google
-Form question may be dropped**, so any question added to the Google Form must
-be added here too.
+the website form, the API payload and the database. Keep it current: a
+question that exists in one place and not the others fails silently.
 
 Keep these four places in sync:
 
 | Where | File |
 |---|---|
 | Website form questions | `lok-love/lok-love.js` → `LOK_LOVE_FORM_SCHEMA` |
-| Sheet column order | `docs/lok-love/apps-script/Code.gs` → `COLUMNS` |
-| Server validation | `docs/lok-love/apps-script/Code.gs` → `validate()` |
+| Request validation | POSGitew `packages/contracts/src/lok-love.schema.js` |
+| Table columns | POSGitew `server/db/schema/49-lok-love-applications.sql` |
+| Row → JSON mapping | POSGitew `server/modules/lok-love/lok-love.mapper.ts` |
 | This document | `docs/lok-love/question-mapping.md` |
 
-A field's `id` in the schema is simultaneously its JSON payload key and its
-lookup key in `COLUMNS`. Change an `id` and you must change all four.
+A field's `id` in the schema is its JSON payload key. The request schema is
+`.strict()`, so an unknown key is rejected rather than silently dropped —
+change an `id` and you must change all of the above.
 
 ---
 
@@ -46,7 +47,7 @@ All nine questions below are transcribed **verbatim** from Google Form page 1,
 in their original order and original Indonesian wording. Meaning must not
 change without organiser approval (PRD §11).
 
-| # | Existing Google Form question | Website field | Type | Required | Google Sheet column |
+| # | Existing Google Form question | Website field | Type | Required | Database column |
 |---|---|---|---|---|---|
 | 1 | Nama lengkap | `name` | Text | Yes | `Name` |
 | 2 | Usia | `age` | Number (min 21, max 99) | Yes | `Age` |
@@ -87,7 +88,7 @@ requirements the PRD specifies for the confirmation step (§10 Step 5) and turn
 the Google Form's "Informasi Penting" notice — previously just text above the
 form — into explicit, auditable tick-boxes.
 
-| Consent | Website field | Type | Required | Google Sheet column |
+| Consent | Website field | Type | Required | Database column |
 |---|---|---|---|---|
 | Information supplied is accurate | `consentAccurate` | Checkbox | Yes | `Consent — Accurate` |
 | Applying does not guarantee selection | `consentSelection` | Checkbox | Yes | `Consent — Selection` |
@@ -132,7 +133,7 @@ never exposes them to applicants (PRD §19–§21, §26).
 
 Feeds the *kepribadian* and *minat* selection criteria.
 
-| # | Question | Website field | Type | Required | Google Sheet column |
+| # | Question | Website field | Type | Required | Database column |
 |---|---|---|---|---|---|
 | 10 | Kepribadian kamu | `personality` | Radio — 5-point introvert↔extrovert | Yes | `Personality` |
 | 11 | Minat & hobi | `interests` | Multi-select, 16 options, max 6 | Yes | `Interests` |
@@ -149,7 +150,7 @@ once the cap is hit rather than rejecting the choice afterwards.
 
 Feeds the *preferensi pasangan* criterion.
 
-| # | Question | Website field | Type | Required | Google Sheet column |
+| # | Question | Website field | Type | Required | Database column |
 |---|---|---|---|---|---|
 | 14 | Apa yang kamu cari di acara ini? | `intention` | Radio — 4 options | Yes | `Intention` |
 | 15 | Rentang usia yang kamu harapkan | `preferredAgeRange` | Dropdown — 6 bands | Yes | `Preferred Age Range` |
@@ -167,7 +168,7 @@ on appearance or background.
 
 Practical logistics for the night.
 
-| # | Question | Website field | Type | Required | Google Sheet column |
+| # | Question | Website field | Type | Required | Database column |
 |---|---|---|---|---|---|
 | 18 | Bisa hadir pada *(event date and time)*? | `availability` | Radio — 3 options | Yes | `Availability` |
 | 19 | Preferensi makanan atau alergi | `dietary` | Multi-select, 8 options | Yes | `Dietary Requirements` |
@@ -199,8 +200,7 @@ Reasoning:
 - Uploading forced applicants to sign in to a Google account — friction that
   moving off Google Forms was meant to remove.
 - Storing personal photographs raises the stakes of the data considerably for
-  a Phase 1 system whose entire security boundary is one spreadsheet's sharing
-  settings.
+  a system where they would sit alongside applicant contact details.
 
 If the organisers want uploads back, the two workable routes are a
 Drive-backed upload via `DriveApp.createFile()` in `Code.gs` (needs a ~5 MB cap

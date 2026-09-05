@@ -8,10 +8,10 @@
    To add / change / remove a question, edit the schema only. Do not hand-
    edit the form markup — it does not exist as markup.
 
-   Each field's `id` is also its key in the API payload, and its
-   `sheetColumn` is the human-readable Google Sheet header it lands under.
-   Keep those in sync with docs/lok-love/question-mapping.md and the
-   COLUMNS array in docs/lok-love/apps-script/Code.gs.
+   Each field's `id` is also its key in the API payload. Keep those in
+   sync with docs/lok-love/question-mapping.md and the column list in
+   POSGitew's server/modules/lok-love/ — applications are stored there,
+   and reviewed in the POS admin dashboard.
 ════════════════════════════════════════════════════════════════════════ */
 
 'use strict';
@@ -40,9 +40,10 @@ const LOK_LOVE_CONFIG = {
     announcementNote:     'Pendaftar terpilih dihubungi lewat WhatsApp.',
     paymentWindowHours:   24,
     whatsappNumber:       '6285122333769',
-    // Google Apps Script Web App URL. Set after deploying Code.gs.
-    // See docs/lok-love/README.md for the deployment steps.
-    apiEndpoint:          'https://script.google.com/macros/s/REPLACE_WITH_DEPLOYMENT_ID/exec'
+    // POSGitew intake endpoint, behind the shared GitewOS gateway.
+    // Applications land in Postgres and are triaged in the POS admin
+    // dashboard under the "Lok & Love" tab.
+    apiEndpoint:          'https://lokgitew.gitew.com/pos/api/lok-love/apply'
 };
 
 /* ── Ticket inclusions (landing page) ─────────────────────────────────── */
@@ -64,8 +65,8 @@ const LOK_LOVE_INCLUDES = [
    the selection criteria the event itself publishes — usia, kepribadian,
    minat, preferensi pasangan.
 
-   Question wording is Indonesian (the applicant's language) with a
-   smaller English gloss underneath, matching Step 1.                     */
+   Question wording is Indonesian throughout, matching the rest of the
+   site.                                                                  */
 const LOK_LOVE_FORM_SCHEMA = [
     {
         id: 'about-you',
@@ -79,7 +80,6 @@ const LOK_LOVE_FORM_SCHEMA = [
                 required: true,
                 autocomplete: 'name',
                 placeholder: 'mis. Putri Ananda',
-                sheetColumn: 'Name',
                 maxLength: 100
             },
             {
@@ -91,7 +91,6 @@ const LOK_LOVE_FORM_SCHEMA = [
                 max: 99,
                 inputmode: 'numeric',
                 placeholder: '21',
-                sheetColumn: 'Age',
                 help: 'Usia minimal ' + LOK_LOVE_CONFIG.minimumAge + ' tahun untuk ikut.'
             },
             {
@@ -102,8 +101,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                 options: [
                     { value: 'Pria',   label: 'Pria' },
                     { value: 'Wanita', label: 'Wanita' }
-                ],
-                sheetColumn: 'Gender'
+                ]
             },
             {
                 id: 'lookingToMeet',
@@ -113,8 +111,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                 options: [
                     { value: 'Pria',   label: 'Pria' },
                     { value: 'Wanita', label: 'Wanita' }
-                ],
-                sheetColumn: 'Looking To Meet'
+                ]
             },
             {
                 id: 'city',
@@ -122,7 +119,6 @@ const LOK_LOVE_FORM_SCHEMA = [
                 type: 'text',
                 required: true,
                 placeholder: 'mis. Serpong, Tangerang',
-                sheetColumn: 'City',
                 maxLength: 120
             },
             {
@@ -131,7 +127,6 @@ const LOK_LOVE_FORM_SCHEMA = [
                 type: 'text',
                 required: true,
                 placeholder: 'mis. Desainer grafis',
-                sheetColumn: 'Occupation',
                 maxLength: 120
             },
             {
@@ -142,7 +137,6 @@ const LOK_LOVE_FORM_SCHEMA = [
                 autocomplete: 'tel',
                 inputmode: 'tel',
                 placeholder: '08xx xxxx xxxx',
-                sheetColumn: 'WhatsApp',
                 help: 'Lewat nomor ini kami hubungi kamu kalau terpilih.'
             },
             {
@@ -151,7 +145,6 @@ const LOK_LOVE_FORM_SCHEMA = [
                 type: 'text',
                 required: true,
                 placeholder: '@usernamekamu',
-                sheetColumn: 'Instagram/TikTok',
                 maxLength: 80
             },
             {
@@ -161,7 +154,6 @@ const LOK_LOVE_FORM_SCHEMA = [
                 required: true,
                 autocomplete: 'email',
                 placeholder: 'kamu@email.com',
-                sheetColumn: 'Email',
                 maxLength: 160
             }
         ]
@@ -183,8 +175,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: 'Di antara keduanya',  label: 'Di antara keduanya' },
                     { value: 'Cenderung ekstrovert',label: 'Cenderung ekstrovert' },
                     { value: 'Sangat ekstrovert',   label: 'Sangat ekstrovert' }
-                ],
-                sheetColumn: 'Personality'
+                ]
             },
             {
                 id: 'interests',
@@ -210,8 +201,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: 'Otomotif',             label: 'Otomotif' },
                     { value: 'Bisnis & startup',     label: 'Bisnis & startup' },
                     { value: 'Hewan peliharaan',     label: 'Hewan peliharaan' }
-                ],
-                sheetColumn: 'Interests'
+                ]
             },
             {
                 id: 'weekendVibe',
@@ -226,8 +216,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: 'Coba tempat makan baru',       label: 'Coba tempat makan baru' },
                     { value: 'Olahraga atau gym',            label: 'Olahraga atau gym' },
                     { value: 'Ngerjain hobi atau proyek',    label: 'Ngerjain hobi atau proyek' }
-                ],
-                sheetColumn: 'Ideal Weekend'
+                ]
             },
             {
                 id: 'selfDescription',
@@ -236,8 +225,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                 required: true,
                 maxLength: 300,
                 placeholder: 'Kerja di bidang apa, lagi suka apa, hal random yang bikin kamu semangat…',
-                help: 'Beberapa kalimat aja cukup. Tulis santai kayak kamu ngomong.',
-                sheetColumn: 'Self Description'
+                help: 'Beberapa kalimat aja cukup. Tulis santai kayak kamu ngomong.'
             }
         ]
     },
@@ -257,8 +245,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: 'Kenalan dulu, lihat ke mana arahnya',label: 'Kenalan dulu, lihat ke mana arahnya' },
                     { value: 'Teman baru & memperluas relasi',     label: 'Teman baru & memperluas relasi' },
                     { value: 'Belum tahu, mau coba dulu',          label: 'Belum tahu, mau coba dulu' }
-                ],
-                sheetColumn: 'Intention'
+                ]
             },
             {
                 id: 'preferredAgeRange',
@@ -272,8 +259,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: '33–40',          label: '33–40' },
                     { value: '40+',            label: '40+' },
                     { value: 'Tidak masalah',  label: 'Tidak masalah' }
-                ],
-                sheetColumn: 'Preferred Age Range'
+                ]
             },
             {
                 id: 'valuedQualities',
@@ -294,8 +280,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: 'Aktif & sporty',       label: 'Aktif & sporty' },
                     { value: 'Religius',             label: 'Religius' },
                     { value: 'Pendengar yang baik',  label: 'Pendengar yang baik' }
-                ],
-                sheetColumn: 'Valued Qualities'
+                ]
             },
             {
                 id: 'dealBreakers',
@@ -309,8 +294,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: 'Tidak suka hewan peliharaan',label: 'Tidak suka hewan peliharaan' },
                     { value: 'Jarang komunikasi',          label: 'Jarang komunikasi' },
                     { value: 'Beda prinsip agama',         label: 'Beda prinsip agama' }
-                ],
-                sheetColumn: 'Deal Breakers'
+                ]
             }
         ]
     },
@@ -329,8 +313,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: 'Ya, saya bisa hadir',      label: 'Ya, saya bisa hadir' },
                     { value: 'Belum pasti',              label: 'Belum pasti' },
                     { value: 'Tidak bisa di tanggal ini',label: 'Tidak bisa di tanggal ini' }
-                ],
-                sheetColumn: 'Availability'
+                ]
             },
             {
                 id: 'dietary',
@@ -347,8 +330,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: 'Alergi seafood',   label: 'Alergi seafood' },
                     { value: 'Alergi kacang',    label: 'Alergi kacang' },
                     { value: 'Lainnya',          label: 'Lainnya' }
-                ],
-                sheetColumn: 'Dietary Requirements'
+                ]
             },
             {
                 id: 'dietaryNotes',
@@ -356,8 +338,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                 type: 'text',
                 required: false,
                 maxLength: 200,
-                placeholder: 'Alergi udang, nggak makan sapi, dll.',
-                sheetColumn: 'Dietary Notes'
+                placeholder: 'Alergi udang, nggak makan sapi, dll.'
             },
             {
                 id: 'hearAboutUs',
@@ -370,8 +351,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: 'Teman',                      label: 'Teman' },
                     { value: 'Pernah datang ke LokGitew',  label: 'Pernah datang ke LokGitew' },
                     { value: 'Lainnya',                    label: 'Lainnya' }
-                ],
-                sheetColumn: 'Heard About Us Via'
+                ]
             },
             {
                 id: 'additionalInfo',
@@ -379,8 +359,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                 type: 'textarea',
                 required: false,
                 maxLength: 400,
-                placeholder: 'Opsional — apa pun yang menurutmu penting.',
-                sheetColumn: 'Additional Information'
+                placeholder: 'Opsional — apa pun yang menurutmu penting.'
             }
         ]
     },
@@ -395,29 +374,25 @@ const LOK_LOVE_FORM_SCHEMA = [
                 id: 'consentAccurate',
                 type: 'consent',
                 required: true,
-                label: 'Semua yang saya isi di sini benar dan akurat.',
-                sheetColumn: 'Consent — Accurate'
+                label: 'Semua yang saya isi di sini benar dan akurat.'
             },
             {
                 id: 'consentSelection',
                 type: 'consent',
                 required: true,
-                label: 'Saya paham bahwa mendaftar tidak menjamin dapat tempat, dan peserta dipilih oleh tim LOK GITEW.',
-                sheetColumn: 'Consent — Selection'
+                label: 'Saya paham bahwa mendaftar tidak menjamin dapat tempat, dan peserta dipilih oleh tim LOK GITEW.'
             },
             {
                 id: 'consentContact',
                 type: 'consent',
                 required: true,
-                label: 'LOK GITEW boleh menghubungi saya lewat WhatsApp atau email terkait acara ini.',
-                sheetColumn: 'Consent — Contact'
+                label: 'LOK GITEW boleh menghubungi saya lewat WhatsApp atau email terkait acara ini.'
             },
             {
                 id: 'consentPrivacy',
                 type: 'consent',
                 required: true,
-                label: 'Saya setuju data yang saya kirim dipakai untuk meninjau pendaftaran saya, dan kontak saya tidak dibagikan ke peserta lain tanpa persetujuan saya.',
-                sheetColumn: 'Consent — Privacy'
+                label: 'Saya setuju data yang saya kirim dipakai untuk meninjau pendaftaran saya, dan kontak saya tidak dibagikan ke peserta lain tanpa persetujuan saya.'
             }
         ]
     }
@@ -456,8 +431,7 @@ function el(id)      { return document.getElementById(id); }
    undo at launch. */
 function isEndpointConfigured() {
     const url = String(LOK_LOVE_CONFIG.apiEndpoint || '');
-    return url.indexOf('REPLACE_WITH_DEPLOYMENT_ID') === -1 &&
-           /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(url);
+    return url.indexOf('REPLACE_WITH') === -1 && /^https:\/\/\S+$/.test(url);
 }
 function escapeHtml(str) {
     const d = document.createElement('div');
@@ -1022,15 +996,12 @@ async function submitApplication() {
     const payload = buildPayload();
 
     try {
-        /* NOTE ON CONTENT TYPE — do not "fix" this to application/json.
-           Apps Script web apps do not answer CORS preflight (OPTIONS)
-           requests. Sending text/plain keeps this a CORS "simple request"
-           so no preflight is issued; Code.gs JSON.parse()s the raw body. */
+        /* The POS gateway parses application/json and answers the CORS
+           preflight, the same path the reservation form already uses. */
         const res = await fetch(LOK_LOVE_CONFIG.apiEndpoint, {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload),
-            redirect: 'follow'
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
 
         let data = null;
