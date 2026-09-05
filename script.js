@@ -244,10 +244,36 @@ window.addEventListener('scroll', () => {
 const POS_SERVER_URL = 'https://lokgitew.gitew.com/pos';
 
 /* The gateway routes public (unauthenticated) requests to a specific
-   outlet and answers 400 "Outlet is required" without one, so every
+   outlet and rejects them without one — 400 "Outlet is required", or 403
+   "Outlet unavailable" for a key that is not an active outlet. So every
    customer-facing call has to carry ?outlet=. The POS server strips the
-   parameter again before the route sees it. */
-const POS_OUTLET_KEY = 'lg-ha-01';
+   parameter again before the route sees it.
+
+   The key is read from the gateway's own public outlet list rather than
+   hardcoded, so renaming or re-provisioning an outlet cannot silently
+   break the booking form. Set POS_OUTLET_KEY_PINNED to override. */
+const POS_OUTLET_KEY_PINNED = '';
+const POS_OUTLETS_URL = POS_SERVER_URL + '/api/v1/auth/outlets';
+
+let _posOutletKeyPromise = null;
+function resolvePosOutletKey() {
+    if (POS_OUTLET_KEY_PINNED) return Promise.resolve(POS_OUTLET_KEY_PINNED);
+    if (_posOutletKeyPromise) return _posOutletKeyPromise;
+
+    _posOutletKeyPromise = fetch(POS_OUTLETS_URL)
+        .then(res => (res.ok ? res.json() : null))
+        .then(data => {
+            const first = data && Array.isArray(data.outlets) ? data.outlets[0] : null;
+            if (!first || !first.outletKey) throw new Error('no active outlet');
+            return first.outletKey;
+        })
+        .catch(err => {
+            _posOutletKeyPromise = null;   // let a retry look it up again
+            throw err;
+        });
+
+    return _posOutletKeyPromise;
+}
 const PAX_CAP        = 10;   // max pax per hourly slot
 
 // Opening hours by JS day-of-week (0=Sun … 6=Sat), times in WIB
@@ -436,7 +462,8 @@ async function loadTimeSlots(dateStr) {
     // Fetch booked pax counts from POS server
     let booked = {};
     try {
-        const res  = await fetch(`${POS_SERVER_URL}/api/reservations/slots?date=${dateStr}&outlet=${POS_OUTLET_KEY}`);
+        const outletKey = await resolvePosOutletKey();
+        const res  = await fetch(`${POS_SERVER_URL}/api/reservations/slots?date=${dateStr}&outlet=${encodeURIComponent(outletKey)}`);
         const data = await res.json();
         if (data.success) booked = data.slots; // { "14:00": 7, "15:00": 10, ... }
     } catch (e) {
@@ -538,7 +565,8 @@ function validateResForm() {
 
 // ── POST to POS server ─────────────────────────────────────────────────────────
 async function saveReservation(data) {
-    const res = await fetch(POS_SERVER_URL + '/api/reservations?outlet=' + POS_OUTLET_KEY, {
+    const outletKey = await resolvePosOutletKey();
+    const res = await fetch(POS_SERVER_URL + '/api/reservations?outlet=' + encodeURIComponent(outletKey), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
