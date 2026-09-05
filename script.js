@@ -242,6 +242,12 @@ window.addEventListener('scroll', () => {
    (Was https://pos.lokgitew.com before the apps were consolidated into
    the single "Lok Gitew" Railway project.) */
 const POS_SERVER_URL = 'https://lokgitew.gitew.com/pos';
+
+/* The gateway routes public (unauthenticated) requests to a specific
+   outlet and answers 400 "Outlet is required" without one, so every
+   customer-facing call has to carry ?outlet=. The POS server strips the
+   parameter again before the route sees it. */
+const POS_OUTLET_KEY = 'lg-ha-01';
 const PAX_CAP        = 10;   // max pax per hourly slot
 
 // Opening hours by JS day-of-week (0=Sun … 6=Sat), times in WIB
@@ -430,7 +436,7 @@ async function loadTimeSlots(dateStr) {
     // Fetch booked pax counts from POS server
     let booked = {};
     try {
-        const res  = await fetch(`${POS_SERVER_URL}/api/reservations/slots?date=${dateStr}`);
+        const res  = await fetch(`${POS_SERVER_URL}/api/reservations/slots?date=${dateStr}&outlet=${POS_OUTLET_KEY}`);
         const data = await res.json();
         if (data.success) booked = data.slots; // { "14:00": 7, "15:00": 10, ... }
     } catch (e) {
@@ -532,7 +538,7 @@ function validateResForm() {
 
 // ── POST to POS server ─────────────────────────────────────────────────────────
 async function saveReservation(data) {
-    const res = await fetch(POS_SERVER_URL + '/api/reservations', {
+    const res = await fetch(POS_SERVER_URL + '/api/reservations?outlet=' + POS_OUTLET_KEY, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)

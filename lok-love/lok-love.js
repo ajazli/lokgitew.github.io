@@ -43,7 +43,15 @@ const LOK_LOVE_CONFIG = {
     // POSGitew intake endpoint, behind the shared GitewOS gateway.
     // Applications land in Postgres and are triaged in the POS admin
     // dashboard under the "Lok & Love" tab.
-    apiEndpoint:          'https://lokgitew.gitew.com/pos/api/lok-love/apply'
+    apiEndpoint:          'https://lokgitew.gitew.com/pos/api/lok-love/apply',
+
+    /* The gateway routes public requests to a specific outlet and rejects
+       them with 400 "Outlet is required" without one. It reads ?outlet=
+       (also an X-Outlet-Code header, or outletCode in the body), and the
+       POS server strips the parameter again before the route sees it.
+       The key must match an available outlet in the POS database — the
+       outlet picker on the POS login screen lists the valid values. */
+    outletKey:            'lg-ha-01'
 };
 
 /* ── Ticket inclusions (landing page) ─────────────────────────────────── */
@@ -998,7 +1006,11 @@ async function submitApplication() {
     try {
         /* The POS gateway parses application/json and answers the CORS
            preflight, the same path the reservation form already uses. */
-        const res = await fetch(LOK_LOVE_CONFIG.apiEndpoint, {
+        const endpoint = LOK_LOVE_CONFIG.apiEndpoint +
+            (LOK_LOVE_CONFIG.apiEndpoint.indexOf('?') === -1 ? '?' : '&') +
+            'outlet=' + encodeURIComponent(LOK_LOVE_CONFIG.outletKey);
+
+        const res = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
