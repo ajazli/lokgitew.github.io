@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LOK &amp; LOVE — Blind Date Night at LOK GITEW</title>
+    <meta name="description" content="Meet 11 strangers. Grab a bite. Maybe find someone worth coming back for. Join LOK &amp; LOVE at LOK GITEW.">
+    <link rel="canonical" href="https://lokgitew.com/lok-love/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="LOK GITEW">
+    <meta property="og:title" content="LOK &amp; LOVE — Blind Date Night at LOK GITEW">
+    <meta property="og:description" content="6 guys. 6 girls. 12 strangers. One table. Applications are open.">
+    <meta property="og:url" content="https://lokgitew.com/lok-love/">
+    <meta property="og:image" content="https://lokgitew.com/images/posters/hero.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" type="image/x-icon" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Shared LOK GITEW system: nav, footer, buttons, reveal animations -->
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/lok-love/lok-love.css">
+</head>
+<body class="ll-body">
+
+    <a href="#llApply" class="ll-skip-link">Skip to application form</a>
+
+    <!-- Navigation (shared with the main site) -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <img src="/images/logo.png" alt="Lok Gitew Logo">
+            </a>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="#what">What Is It</a></li>
+                <li><a href="#how">How It Works</a></li>
+                <li><a href="#details">Details</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#llApply">Apply</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ── Hero ──────────────────────────────────────────────────────── -->
+    <header class="ll-hero" id="top">
+        <div class="ll-hero-glow" aria-hidden="true"></div>
+        <div class="ll-hero-inner">
+            <p class="ll-eyebrow"><span data-ll="editionLabel">6×6 — Curated Singles Dinner</span></p>
+            <h1 class="ll-hero-title">LOK <span class="ll-amp">&amp;</span> LOVE</h1>
+            <p class="ll-hero-lines">
+                <span>6 guys.</span>
+                <span>6 girls.</span>
+                <span>12 strangers.</span>
+                <span class="ll-hero-punch">One table.</span>
+            </p>
+            <p class="ll-hero-sub">
+                A curated blind-date night at LOK GITEW.
+                <strong data-ll="eventDate">Saturday, 19 September 2026</strong>.
+            </p>
+            <div class="ll-hero-actions">
+                <a href="#llApply" class="ll-btn ll-btn-primary" data-ll-apply>Apply Now</a>
+                <a href="#how" class="ll-btn ll-btn-ghost">How It Works</a>
+            </div>
+            <p class="ll-hero-note">
+                Only <span data-ll="totalParticipants">12</span> seats.
+                Applications close <span data-ll="applicationDeadline">Friday, 11 September 2026</span>.
+            </p>
+        </div>
+    </header>
+
+    <main>
+
+    <!-- ── What is LOK & LOVE ────────────────────────────────────────── -->
+    <section class="ll-section ll-section-dark" id="what">
+        <div class="ll-container">
+            <h2 class="ll-section-title title-reveal">So… what is this?</h2>
+            <div class="ll-what-grid">
+                <div class="ll-what-copy reveal reveal-left">
+                    <p class="ll-lead">
+                        We're skipping the swiping, the awkward DMs and the
+                        "so… what do you do?" situations.
+                    </p>
+                    <p>
+                        LOK &amp; LOVE is a curated blind-date night at LOK GITEW where
+                        12 strangers come together, eat, talk, play a few games and see
+                        if there's a spark. Six guys, six girls, one long table, and a
+                        proper plate of food in front of everyone.
+                    </p>
+                    <p>
+                        You'll get short one-on-one sessions with everyone at the table,
+                        then dinner and group games. Afterwards, we handle the matching
+                        quietly — no public rejections, no big reveal, no drama.
+                    </p>
+                    <p class="ll-callout">
+                        Because there are only <strong data-ll="totalParticipants">12</strong>
+                        seats, every applicant is hand-picked to keep the table balanced
+                        on age, interests and what everyone's actually looking for.
+                    </p>
+                </div>
+                <ul class="ll-what-stats reveal reveal-right">
+                    <li><span class="ll-stat-num" data-ll="maxMaleParticipants">6</span><span class="ll-stat-label">Guys</span></li>
+                    <li><span class="ll-stat-num" data-ll="maxFemaleParticipants">6</span><span class="ll-stat-label">Girls</span></li>
+                    <li><span class="ll-stat-num">2</span><span class="ll-stat-label">Hours</span></li>
+                    <li><span class="ll-stat-num">1</span><span class="ll-stat-label">Table</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── How it works ──────────────────────────────────────────────── -->
+    <section class="ll-section" id="how">
+        <div class="ll-container">
+            <h2 class="ll-section-title title-reveal">How It Works</h2>
+            <ol class="ll-steps">
+                <li class="ll-step reveal stagger-item" style="--stagger:0">
+                    <span class="ll-step-num">01</span>
+                    <h3>Apply</h3>
+                    <p>Tell us a little about yourself. Takes about three minutes.</p>
+                </li>
+                <li class="ll-step reveal stagger-item" style="--stagger:1">
+                    <span class="ll-step-num">02</span>
+                    <h3>We Review</h3>
+                    <p>Our team reads every application and builds a balanced table.</p>
+                </li>
+                <li class="ll-step reveal stagger-item" style="--stagger:2">
+                    <span class="ll-step-num">03</span>
+                    <h3>Get Matched</h3>
+                    <p>If you're selected, we'll message you on WhatsApp with the details.</p>
+                </li>
+                <li class="ll-step reveal stagger-item" style="--stagger:3">
+                    <span class="ll-step-num">04</span>
+                    <h3>Show Up</h3>
+                    <p>Meet the other 11 and see where the night goes.</p>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- ── Event details ─────────────────────────────────────────────── -->
+    <section class="ll-section ll-section-dark" id="details">
+        <div class="ll-container">
+            <h2 class="ll-section-title title-reveal">The Details</h2>
+
+            <div class="ll-details-grid">
+                <div class="ll-detail-card reveal stagger-item" style="--stagger:0">
+                    <span class="ll-detail-icon" aria-hidden="true">📅</span>
+                    <h3>When</h3>
+                    <p><strong data-ll="eventDate">Saturday, 19 September 2026</strong></p>
+                    <p data-ll="eventTime">19.00 – 21.00 WIB</p>
+                </div>
+                <div class="ll-detail-card reveal stagger-item" style="--stagger:1">
+                    <span class="ll-detail-icon" aria-hidden="true">📍</span>
+                    <h3>Where</h3>
+                    <p><strong data-ll="venue">LOK GITEW</strong></p>
+                    <p data-ll="address">Ruko Hampton Promenade Blok M No. 18, Medang, Kec. Pagedangan, Kab. Tangerang, Banten 15334</p>
+                    <a class="ll-detail-link" data-ll-href="mapsUrl" href="https://www.google.com/maps/search/?api=1&amp;query=LOK%20GITEW%20Hampton%20Promenade%20Serpong" target="_blank" rel="noopener">Open in Maps →</a>
+                </div>
+                <div class="ll-detail-card reveal stagger-item" style="--stagger:2">
+                    <span class="ll-detail-icon" aria-hidden="true">🎟️</span>
+                    <h3>Ticket</h3>
+                    <p><strong><span data-ll="ticketPrice">Rp199.000</span> <span data-ll="ticketPriceNote">per person</span></strong></p>
+                    <p class="ll-detail-note">Only payable if you're selected.</p>
+                </div>
+                <div class="ll-detail-card reveal stagger-item" style="--stagger:3">
+                    <span class="ll-detail-icon" aria-hidden="true">🙋</span>
+                    <h3>Who Can Apply</h3>
+                    <p>Single, and <span data-ll="minimumAge">21</span> or older.</p>
+                    <p class="ll-detail-note">That's it. Come as you are.</p>
+                </div>
+            </div>
+
+            <div class="ll-includes-card reveal">
+                <h3>Your ticket includes</h3>
+                <ul class="ll-includes" id="llIncludes">
+                    <li><span class="ll-include-icon" aria-hidden="true">🍚</span>One LokGitew rice bowl</li>
+                    <li><span class="ll-include-icon" aria-hidden="true">🥤</span>One welcome drink</li>
+                    <li><span class="ll-include-icon" aria-hidden="true">💬</span>Mini date sessions</li>
+                    <li><span class="ll-include-icon" aria-hidden="true">🎲</span>Group games &amp; activities</li>
+                    <li><span class="ll-include-icon" aria-hidden="true">💌</span>Matching process after the event</li>
+                </ul>
+            </div>
+
+            <div class="ll-capacity-note reveal">
+                <p>
+                    <strong>Applications are still open 👀</strong>
+                    If the initial <span data-ll="totalParticipants">12</span> spots are already
+                    filled, you may be placed on our waitlist — people drop out more often
+                    than you'd think.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Application form ──────────────────────────────────────────── -->
+    <section class="ll-section ll-apply-section" id="llApply">
+        <div class="ll-container ll-container-narrow">
+
+            <h2 class="ll-section-title title-reveal">Apply for LOK &amp; LOVE</h2>
+            <p class="ll-apply-intro">
+                Three minutes, and you're done. Filling this in doesn't guarantee a seat —
+                we'll only contact you on WhatsApp if you're selected.
+            </p>
+
+            <!-- Form card -->
+            <div class="ll-form-card" id="llFormCard">
+
+                <div class="ll-progress">
+                    <div class="ll-progress-meta">
+                        <span id="llStepCounter">Step 1 of 2</span>
+                    </div>
+                    <div class="ll-progress-track" id="llProgressTrack"
+                         role="progressbar" aria-valuemin="1" aria-valuenow="1" aria-valuemax="2"
+                         aria-label="Application progress">
+                        <div class="ll-progress-bar" id="llProgressBar"></div>
+                    </div>
+                </div>
+
+                <!-- Steps are rendered from LOK_LOVE_FORM_SCHEMA in lok-love.js -->
+                <form id="llForm" novalidate autocomplete="on">
+                    <div id="llStepBody"></div>
+
+                    <div class="ll-form-error" id="llFormError" role="alert" hidden></div>
+
+                    <div class="ll-form-nav">
+                        <button type="button" class="ll-btn ll-btn-back" id="llBackBtn" hidden>Back</button>
+                        <button type="button" class="ll-btn ll-btn-primary" id="llNextBtn">Continue</button>
+                    </div>
+                </form>
+
+                <p class="ll-form-privacy">
+                    🔒 Your answers go straight to the LOK GITEW team. We never share your
+                    contact details with other participants without your say-so.
+                </p>
+            </div>
+
+            <!-- Success state -->
+            <div class="ll-result ll-result-success" id="llSuccess" hidden>
+                <div class="ll-result-emoji" aria-hidden="true">👀</div>
+                <h3>You're in the running</h3>
+                <p>Application received.</p>
+                <p class="ll-result-label">Your LOK &amp; LOVE application ID</p>
+                <p class="ll-application-id" id="llApplicationId">LL-2026-00000</p>
+                <p>
+                    We'll review your application and contact you on WhatsApp if you're
+                    selected. Keep an eye on your messages 📱
+                </p>
+                <div class="ll-result-actions">
+                    <a href="/" class="ll-btn ll-btn-primary">Back to LOK GITEW</a>
+                </div>
+            </div>
+
+            <!-- Duplicate state -->
+            <div class="ll-result ll-result-dupe" id="llDuplicate" hidden>
+                <div class="ll-result-emoji" aria-hidden="true">👀</div>
+                <h3>Looks like you've already applied</h3>
+                <p>
+                    We've already got your application. If you need to update anything,
+                    just message us and we'll sort it out.
+                </p>
+                <div class="ll-result-actions">
+                    <a class="ll-btn ll-btn-primary" href="https://wa.me/6285122333769" target="_blank" rel="noopener">WhatsApp Us</a>
+                    <a href="/" class="ll-btn ll-btn-ghost">Back to LOK GITEW</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ── FAQ ───────────────────────────────────────────────────────── -->
+    <section class="ll-section ll-section-dark" id="faq">
+        <div class="ll-container ll-container-narrow">
+            <h2 class="ll-section-title title-reveal">Questions You're Probably Asking</h2>
+
+            <div class="ll-faq">
+                <details class="ll-faq-item">
+                    <summary>Does applying mean I've got a spot?</summary>
+                    <div class="ll-faq-body">
+                        <p>
+                            Not yet. There are only <span data-ll="totalParticipants">12</span>
+                            seats, so our team reviews every application and picks a group
+                            that fits well together. Only selected applicants get contacted.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="ll-faq-item">
+                    <summary>How will I know if I'm selected?</summary>
+                    <div class="ll-faq-body">
+                        <p>
+                            We'll message you on WhatsApp using the number you give us. If you
+                            don't hear from us, it just means this round wasn't the right fit —
+                            you're very welcome to apply again for the next one.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="ll-faq-item">
+                    <summary>When do I pay?</summary>
+                    <div class="ll-faq-body">
+                        <p>
+                            Only after you're invited. Selected applicants pay
+                            <span data-ll="ticketPrice">Rp199.000</span> in full within
+                            <span data-ll="paymentWindowHours">24</span> hours of getting the
+                            invitation. Your seat is confirmed once payment lands — nothing is
+                            charged when you apply.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="ll-faq-item">
+                    <summary>Who can join?</summary>
+                    <div class="ll-faq-body">
+                        <p>
+                            Anyone single and <span data-ll="minimumAge">21</span> or older.
+                            We build each table to be balanced on age, interests and what
+                            people are looking for.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="ll-faq-item">
+                    <summary>What happens to my information?</summary>
+                    <div class="ll-faq-body">
+                        <p>
+                            The details and photos you send are used purely to review your
+                            application. Your contact information is never passed to another
+                            participant unless you both agree to it.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="ll-faq-item">
+                    <summary>Is the food included?</summary>
+                    <div class="ll-faq-body">
+                        <p>
+                            Yes — your ticket covers a LokGitew rice bowl and a welcome drink,
+                            plus the mini date sessions, group games and the matching process
+                            afterwards.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="ll-faq-item">
+                    <summary>Do I have to come alone?</summary>
+                    <div class="ll-faq-body">
+                        <p>
+                            Yes. Everyone comes solo — that's rather the point. You'll know
+                            nobody at the table when you sit down, and that's what makes it work.
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="ll-faq-footer">
+                <p>Still got questions?</p>
+                <a class="ll-btn ll-btn-ghost" href="https://wa.me/6285122333769" target="_blank" rel="noopener">WhatsApp Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Final CTA ─────────────────────────────────────────────────── -->
+    <section class="ll-final-cta">
+        <div class="ll-container">
+            <h2>One table. One night.<br>Might as well.</h2>
+            <a href="#llApply" class="ll-btn ll-btn-primary ll-btn-lg" data-ll-apply>Apply Now</a>
+            <p class="ll-final-note">
+                Applications close <span data-ll="applicationDeadline">Friday, 11 September 2026</span>.
+            </p>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- Footer (shared with the main site) -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <img src="/images/logo.png" alt="Lok Gitew Logo" class="footer-logo">
+                <p>Singaporean &amp; Malaysian Street Food</p>
+                <p>Tue-Sun: 3PM-3AM WIB | Monday: Closed</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="/">Home</a>
+                <a href="/#menu">Menu</a>
+                <a href="/#loyalty">GitewGang</a>
+                <a href="/#reservations">Reserve a Table</a>
+                <a href="/lok-love/">LOK &amp; LOVE</a>
+                <a href="/#location">Location</a>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <p>Follow us on social media for updates and promos!</p>
+                <p style="margin-top: 0.5rem; color: var(--tangerine); font-weight: 600;">@lokgitew</p>
+                <div class="social-links">
+                    <a href="https://instagram.com/lokgitew" target="_blank" title="Instagram @lokgitew">
+                        <img src="/images/instagram.svg" alt="Instagram">
+                    </a>
+                    <a href="https://tiktok.com/@lokgitew" target="_blank" title="TikTok @lokgitew">
+                        <img src="/images/tiktok.svg" alt="TikTok">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Lok Gitew. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/lok-love/lok-love.js"></script>
+</body>
+</html>
