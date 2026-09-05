@@ -53,6 +53,22 @@ var COLUMNS = [
   { header: 'Instagram/TikTok',     key: 'socialHandle'   },
   { header: 'Email',                key: 'email'          },
 
+  { header: 'Personality',          key: 'personality'      },
+  { header: 'Interests',            key: 'interests'        },
+  { header: 'Ideal Weekend',        key: 'weekendVibe'      },
+  { header: 'Self Description',     key: 'selfDescription'  },
+
+  { header: 'Intention',            key: 'intention'         },
+  { header: 'Preferred Age Range',  key: 'preferredAgeRange' },
+  { header: 'Valued Qualities',     key: 'valuedQualities'   },
+  { header: 'Deal Breakers',        key: 'dealBreakers'      },
+
+  { header: 'Availability',           key: 'availability'   },
+  { header: 'Dietary Requirements',   key: 'dietary'        },
+  { header: 'Dietary Notes',          key: 'dietaryNotes'   },
+  { header: 'Heard About Us Via',     key: 'hearAboutUs'    },
+  { header: 'Additional Information', key: 'additionalInfo' },
+
   { header: 'Consent — Accurate',   key: 'consentAccurate'  },
   { header: 'Consent — Selection',  key: 'consentSelection' },
   { header: 'Consent — Contact',    key: 'consentContact'   },
@@ -73,7 +89,8 @@ var REQUIRED_TEXT_FIELDS = [
   { key: 'name',         label: 'Nama lengkap',        max: 100 },
   { key: 'city',         label: 'Kota atau daerah',    max: 120 },
   { key: 'occupation',   label: 'Pekerjaan',           max: 120 },
-  { key: 'socialHandle', label: 'Username Instagram/TikTok', max: 80 }
+  { key: 'socialHandle', label: 'Username Instagram/TikTok', max: 80 },
+  { key: 'selfDescription', label: 'Ceritakan sedikit tentang dirimu', max: 300 }
 ];
 
 var REQUIRED_CONSENTS = [
@@ -82,7 +99,47 @@ var REQUIRED_CONSENTS = [
 
 var CHOICE_FIELDS = [
   { key: 'gender',        allowed: ['Pria', 'Wanita'] },
-  { key: 'lookingToMeet', allowed: ['Pria', 'Wanita'] }
+  { key: 'lookingToMeet', allowed: ['Pria', 'Wanita'] },
+  { key: 'personality',   allowed: ['Sangat introvert', 'Cenderung introvert',
+                                    'Di antara keduanya', 'Cenderung ekstrovert',
+                                    'Sangat ekstrovert'] },
+  { key: 'weekendVibe',   allowed: ['Nongkrong di kafe', 'Petualangan di luar ruangan',
+                                    'Santai di rumah', 'Keluar malam & live music',
+                                    'Coba tempat makan baru', 'Olahraga atau gym',
+                                    'Ngerjain hobi atau proyek'] },
+  { key: 'intention',     allowed: ['Hubungan serius',
+                                    'Kenalan dulu, lihat ke mana arahnya',
+                                    'Teman baru & memperluas relasi',
+                                    'Belum tahu, mau coba dulu'] },
+  { key: 'preferredAgeRange', allowed: ['21–25', '24–30', '28–35', '33–40', '40+',
+                                        'Tidak masalah'] },
+  { key: 'availability',  allowed: ['Ya, saya bisa hadir', 'Belum pasti',
+                                    'Tidak bisa di tanggal ini'] },
+  { key: 'hearAboutUs',   allowed: ['Instagram', 'TikTok', 'Teman',
+                                    'Pernah datang ke LokGitew', 'Lainnya'] }
+];
+
+/**
+ * Multi-select fields. Values arrive as an array and are stored as a
+ * comma-separated string. `max` mirrors the form's selection cap.
+ */
+var MULTI_FIELDS = [
+  { key: 'interests', label: 'Minat & hobi', required: true, max: 6,
+    allowed: ['Kuliner & jajan', 'Musik', 'Film & series', 'Olahraga & gym',
+              'Traveling', 'Gaming', 'Seni & desain', 'Membaca', 'Fotografi',
+              'Fashion', 'Nongkrong di kafe', 'Alam & hiking',
+              'Konser & live music', 'Otomotif', 'Bisnis & startup',
+              'Hewan peliharaan'] },
+  { key: 'valuedQualities', label: 'Kualitas yang paling kamu cari', required: true, max: 3,
+    allowed: ['Humoris', 'Cerdas', 'Penyayang', 'Ambisius', 'Mandiri',
+              'Petualang', 'Tenang & sabar', 'Kreatif', 'Aktif & sporty',
+              'Religius', 'Pendengar yang baik'] },
+  { key: 'dealBreakers', label: 'Hal yang kurang cocok buatmu', required: false, max: 0,
+    allowed: ['Merokok', 'Sering minum alkohol', 'Tidak suka hewan peliharaan',
+              'Jarang komunikasi', 'Beda prinsip agama'] },
+  { key: 'dietary', label: 'Preferensi makanan atau alergi', required: true, max: 0,
+    allowed: ['Tidak ada', 'Halal', 'Vegetarian', 'Vegan', 'Tidak makan pedas',
+              'Alergi seafood', 'Alergi kacang', 'Lainnya'] }
 ];
 
 /* ── HTTP entry points ───────────────────────────────────────────────── */
@@ -239,6 +296,28 @@ function validate(payload) {
     email = '';
   }
   v.email = email;
+
+  // Multi-selects
+  MULTI_FIELDS.forEach(function (f) {
+    var raw = payload[f.key];
+    var picked = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+
+    picked = picked.map(trimStr).filter(function (x) { return x !== ''; });
+
+    var invalid = picked.filter(function (x) { return f.allowed.indexOf(x) === -1; });
+    if (invalid.length) {
+      errors.push({ field: f.key, message: 'Please choose from the listed options.' });
+      picked = [];
+    } else if (f.required && !picked.length) {
+      errors.push({ field: f.key, message: f.label + ' is required.' });
+    } else if (f.max && picked.length > f.max) {
+      errors.push({
+        field: f.key,
+        message: f.label + ': please pick no more than ' + f.max + '.'
+      });
+    }
+    v[f.key] = picked.join(', ');
+  });
 
   // Consents
   REQUIRED_CONSENTS.forEach(function (key) {

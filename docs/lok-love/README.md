@@ -104,7 +104,8 @@ Commit and push. GitHub Pages redeploys automatically.
 
 ### 6. Verify end to end
 
-1. Open `https://lokgitew.com/lok-love/` and submit a real application.
+1. Open `https://lokgitew.com/lok-love/` and submit a real application
+   (five steps — the last is review and consent).
 2. Confirm you get an application ID (`LL-2026-00001`).
 3. Confirm the row appears in the sheet.
 4. Submit again with the same WhatsApp number — you should get the
@@ -164,11 +165,17 @@ To add a question:
 4. Update `docs/lok-love/question-mapping.md`.
 
 Field `id` = payload key = `COLUMNS` key. Supported `type` values: `text`,
-`tel`, `email`, `number`, `textarea`, `select`, `radio`, `consent`.
+`tel`, `email`, `number`, `textarea`, `select`, `radio`, `checkbox`
+(multi-select) and `consent`.
 
-Any schema field not explicitly handled in `validate()` is still stored — the
-final loop in `validate()` carries unknown keys through — so simple text
-questions need no server change beyond the `COLUMNS` row.
+For a `select` or `radio`, add its allowed values to `CHOICE_FIELDS` in
+`Code.gs`; for a `checkbox`, add an entry to `MULTI_FIELDS` (with `required`
+and an optional `max` matching the form's cap). Plain text questions need
+neither — the final loop in `validate()` carries unknown keys through, so they
+are stored with no server change beyond the `COLUMNS` row.
+
+Multi-selects travel as a JSON array and are stored as a comma-separated
+string in one cell.
 
 To add a whole step, push another object onto `LOK_LOVE_FORM_SCHEMA` **before**
 the `isReview: true` step. The progress bar re-counts itself.
@@ -253,8 +260,12 @@ contract:
 
 ```
 POST  <apiEndpoint>
-      { name, age, gender, lookingToMeet, city, occupation,
-        whatsapp, socialHandle, email, consent* }
+      { name, age, gender, lookingToMeet, city, occupation, whatsapp,
+        socialHandle, email,                          // step 1
+        personality, interests[], weekendVibe, selfDescription,
+        intention, preferredAgeRange, valuedQualities[], dealBreakers[],
+        availability, dietary[], dietaryNotes, hearAboutUs, additionalInfo,
+        consentAccurate, consentSelection, consentContact, consentPrivacy }
 
 200   { status: "ok",        applicationId: "LL-2026-00037", submittedAt: "…" }
 200   { status: "duplicate" }

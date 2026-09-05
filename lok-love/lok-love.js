@@ -55,11 +55,17 @@ const LOK_LOVE_INCLUDES = [
 ];
 
 /* ── Form schema ───────────────────────────────────────────────────────
-   STEP 1 questions are transcribed verbatim from the live Google Form
-   (page 1). Do not reword them without organiser approval — see PRD §11.
+   STEP 1 is transcribed verbatim from the live Google Form (page 1).
+   Do not reword those nine questions without organiser approval.
 
-   Later steps are appended here as the organisers confirm the remaining
-   Google Form pages.                                                     */
+   Steps 2–4 were designed for this form. The Google Form had taken no
+   responses, so the organisers cleared us to write them from scratch
+   rather than mirror the old pages; they follow the PRD's groupings and
+   the selection criteria the event itself publishes — usia, kepribadian,
+   minat, preferensi pasangan.
+
+   Question wording is Indonesian (the applicant's language) with a
+   smaller English gloss underneath, matching Step 1.                     */
 const LOK_LOVE_FORM_SCHEMA = [
     {
         id: 'about-you',
@@ -170,13 +176,236 @@ const LOK_LOVE_FORM_SCHEMA = [
         ]
     },
 
-    /* ── PENDING ORGANISER INPUT ────────────────────────────────────────
-       Google Form pages 2+ (vibe / what you are looking for / event
-       details / photo upload) are not yet transcribed. Append them here
-       as additional step objects using the same shape as above; the
-       renderer, validation, review screen, payload and Sheet columns all
-       pick them up automatically. See docs/lok-love/question-mapping.md.
-    ──────────────────────────────────────────────────────────────────── */
+    {
+        id: 'your-vibe',
+        title: 'Your Vibe',
+        blurb: 'This is what we actually use to build a table that clicks.',
+        fields: [
+            {
+                id: 'personality',
+                label: 'Kepribadian kamu',
+                labelEn: 'Your personality',
+                type: 'radio',
+                required: true,
+                options: [
+                    { value: 'Sangat introvert',    label: 'Sangat introvert',    labelEn: 'Very introverted' },
+                    { value: 'Cenderung introvert', label: 'Cenderung introvert', labelEn: 'Leans introverted' },
+                    { value: 'Di antara keduanya',  label: 'Di antara keduanya',  labelEn: 'Somewhere in between' },
+                    { value: 'Cenderung ekstrovert',label: 'Cenderung ekstrovert',labelEn: 'Leans extroverted' },
+                    { value: 'Sangat ekstrovert',   label: 'Sangat ekstrovert',   labelEn: 'Very extroverted' }
+                ],
+                sheetColumn: 'Personality'
+            },
+            {
+                id: 'interests',
+                label: 'Minat & hobi',
+                labelEn: 'Interests & hobbies',
+                type: 'checkbox',
+                required: true,
+                maxSelections: 6,
+                help: 'Pick up to 6 — these help us seat you near people you can actually talk to.',
+                options: [
+                    { value: 'Kuliner & jajan',      label: 'Kuliner & jajan' },
+                    { value: 'Musik',                label: 'Musik' },
+                    { value: 'Film & series',        label: 'Film & series' },
+                    { value: 'Olahraga & gym',       label: 'Olahraga & gym' },
+                    { value: 'Traveling',            label: 'Traveling' },
+                    { value: 'Gaming',               label: 'Gaming' },
+                    { value: 'Seni & desain',        label: 'Seni & desain' },
+                    { value: 'Membaca',              label: 'Membaca' },
+                    { value: 'Fotografi',            label: 'Fotografi' },
+                    { value: 'Fashion',              label: 'Fashion' },
+                    { value: 'Nongkrong di kafe',    label: 'Nongkrong di kafe' },
+                    { value: 'Alam & hiking',        label: 'Alam & hiking' },
+                    { value: 'Konser & live music',  label: 'Konser & live music' },
+                    { value: 'Otomotif',             label: 'Otomotif' },
+                    { value: 'Bisnis & startup',     label: 'Bisnis & startup' },
+                    { value: 'Hewan peliharaan',     label: 'Hewan peliharaan' }
+                ],
+                sheetColumn: 'Interests'
+            },
+            {
+                id: 'weekendVibe',
+                label: 'Akhir pekan idealmu',
+                labelEn: 'Your ideal weekend',
+                type: 'select',
+                required: true,
+                options: [
+                    { value: 'Nongkrong di kafe',            label: 'Nongkrong di kafe' },
+                    { value: 'Petualangan di luar ruangan',  label: 'Petualangan di luar ruangan' },
+                    { value: 'Santai di rumah',              label: 'Santai di rumah' },
+                    { value: 'Keluar malam & live music',    label: 'Keluar malam & live music' },
+                    { value: 'Coba tempat makan baru',       label: 'Coba tempat makan baru' },
+                    { value: 'Olahraga atau gym',            label: 'Olahraga atau gym' },
+                    { value: 'Ngerjain hobi atau proyek',    label: 'Ngerjain hobi atau proyek' }
+                ],
+                sheetColumn: 'Ideal Weekend'
+            },
+            {
+                id: 'selfDescription',
+                label: 'Ceritakan sedikit tentang dirimu',
+                labelEn: 'Tell us a bit about yourself',
+                type: 'textarea',
+                required: true,
+                maxLength: 300,
+                placeholder: 'Kerja di bidang apa, lagi suka apa, hal random yang bikin kamu semangat…',
+                help: 'A few sentences is plenty. Write like you talk.',
+                sheetColumn: 'Self Description'
+            }
+        ]
+    },
+
+    {
+        id: 'looking-for',
+        title: "What You're Looking For",
+        blurb: 'No wrong answers here — it just helps us pair you sensibly.',
+        fields: [
+            {
+                id: 'intention',
+                label: 'Apa yang kamu cari di acara ini?',
+                labelEn: 'What are you hoping to find?',
+                type: 'radio',
+                required: true,
+                options: [
+                    { value: 'Hubungan serius',                    label: 'Hubungan serius',                    labelEn: 'Something serious' },
+                    { value: 'Kenalan dulu, lihat ke mana arahnya',label: 'Kenalan dulu, lihat ke mana arahnya',labelEn: 'Meet first, see where it goes' },
+                    { value: 'Teman baru & memperluas relasi',     label: 'Teman baru & memperluas relasi',     labelEn: 'New friends and connections' },
+                    { value: 'Belum tahu, mau coba dulu',          label: 'Belum tahu, mau coba dulu',          labelEn: 'Not sure yet, just curious' }
+                ],
+                sheetColumn: 'Intention'
+            },
+            {
+                id: 'preferredAgeRange',
+                label: 'Rentang usia yang kamu harapkan',
+                labelEn: 'Preferred age range',
+                type: 'select',
+                required: true,
+                options: [
+                    { value: '21–25',          label: '21–25' },
+                    { value: '24–30',          label: '24–30' },
+                    { value: '28–35',          label: '28–35' },
+                    { value: '33–40',          label: '33–40' },
+                    { value: '40+',            label: '40+' },
+                    { value: 'Tidak masalah',  label: 'Tidak masalah', labelEn: 'No preference' }
+                ],
+                sheetColumn: 'Preferred Age Range'
+            },
+            {
+                id: 'valuedQualities',
+                label: 'Kualitas yang paling kamu cari',
+                labelEn: 'Qualities you value most',
+                type: 'checkbox',
+                required: true,
+                maxSelections: 3,
+                help: 'Pick your top 3.',
+                options: [
+                    { value: 'Humoris',              label: 'Humoris' },
+                    { value: 'Cerdas',               label: 'Cerdas' },
+                    { value: 'Penyayang',            label: 'Penyayang' },
+                    { value: 'Ambisius',             label: 'Ambisius' },
+                    { value: 'Mandiri',              label: 'Mandiri' },
+                    { value: 'Petualang',            label: 'Petualang' },
+                    { value: 'Tenang & sabar',       label: 'Tenang & sabar' },
+                    { value: 'Kreatif',              label: 'Kreatif' },
+                    { value: 'Aktif & sporty',       label: 'Aktif & sporty' },
+                    { value: 'Religius',             label: 'Religius' },
+                    { value: 'Pendengar yang baik',  label: 'Pendengar yang baik' }
+                ],
+                sheetColumn: 'Valued Qualities'
+            },
+            {
+                id: 'dealBreakers',
+                label: 'Hal yang kurang cocok buatmu',
+                labelEn: 'Deal breakers',
+                type: 'checkbox',
+                required: false,
+                help: 'Optional — leave it blank if nothing here bothers you.',
+                options: [
+                    { value: 'Merokok',                    label: 'Merokok' },
+                    { value: 'Sering minum alkohol',       label: 'Sering minum alkohol' },
+                    { value: 'Tidak suka hewan peliharaan',label: 'Tidak suka hewan peliharaan' },
+                    { value: 'Jarang komunikasi',          label: 'Jarang komunikasi' },
+                    { value: 'Beda prinsip agama',         label: 'Beda prinsip agama' }
+                ],
+                sheetColumn: 'Deal Breakers'
+            }
+        ]
+    },
+
+    {
+        id: 'event-details',
+        title: 'Event Details',
+        blurb: 'Last bit — the practical stuff so the night runs smoothly.',
+        fields: [
+            {
+                id: 'availability',
+                label: 'Bisa hadir pada ' + LOK_LOVE_CONFIG.eventDate + ', ' + LOK_LOVE_CONFIG.eventTime + '?',
+                labelEn: 'Can you make the event date and time?',
+                type: 'radio',
+                required: true,
+                options: [
+                    { value: 'Ya, saya bisa hadir',      label: 'Ya, saya bisa hadir',      labelEn: 'Yes, I can make it' },
+                    { value: 'Belum pasti',              label: 'Belum pasti',              labelEn: 'Not certain yet' },
+                    { value: 'Tidak bisa di tanggal ini',label: 'Tidak bisa di tanggal ini',labelEn: 'Not this date' }
+                ],
+                sheetColumn: 'Availability'
+            },
+            {
+                id: 'dietary',
+                label: 'Preferensi makanan atau alergi',
+                labelEn: 'Dietary requirements or allergies',
+                type: 'checkbox',
+                required: true,
+                help: 'Pick "Tidak ada" if none apply — your rice bowl depends on this.',
+                options: [
+                    { value: 'Tidak ada',        label: 'Tidak ada', labelEn: 'None' },
+                    { value: 'Halal',            label: 'Halal' },
+                    { value: 'Vegetarian',       label: 'Vegetarian' },
+                    { value: 'Vegan',            label: 'Vegan' },
+                    { value: 'Tidak makan pedas',label: 'Tidak makan pedas' },
+                    { value: 'Alergi seafood',   label: 'Alergi seafood' },
+                    { value: 'Alergi kacang',    label: 'Alergi kacang' },
+                    { value: 'Lainnya',          label: 'Lainnya', labelEn: 'Other — note it below' }
+                ],
+                sheetColumn: 'Dietary Requirements'
+            },
+            {
+                id: 'dietaryNotes',
+                label: 'Detail alergi atau catatan makanan',
+                labelEn: 'Allergy details or food notes',
+                type: 'text',
+                required: false,
+                maxLength: 200,
+                placeholder: 'Alergi udang, tidak makan sapi, dll.',
+                sheetColumn: 'Dietary Notes'
+            },
+            {
+                id: 'hearAboutUs',
+                label: 'Dari mana kamu tahu acara ini?',
+                labelEn: 'How did you hear about LOK & LOVE?',
+                type: 'select',
+                required: true,
+                options: [
+                    { value: 'Instagram',                  label: 'Instagram' },
+                    { value: 'TikTok',                     label: 'TikTok' },
+                    { value: 'Teman',                      label: 'Teman', labelEn: 'A friend' },
+                    { value: 'Pernah datang ke LokGitew',  label: 'Pernah datang ke LokGitew' },
+                    { value: 'Lainnya',                    label: 'Lainnya' }
+                ],
+                sheetColumn: 'Heard About Us Via'
+            },
+            {
+                id: 'additionalInfo',
+                label: 'Ada hal lain yang perlu kami tahu?',
+                labelEn: 'Anything else we should know?',
+                type: 'textarea',
+                required: false,
+                maxLength: 400,
+                placeholder: 'Opsional — apa pun yang menurutmu penting.',
+                sheetColumn: 'Additional Information'
+            }
+        ]
+    },
 
     {
         id: 'confirm',
@@ -331,9 +560,21 @@ function validateField(field, value) {
         return value === true ? null : 'Please tick this box to continue.';
     }
     if (field.required && isBlank) {
-        return 'This one is required.';
+        return field.type === 'checkbox' ? 'Pick at least one.' : 'This one is required.';
     }
     if (isBlank) return null; // optional + empty is fine
+
+    if (field.type === 'checkbox') {
+        const picked = Array.isArray(value) ? value : [];
+        if (field.maxSelections && picked.length > field.maxSelections) {
+            return 'Please pick no more than ' + field.maxSelections + '.';
+        }
+        const allowed = field.options.map(o => o.value);
+        if (picked.some(v => allowed.indexOf(v) === -1)) {
+            return 'Please pick from the options listed.';
+        }
+        return null;
+    }
 
     switch (field.type) {
         case 'number': {
@@ -451,6 +692,35 @@ function renderField(field) {
                     '<div class="ll-radio-group" role="radiogroup" aria-describedby="' + describedBy + '">' +
                         opts +
                     '</div>' +
+                    errNode +
+                '</fieldset>' +
+            '</div>';
+        }
+
+        case 'checkbox': {
+            // Multi-select. Value is an array of the chosen option values.
+            const chosen = Array.isArray(val) ? val : [];
+            const opts = field.options.map((o, i) => {
+                const oid = field.id + '-' + i;
+                const checked = chosen.indexOf(o.value) !== -1 ? ' checked' : '';
+                return '<div class="ll-check">' +
+                    '<input type="checkbox" id="' + oid + '" name="' + field.id + '" value="' +
+                        escapeHtml(o.value) + '"' + checked + '>' +
+                    '<label for="' + oid + '">' + escapeHtml(o.label) + '</label>' +
+                '</div>';
+            }).join('');
+            const counter = field.maxSelections
+                ? '<p class="ll-check-count" id="count-' + field.id + '" aria-live="polite">' +
+                      chosen.length + ' of ' + field.maxSelections + ' selected</p>'
+                : '';
+            return '<div class="ll-field" data-field="' + field.id + '">' +
+                '<fieldset class="ll-fieldset">' +
+                    '<legend class="ll-label">' + fieldLabelHtml(field) + '</legend>' +
+                    help +
+                    '<div class="ll-check-group" role="group" aria-describedby="' + describedBy + '">' +
+                        opts +
+                    '</div>' +
+                    counter +
                     errNode +
                 '</fieldset>' +
             '</div>';
@@ -618,6 +888,26 @@ function bindStepInputs() {
             wrap.querySelectorAll('input[type="radio"]').forEach(input => {
                 input.addEventListener('change', () => commit(input.value));
             });
+        } else if (field.type === 'checkbox') {
+            const boxes = Array.from(wrap.querySelectorAll('input[type="checkbox"]'));
+            const counter = wrap.querySelector('.ll-check-count');
+            const sync = () => {
+                const chosen = boxes.filter(b => b.checked).map(b => b.value);
+                const atCap = field.maxSelections && chosen.length >= field.maxSelections;
+                // Grey out the unpicked options once the cap is reached, rather
+                // than letting the user pick a 4th and then scolding them.
+                boxes.forEach(b => {
+                    b.disabled = atCap && !b.checked;
+                    b.closest('.ll-check').classList.toggle('ll-check-disabled', b.disabled);
+                });
+                if (counter) {
+                    counter.textContent = chosen.length + ' of ' + field.maxSelections + ' selected';
+                }
+                commit(chosen);
+            };
+            boxes.forEach(b => b.addEventListener('change', sync));
+            // Apply the cap to a restored draft on first render too.
+            if (field.maxSelections) sync();
         } else if (field.type === 'consent') {
             const box = wrap.querySelector('input[type="checkbox"]');
             if (box) box.addEventListener('change', () => commit(box.checked));
@@ -705,9 +995,14 @@ function buildPayload() {
     allFields().forEach(field => {
         let v = formState.answers[field.id];
         if (typeof v === 'string') v = v.trim();
-        if (field.type === 'consent')      v = v === true;
+
+        // A field's payload type must not depend on whether the applicant
+        // happened to touch it: an untouched multi-select is [], not ''.
+        if (field.type === 'checkbox')     v = Array.isArray(v) ? v : [];
+        else if (field.type === 'consent') v = v === true;
         else if (field.type === 'number')  v = v === '' || v == null ? null : Number(v);
         else if (field.type === 'tel')     v = normaliseWhatsapp(v) || v;
+
         payload[field.id] = v === undefined ? '' : v;
     });
     return payload;
