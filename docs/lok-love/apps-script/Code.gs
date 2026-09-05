@@ -19,6 +19,22 @@
 /* ── Configuration ───────────────────────────────────────────────────── */
 
 var CONFIG = {
+  /**
+   * Which spreadsheet to write to.
+   *
+   * Leave as '' when this script is BOUND to the sheet (created via
+   * Extensions -> Apps Script from inside the spreadsheet) — it will use
+   * whichever spreadsheet it belongs to.
+   *
+   * Set it to a spreadsheet ID to run STANDALONE (created at
+   * script.google.com). The ID is the long string in the sheet's URL:
+   * docs.google.com/spreadsheets/d/<THIS PART>/edit
+   *
+   * Standalone is the easier route if you cannot reach the desktop Sheets
+   * UI — the mobile Sheets app has no Extensions menu.
+   */
+  SPREADSHEET_ID: '1oPoztVdq3q3Trxo1SfSh9SreFPXirfTef-ccYolJNgw',
+
   SHEET_NAME:  'Applications',
   ID_PREFIX:   'LL',
   ID_YEAR:     '2026',
@@ -367,7 +383,16 @@ function normaliseWhatsapp(raw) {
 /* ── Sheet helpers ───────────────────────────────────────────────────── */
 
 function getSheet() {
-  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = CONFIG.SPREADSHEET_ID
+    ? SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID)
+    : SpreadsheetApp.getActiveSpreadsheet();
+
+  if (!ss) {
+    throw new Error(
+      'No spreadsheet. Either bind this script to a sheet, or set ' +
+      'CONFIG.SPREADSHEET_ID.');
+  }
+
   var sheet = ss.getSheetByName(CONFIG.SHEET_NAME);
 
   if (!sheet) {
@@ -475,10 +500,16 @@ function setupSheet() {
   var sheet = getSheet();
   writeHeaderRow(sheet);
   sheet.autoResizeColumns(1, COLUMNS.length);
-  SpreadsheetApp.getUi().alert(
-    'LOK & LOVE: "' + CONFIG.SHEET_NAME + '" is ready with ' +
-    COLUMNS.length + ' columns.'
-  );
+
+  var msg = 'LOK & LOVE: "' + CONFIG.SHEET_NAME + '" is ready with ' +
+            COLUMNS.length + ' columns.';
+  console.log(msg);
+
+  // A standalone script has no spreadsheet UI to pop a dialog in; the log
+  // above is the confirmation in that case.
+  try {
+    SpreadsheetApp.getUi().alert(msg);
+  } catch (noUi) { /* standalone — nothing to alert into */ }
 }
 
 /**

@@ -54,10 +54,25 @@ it holds applicants' personal data.
 
 ### 2. Add the script
 
+Two routes. Both need a **desktop browser** — the Apps Script editor has no
+mobile app and does not work properly on a phone.
+
+**Bound (from inside the sheet)** — the usual way:
+
 1. In the spreadsheet: **Extensions → Apps Script**.
-2. Delete the placeholder `Code.gs` contents.
-3. Paste the entire contents of `docs/lok-love/apps-script/Code.gs`.
-4. Save.
+2. Delete the placeholder contents, paste all of
+   `docs/lok-love/apps-script/Code.gs`, save.
+3. Set `CONFIG.SPREADSHEET_ID` to `''` — a bound script finds its own sheet.
+
+**Standalone (from script.google.com)** — no Sheets UI needed, which helps if
+you only have a phone in desktop-site mode:
+
+1. Go to **script.google.com** → **New project**.
+2. Paste the same file.
+3. Leave `CONFIG.SPREADSHEET_ID` set to the spreadsheet's ID (the long string
+   between `/d/` and `/edit` in its URL). It is pre-filled.
+
+Everything after this is identical for both.
 
 ### 3. Create the sheet tab
 
