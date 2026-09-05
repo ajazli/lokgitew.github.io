@@ -168,14 +168,14 @@ var MULTI_FIELDS = [
 function doPost(e) {
   try {
     if (!e || !e.postData || !e.postData.contents) {
-      return jsonResponse({ status: 'error', message: 'Empty request.' });
+      return jsonResponse({ status: 'error', message: 'Permintaan kosong.' });
     }
 
     var payload;
     try {
       payload = JSON.parse(e.postData.contents);
     } catch (parseErr) {
-      return jsonResponse({ status: 'error', message: 'Malformed request.' });
+      return jsonResponse({ status: 'error', message: 'Format permintaan tidak valid.' });
     }
 
     return handleApplication(payload);
@@ -185,7 +185,7 @@ function doPost(e) {
     console.error('doPost failed: ' + (err && err.stack ? err.stack : err));
     return jsonResponse({
       status: 'error',
-      message: 'We could not save your application. Please try again.'
+      message: 'Pendaftaran kamu belum tersimpan. Coba lagi ya.'
     });
   }
 }
@@ -205,7 +205,7 @@ function handleApplication(payload) {
   if (clean.errors.length) {
     return jsonResponse({
       status: 'invalid',
-      message: 'Some answers need another look.',
+      message: 'Ada jawaban yang perlu dicek lagi.',
       errors: clean.errors
     });
   }
@@ -222,7 +222,7 @@ function handleApplication(payload) {
     console.error('Could not acquire lock: ' + lockErr);
     return jsonResponse({
       status: 'error',
-      message: 'We are a bit busy right now. Please try again in a moment.'
+      message: 'Lagi ramai nih. Coba lagi sebentar ya.'
     });
   }
 
@@ -261,15 +261,15 @@ function validate(payload) {
   var v = {};
 
   if (!payload || typeof payload !== 'object') {
-    return { values: v, errors: [{ field: '_', message: 'Malformed request.' }] };
+    return { values: v, errors: [{ field: '_', message: 'Format permintaan tidak valid.' }] };
   }
 
   REQUIRED_TEXT_FIELDS.forEach(function (f) {
     var value = trimStr(payload[f.key]);
     if (!value) {
-      errors.push({ field: f.key, message: f.label + ' is required.' });
+      errors.push({ field: f.key, message: f.label + ' wajib diisi.' });
     } else if (value.length > f.max) {
-      errors.push({ field: f.key, message: f.label + ' is too long.' });
+      errors.push({ field: f.key, message: f.label + ' terlalu panjang.' });
     }
     v[f.key] = value;
   });
@@ -277,14 +277,14 @@ function validate(payload) {
   // Age
   var age = parseInt(payload.age, 10);
   if (!isFinite(age)) {
-    errors.push({ field: 'age', message: 'Usia is required.' });
+    errors.push({ field: 'age', message: 'Usia wajib diisi.' });
   } else if (age < CONFIG.MIN_AGE) {
     errors.push({
       field: 'age',
-      message: 'Participants must be at least ' + CONFIG.MIN_AGE + '.'
+      message: 'Usia peserta minimal ' + CONFIG.MIN_AGE + ' tahun.'
     });
   } else if (age > 99) {
-    errors.push({ field: 'age', message: 'Please enter a valid age.' });
+    errors.push({ field: 'age', message: 'Masukkan usia yang valid.' });
   }
   v.age = isFinite(age) ? age : '';
 
@@ -292,7 +292,7 @@ function validate(payload) {
   CHOICE_FIELDS.forEach(function (f) {
     var value = trimStr(payload[f.key]);
     if (f.allowed.indexOf(value) === -1) {
-      errors.push({ field: f.key, message: 'Please choose a valid option.' });
+      errors.push({ field: f.key, message: 'Pilih opsi yang valid.' });
       value = '';
     }
     v[f.key] = value;
@@ -301,14 +301,14 @@ function validate(payload) {
   // WhatsApp
   var wa = normaliseWhatsapp(payload.whatsapp);
   if (!wa) {
-    errors.push({ field: 'whatsapp', message: 'A valid WhatsApp number is required.' });
+    errors.push({ field: 'whatsapp', message: 'Nomor WhatsApp yang valid wajib diisi.' });
   }
   v.whatsapp = wa || '';
 
   // Email
   var email = trimStr(payload.email).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-    errors.push({ field: 'email', message: 'A valid email address is required.' });
+    errors.push({ field: 'email', message: 'Alamat email yang valid wajib diisi.' });
     email = '';
   }
   v.email = email;
@@ -322,14 +322,14 @@ function validate(payload) {
 
     var invalid = picked.filter(function (x) { return f.allowed.indexOf(x) === -1; });
     if (invalid.length) {
-      errors.push({ field: f.key, message: 'Please choose from the listed options.' });
+      errors.push({ field: f.key, message: 'Pilih dari opsi yang tersedia.' });
       picked = [];
     } else if (f.required && !picked.length) {
-      errors.push({ field: f.key, message: f.label + ' is required.' });
+      errors.push({ field: f.key, message: f.label + ' wajib diisi.' });
     } else if (f.max && picked.length > f.max) {
       errors.push({
         field: f.key,
-        message: f.label + ': please pick no more than ' + f.max + '.'
+        message: f.label + ': maksimal ' + f.max + ' pilihan.'
       });
     }
     v[f.key] = picked.join(', ');
@@ -339,7 +339,7 @@ function validate(payload) {
   REQUIRED_CONSENTS.forEach(function (key) {
     var accepted = payload[key] === true || payload[key] === 'true';
     if (!accepted) {
-      errors.push({ field: key, message: 'This consent is required.' });
+      errors.push({ field: key, message: 'Persetujuan ini wajib dicentang.' });
     }
     v[key] = accepted ? 'YES' : 'NO';
   });

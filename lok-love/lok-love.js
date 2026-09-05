@@ -23,21 +23,21 @@
    [data-ll] placeholder from this object, so THIS is authoritative. */
 const LOK_LOVE_CONFIG = {
     eventName:            'LOK & LOVE',
-    editionLabel:         '6×6 — Curated Singles Dinner',
-    eventDate:            'Saturday, 19 September 2026',
+    editionLabel:         '6×6 — Makan Malam Khusus Para Lajang',
+    eventDate:            'Sabtu, 19 September 2026',
     eventDateISO:         '2026-09-19',
     eventTime:            '19.00 – 21.00 WIB',
     venue:                'LOK GITEW',
     address:              'Ruko Hampton Promenade Blok M No. 18, Medang, Kec. Pagedangan, Kab. Tangerang, Banten 15334',
     mapsUrl:              'https://www.google.com/maps/search/?api=1&query=LOK%20GITEW%20Hampton%20Promenade%20Serpong',
     ticketPrice:          'Rp199.000',
-    ticketPriceNote:      'per person',
+    ticketPriceNote:      'per orang',
     maxMaleParticipants:  6,
     maxFemaleParticipants: 6,
     totalParticipants:    12,
     minimumAge:           21,
-    applicationDeadline:  'Friday, 11 September 2026',
-    announcementNote:     'Selected applicants are contacted on WhatsApp.',
+    applicationDeadline:  'Jumat, 11 September 2026',
+    announcementNote:     'Pendaftar terpilih dihubungi lewat WhatsApp.',
     paymentWindowHours:   24,
     whatsappNumber:       '6285122333769',
     // Google Apps Script Web App URL. Set after deploying Code.gs.
@@ -47,11 +47,11 @@ const LOK_LOVE_CONFIG = {
 
 /* ── Ticket inclusions (landing page) ─────────────────────────────────── */
 const LOK_LOVE_INCLUDES = [
-    { icon: '🍚', text: 'One LokGitew rice bowl' },
-    { icon: '🥤', text: 'One welcome drink' },
-    { icon: '💬', text: 'Mini date sessions' },
-    { icon: '🎲', text: 'Group games & activities' },
-    { icon: '💌', text: 'Matching process after the event' }
+    { icon: '🍚', text: 'Satu rice bowl LokGitew' },
+    { icon: '🥤', text: 'Satu welcome drink' },
+    { icon: '💬', text: 'Sesi mini date' },
+    { icon: '🎲', text: 'Permainan dan aktivitas kelompok' },
+    { icon: '💌', text: 'Proses matching setelah acara' }
 ];
 
 /* ── Form schema ───────────────────────────────────────────────────────
@@ -69,24 +69,22 @@ const LOK_LOVE_INCLUDES = [
 const LOK_LOVE_FORM_SCHEMA = [
     {
         id: 'about-you',
-        title: 'About You',
-        blurb: 'The basics — so we know who we are talking to.',
+        title: 'Tentang Kamu',
+        blurb: 'Dasar-dasarnya dulu — biar kami tahu kamu siapa.',
         fields: [
             {
                 id: 'name',
                 label: 'Nama lengkap',
-                labelEn: 'Full name',
                 type: 'text',
                 required: true,
                 autocomplete: 'name',
-                placeholder: 'e.g. Putri Ananda',
+                placeholder: 'mis. Putri Ananda',
                 sheetColumn: 'Name',
                 maxLength: 100
             },
             {
                 id: 'age',
                 label: 'Usia',
-                labelEn: 'Age',
                 type: 'number',
                 required: true,
                 min: LOK_LOVE_CONFIG.minimumAge,
@@ -94,82 +92,75 @@ const LOK_LOVE_FORM_SCHEMA = [
                 inputmode: 'numeric',
                 placeholder: '21',
                 sheetColumn: 'Age',
-                help: 'You must be at least ' + LOK_LOVE_CONFIG.minimumAge + ' to join.'
+                help: 'Usia minimal ' + LOK_LOVE_CONFIG.minimumAge + ' tahun untuk ikut.'
             },
             {
                 id: 'gender',
                 label: 'Jenis kelamin',
-                labelEn: 'Gender',
                 type: 'radio',
                 required: true,
                 options: [
-                    { value: 'Pria',   label: 'Pria',   labelEn: 'Male' },
-                    { value: 'Wanita', label: 'Wanita', labelEn: 'Female' }
+                    { value: 'Pria',   label: 'Pria' },
+                    { value: 'Wanita', label: 'Wanita' }
                 ],
                 sheetColumn: 'Gender'
             },
             {
                 id: 'lookingToMeet',
                 label: 'Siapa yang ingin kamu temui dalam acara ini?',
-                labelEn: 'Who would you like to meet at this event?',
                 type: 'radio',
                 required: true,
                 options: [
-                    { value: 'Pria',   label: 'Pria',   labelEn: 'Male' },
-                    { value: 'Wanita', label: 'Wanita', labelEn: 'Female' }
+                    { value: 'Pria',   label: 'Pria' },
+                    { value: 'Wanita', label: 'Wanita' }
                 ],
                 sheetColumn: 'Looking To Meet'
             },
             {
                 id: 'city',
                 label: 'Kota atau daerah tempat tinggal saat ini',
-                labelEn: 'Current city or area of residence',
                 type: 'text',
                 required: true,
-                placeholder: 'e.g. Serpong, Tangerang',
+                placeholder: 'mis. Serpong, Tangerang',
                 sheetColumn: 'City',
                 maxLength: 120
             },
             {
                 id: 'occupation',
                 label: 'Pekerjaan atau aktivitas saat ini',
-                labelEn: 'Current occupation or activity',
                 type: 'text',
                 required: true,
-                placeholder: 'e.g. Graphic designer',
+                placeholder: 'mis. Desainer grafis',
                 sheetColumn: 'Occupation',
                 maxLength: 120
             },
             {
                 id: 'whatsapp',
                 label: 'Nomor WhatsApp',
-                labelEn: 'WhatsApp number',
                 type: 'tel',
                 required: true,
                 autocomplete: 'tel',
                 inputmode: 'tel',
                 placeholder: '08xx xxxx xxxx',
                 sheetColumn: 'WhatsApp',
-                help: 'This is how we contact you if you are selected.'
+                help: 'Lewat nomor ini kami hubungi kamu kalau terpilih.'
             },
             {
                 id: 'socialHandle',
                 label: 'Username Instagram/TikTok',
-                labelEn: 'Instagram / TikTok username',
                 type: 'text',
                 required: true,
-                placeholder: '@yourhandle',
+                placeholder: '@usernamekamu',
                 sheetColumn: 'Instagram/TikTok',
                 maxLength: 80
             },
             {
                 id: 'email',
                 label: 'Alamat email',
-                labelEn: 'Email address',
                 type: 'email',
                 required: true,
                 autocomplete: 'email',
-                placeholder: 'you@email.com',
+                placeholder: 'kamu@email.com',
                 sheetColumn: 'Email',
                 maxLength: 160
             }
@@ -178,32 +169,30 @@ const LOK_LOVE_FORM_SCHEMA = [
 
     {
         id: 'your-vibe',
-        title: 'Your Vibe',
-        blurb: 'This is what we actually use to build a table that clicks.',
+        title: 'Vibe Kamu',
+        blurb: 'Ini yang kami pakai buat nyusun meja yang nyambung.',
         fields: [
             {
                 id: 'personality',
                 label: 'Kepribadian kamu',
-                labelEn: 'Your personality',
                 type: 'radio',
                 required: true,
                 options: [
-                    { value: 'Sangat introvert',    label: 'Sangat introvert',    labelEn: 'Very introverted' },
-                    { value: 'Cenderung introvert', label: 'Cenderung introvert', labelEn: 'Leans introverted' },
-                    { value: 'Di antara keduanya',  label: 'Di antara keduanya',  labelEn: 'Somewhere in between' },
-                    { value: 'Cenderung ekstrovert',label: 'Cenderung ekstrovert',labelEn: 'Leans extroverted' },
-                    { value: 'Sangat ekstrovert',   label: 'Sangat ekstrovert',   labelEn: 'Very extroverted' }
+                    { value: 'Sangat introvert',    label: 'Sangat introvert' },
+                    { value: 'Cenderung introvert', label: 'Cenderung introvert' },
+                    { value: 'Di antara keduanya',  label: 'Di antara keduanya' },
+                    { value: 'Cenderung ekstrovert',label: 'Cenderung ekstrovert' },
+                    { value: 'Sangat ekstrovert',   label: 'Sangat ekstrovert' }
                 ],
                 sheetColumn: 'Personality'
             },
             {
                 id: 'interests',
                 label: 'Minat & hobi',
-                labelEn: 'Interests & hobbies',
                 type: 'checkbox',
                 required: true,
                 maxSelections: 6,
-                help: 'Pick up to 6 — these help us seat you near people you can actually talk to.',
+                help: 'Pilih maksimal 6 — ini bantu kami mendudukkan kamu dekat orang yang nyambung.',
                 options: [
                     { value: 'Kuliner & jajan',      label: 'Kuliner & jajan' },
                     { value: 'Musik',                label: 'Musik' },
@@ -227,7 +216,6 @@ const LOK_LOVE_FORM_SCHEMA = [
             {
                 id: 'weekendVibe',
                 label: 'Akhir pekan idealmu',
-                labelEn: 'Your ideal weekend',
                 type: 'select',
                 required: true,
                 options: [
@@ -244,12 +232,11 @@ const LOK_LOVE_FORM_SCHEMA = [
             {
                 id: 'selfDescription',
                 label: 'Ceritakan sedikit tentang dirimu',
-                labelEn: 'Tell us a bit about yourself',
                 type: 'textarea',
                 required: true,
                 maxLength: 300,
                 placeholder: 'Kerja di bidang apa, lagi suka apa, hal random yang bikin kamu semangat…',
-                help: 'A few sentences is plenty. Write like you talk.',
+                help: 'Beberapa kalimat aja cukup. Tulis santai kayak kamu ngomong.',
                 sheetColumn: 'Self Description'
             }
         ]
@@ -257,27 +244,25 @@ const LOK_LOVE_FORM_SCHEMA = [
 
     {
         id: 'looking-for',
-        title: "What You're Looking For",
-        blurb: 'No wrong answers here — it just helps us pair you sensibly.',
+        title: 'Yang Kamu Cari',
+        blurb: 'Nggak ada jawaban salah — ini cuma bantu kami masangin kamu dengan pas.',
         fields: [
             {
                 id: 'intention',
                 label: 'Apa yang kamu cari di acara ini?',
-                labelEn: 'What are you hoping to find?',
                 type: 'radio',
                 required: true,
                 options: [
-                    { value: 'Hubungan serius',                    label: 'Hubungan serius',                    labelEn: 'Something serious' },
-                    { value: 'Kenalan dulu, lihat ke mana arahnya',label: 'Kenalan dulu, lihat ke mana arahnya',labelEn: 'Meet first, see where it goes' },
-                    { value: 'Teman baru & memperluas relasi',     label: 'Teman baru & memperluas relasi',     labelEn: 'New friends and connections' },
-                    { value: 'Belum tahu, mau coba dulu',          label: 'Belum tahu, mau coba dulu',          labelEn: 'Not sure yet, just curious' }
+                    { value: 'Hubungan serius',                    label: 'Hubungan serius' },
+                    { value: 'Kenalan dulu, lihat ke mana arahnya',label: 'Kenalan dulu, lihat ke mana arahnya' },
+                    { value: 'Teman baru & memperluas relasi',     label: 'Teman baru & memperluas relasi' },
+                    { value: 'Belum tahu, mau coba dulu',          label: 'Belum tahu, mau coba dulu' }
                 ],
                 sheetColumn: 'Intention'
             },
             {
                 id: 'preferredAgeRange',
                 label: 'Rentang usia yang kamu harapkan',
-                labelEn: 'Preferred age range',
                 type: 'select',
                 required: true,
                 options: [
@@ -286,18 +271,17 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: '28–35',          label: '28–35' },
                     { value: '33–40',          label: '33–40' },
                     { value: '40+',            label: '40+' },
-                    { value: 'Tidak masalah',  label: 'Tidak masalah', labelEn: 'No preference' }
+                    { value: 'Tidak masalah',  label: 'Tidak masalah' }
                 ],
                 sheetColumn: 'Preferred Age Range'
             },
             {
                 id: 'valuedQualities',
                 label: 'Kualitas yang paling kamu cari',
-                labelEn: 'Qualities you value most',
                 type: 'checkbox',
                 required: true,
                 maxSelections: 3,
-                help: 'Pick your top 3.',
+                help: 'Pilih 3 teratas kamu.',
                 options: [
                     { value: 'Humoris',              label: 'Humoris' },
                     { value: 'Cerdas',               label: 'Cerdas' },
@@ -316,10 +300,9 @@ const LOK_LOVE_FORM_SCHEMA = [
             {
                 id: 'dealBreakers',
                 label: 'Hal yang kurang cocok buatmu',
-                labelEn: 'Deal breakers',
                 type: 'checkbox',
                 required: false,
-                help: 'Optional — leave it blank if nothing here bothers you.',
+                help: 'Opsional — kosongin aja kalau nggak ada yang mengganggu buat kamu.',
                 options: [
                     { value: 'Merokok',                    label: 'Merokok' },
                     { value: 'Sering minum alkohol',       label: 'Sering minum alkohol' },
@@ -334,61 +317,57 @@ const LOK_LOVE_FORM_SCHEMA = [
 
     {
         id: 'event-details',
-        title: 'Event Details',
-        blurb: 'Last bit — the practical stuff so the night runs smoothly.',
+        title: 'Detail Acara',
+        blurb: 'Terakhir — hal teknis biar malamnya lancar.',
         fields: [
             {
                 id: 'availability',
                 label: 'Bisa hadir pada ' + LOK_LOVE_CONFIG.eventDate + ', ' + LOK_LOVE_CONFIG.eventTime + '?',
-                labelEn: 'Can you make the event date and time?',
                 type: 'radio',
                 required: true,
                 options: [
-                    { value: 'Ya, saya bisa hadir',      label: 'Ya, saya bisa hadir',      labelEn: 'Yes, I can make it' },
-                    { value: 'Belum pasti',              label: 'Belum pasti',              labelEn: 'Not certain yet' },
-                    { value: 'Tidak bisa di tanggal ini',label: 'Tidak bisa di tanggal ini',labelEn: 'Not this date' }
+                    { value: 'Ya, saya bisa hadir',      label: 'Ya, saya bisa hadir' },
+                    { value: 'Belum pasti',              label: 'Belum pasti' },
+                    { value: 'Tidak bisa di tanggal ini',label: 'Tidak bisa di tanggal ini' }
                 ],
                 sheetColumn: 'Availability'
             },
             {
                 id: 'dietary',
                 label: 'Preferensi makanan atau alergi',
-                labelEn: 'Dietary requirements or allergies',
                 type: 'checkbox',
                 required: true,
-                help: 'Pick "Tidak ada" if none apply — your rice bowl depends on this.',
+                help: 'Pilih "Tidak ada" kalau nggak ada — rice bowl kamu tergantung ini.',
                 options: [
-                    { value: 'Tidak ada',        label: 'Tidak ada', labelEn: 'None' },
+                    { value: 'Tidak ada',        label: 'Tidak ada' },
                     { value: 'Halal',            label: 'Halal' },
                     { value: 'Vegetarian',       label: 'Vegetarian' },
                     { value: 'Vegan',            label: 'Vegan' },
                     { value: 'Tidak makan pedas',label: 'Tidak makan pedas' },
                     { value: 'Alergi seafood',   label: 'Alergi seafood' },
                     { value: 'Alergi kacang',    label: 'Alergi kacang' },
-                    { value: 'Lainnya',          label: 'Lainnya', labelEn: 'Other — note it below' }
+                    { value: 'Lainnya',          label: 'Lainnya' }
                 ],
                 sheetColumn: 'Dietary Requirements'
             },
             {
                 id: 'dietaryNotes',
                 label: 'Detail alergi atau catatan makanan',
-                labelEn: 'Allergy details or food notes',
                 type: 'text',
                 required: false,
                 maxLength: 200,
-                placeholder: 'Alergi udang, tidak makan sapi, dll.',
+                placeholder: 'Alergi udang, nggak makan sapi, dll.',
                 sheetColumn: 'Dietary Notes'
             },
             {
                 id: 'hearAboutUs',
                 label: 'Dari mana kamu tahu acara ini?',
-                labelEn: 'How did you hear about LOK & LOVE?',
                 type: 'select',
                 required: true,
                 options: [
                     { value: 'Instagram',                  label: 'Instagram' },
                     { value: 'TikTok',                     label: 'TikTok' },
-                    { value: 'Teman',                      label: 'Teman', labelEn: 'A friend' },
+                    { value: 'Teman',                      label: 'Teman' },
                     { value: 'Pernah datang ke LokGitew',  label: 'Pernah datang ke LokGitew' },
                     { value: 'Lainnya',                    label: 'Lainnya' }
                 ],
@@ -397,7 +376,6 @@ const LOK_LOVE_FORM_SCHEMA = [
             {
                 id: 'additionalInfo',
                 label: 'Ada hal lain yang perlu kami tahu?',
-                labelEn: 'Anything else we should know?',
                 type: 'textarea',
                 required: false,
                 maxLength: 400,
@@ -409,36 +387,36 @@ const LOK_LOVE_FORM_SCHEMA = [
 
     {
         id: 'confirm',
-        title: 'Confirm & Submit',
-        blurb: 'Give it one last look before you send it over.',
+        title: 'Cek & Kirim',
+        blurb: 'Cek sekali lagi sebelum dikirim.',
         isReview: true,
         fields: [
             {
                 id: 'consentAccurate',
                 type: 'consent',
                 required: true,
-                label: 'Everything I have entered here is true and accurate.',
+                label: 'Semua yang saya isi di sini benar dan akurat.',
                 sheetColumn: 'Consent — Accurate'
             },
             {
                 id: 'consentSelection',
                 type: 'consent',
                 required: true,
-                label: 'I understand that applying does not guarantee a spot, and that participants are selected by the LOK GITEW team.',
+                label: 'Saya paham bahwa mendaftar tidak menjamin dapat tempat, dan peserta dipilih oleh tim LOK GITEW.',
                 sheetColumn: 'Consent — Selection'
             },
             {
                 id: 'consentContact',
                 type: 'consent',
                 required: true,
-                label: 'LOK GITEW may contact me on WhatsApp or email about this event.',
+                label: 'LOK GITEW boleh menghubungi saya lewat WhatsApp atau email terkait acara ini.',
                 sheetColumn: 'Consent — Contact'
             },
             {
                 id: 'consentPrivacy',
                 type: 'consent',
                 required: true,
-                label: 'I agree that the information I submit is used to review my application, and that my contact details are never shared with other participants without my consent.',
+                label: 'Saya setuju data yang saya kirim dipakai untuk meninjau pendaftaran saya, dan kontak saya tidak dibagikan ke peserta lain tanpa persetujuan saya.',
                 sheetColumn: 'Consent — Privacy'
             }
         ]
@@ -568,21 +546,21 @@ function validateField(field, value) {
                     (Array.isArray(value) && value.length === 0);
 
     if (field.type === 'consent') {
-        return value === true ? null : 'Please tick this box to continue.';
+        return value === true ? null : 'Centang kotak ini dulu untuk lanjut.';
     }
     if (field.required && isBlank) {
-        return field.type === 'checkbox' ? 'Pick at least one.' : 'This one is required.';
+        return field.type === 'checkbox' ? 'Pilih minimal satu.' : 'Yang ini wajib diisi.';
     }
     if (isBlank) return null; // optional + empty is fine
 
     if (field.type === 'checkbox') {
         const picked = Array.isArray(value) ? value : [];
         if (field.maxSelections && picked.length > field.maxSelections) {
-            return 'Please pick no more than ' + field.maxSelections + '.';
+            return 'Maksimal ' + field.maxSelections + ' pilihan ya.';
         }
         const allowed = field.options.map(o => o.value);
         if (picked.some(v => allowed.indexOf(v) === -1)) {
-            return 'Please pick from the options listed.';
+            return 'Pilih dari opsi yang tersedia ya.';
         }
         return null;
     }
@@ -590,34 +568,34 @@ function validateField(field, value) {
     switch (field.type) {
         case 'number': {
             const n = Number(value);
-            if (!Number.isFinite(n)) return 'Please enter a number.';
+            if (!Number.isFinite(n)) return 'Masukkan angka ya.';
             if (field.min != null && n < field.min) {
                 return field.id === 'age'
-                    ? 'You need to be at least ' + field.min + ' to join LOK & LOVE.'
-                    : 'Must be at least ' + field.min + '.';
+                    ? 'Usia minimal ' + field.min + ' tahun untuk ikut LOK & LOVE.'
+                    : 'Minimal ' + field.min + '.';
             }
-            if (field.max != null && n > field.max) return 'Must be ' + field.max + ' or less.';
+            if (field.max != null && n > field.max) return 'Maksimal ' + field.max + '.';
             break;
         }
         case 'tel':
             if (!normaliseWhatsapp(value)) {
-                return 'Please enter a valid Indonesian number, e.g. 0812 3456 7890.';
+                return 'Masukkan nomor Indonesia yang valid, mis. 0812 3456 7890.';
             }
             break;
         case 'email':
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(value).trim())) {
-                return 'Please enter a valid email address.';
+                return 'Masukkan alamat email yang valid.';
             }
             break;
         case 'radio':
         case 'select':
             if (!field.options.some(o => o.value === value)) {
-                return 'Please pick one of the options.';
+                return 'Pilih salah satu opsi ya.';
             }
             break;
     }
     if (field.maxLength && String(value).length > field.maxLength) {
-        return 'Please keep this under ' + field.maxLength + ' characters.';
+        return 'Maksimal ' + field.maxLength + ' karakter ya.';
     }
     return null;
 }
@@ -662,12 +640,9 @@ function setFieldError(fieldId, message) {
 
 function fieldLabelHtml(field) {
     const req = field.required
-        ? ' <span class="ll-req" aria-hidden="true">*</span><span class="ll-sr-only"> (required)</span>'
-        : ' <span class="ll-optional">(optional)</span>';
-    const sub = field.labelEn && field.labelEn !== field.label
-        ? '<span class="ll-label-en">' + escapeHtml(field.labelEn) + '</span>'
-        : '';
-    return '<span class="ll-label-main">' + escapeHtml(field.label) + req + '</span>' + sub;
+        ? ' <span class="ll-req" aria-hidden="true">*</span><span class="ll-sr-only"> (wajib diisi)</span>'
+        : ' <span class="ll-optional">(opsional)</span>';
+    return '<span class="ll-label-main">' + escapeHtml(field.label) + req + '</span>';
 }
 
 function renderField(field) {
@@ -687,12 +662,10 @@ function renderField(field) {
             const opts = field.options.map((o, i) => {
                 const oid = field.id + '-' + i;
                 const checked = val === o.value ? ' checked' : '';
-                const sub = o.labelEn && o.labelEn !== o.label
-                    ? ' <span class="ll-opt-en">' + escapeHtml(o.labelEn) + '</span>' : '';
                 return '<div class="ll-radio">' +
                     '<input type="radio" id="' + oid + '" name="' + field.id + '" value="' +
                         escapeHtml(o.value) + '"' + checked + '>' +
-                    '<label for="' + oid + '">' + escapeHtml(o.label) + sub + '</label>' +
+                    '<label for="' + oid + '">' + escapeHtml(o.label) + '</label>' +
                 '</div>';
             }).join('');
             // A radio group needs a fieldset/legend, not a <label for>.
@@ -722,7 +695,7 @@ function renderField(field) {
             }).join('');
             const counter = field.maxSelections
                 ? '<p class="ll-check-count" id="count-' + field.id + '" aria-live="polite">' +
-                      chosen.length + ' of ' + field.maxSelections + ' selected</p>'
+                      chosen.length + ' dari ' + field.maxSelections + ' dipilih</p>'
                 : '';
             return '<div class="ll-field" data-field="' + field.id + '">' +
                 '<fieldset class="ll-fieldset">' +
@@ -745,14 +718,14 @@ function renderField(field) {
                         checked + ' aria-describedby="' + errId + '">' +
                     '<label for="' + field.id + '">' + escapeHtml(field.label) +
                         ' <span class="ll-req" aria-hidden="true">*</span>' +
-                        '<span class="ll-sr-only"> (required)</span></label>' +
+                        '<span class="ll-sr-only"> (wajib diisi)</span></label>' +
                 '</div>' +
                 errNode +
             '</div>';
         }
 
         case 'select': {
-            const opts = ['<option value="" disabled' + (val ? '' : ' selected') + '>Select one…</option>']
+            const opts = ['<option value="" disabled' + (val ? '' : ' selected') + '>Pilih salah satu…</option>']
                 .concat(field.options.map(o =>
                     '<option value="' + escapeHtml(o.value) + '"' +
                     (val === o.value ? ' selected' : '') + '>' + escapeHtml(o.label) + '</option>'
@@ -804,7 +777,7 @@ function renderReview() {
             if (Array.isArray(v)) v = v.join(', ');
             if (v == null || v === '') v = '—';
             return '<div class="ll-review-row">' +
-                '<dt>' + escapeHtml(field.labelEn || field.label) + '</dt>' +
+                '<dt>' + escapeHtml(field.label) + '</dt>' +
                 '<dd>' + escapeHtml(v) + '</dd>' +
             '</div>';
         }).join('');
@@ -812,7 +785,7 @@ function renderReview() {
             '<div class="ll-review-group">' +
                 '<div class="ll-review-head">' +
                     '<h4>' + escapeHtml(step.title) + '</h4>' +
-                    '<button type="button" class="ll-review-edit" data-goto="' + idx + '">Edit</button>' +
+                    '<button type="button" class="ll-review-edit" data-goto="' + idx + '">Ubah</button>' +
                 '</div>' +
                 '<dl class="ll-review-list">' + items + '</dl>' +
             '</div>'
@@ -837,11 +810,11 @@ function renderStep() {
             track.setAttribute('aria-valuenow', String(formState.step + 1));
             track.setAttribute('aria-valuemax', String(total));
             track.setAttribute('aria-valuetext',
-                'Step ' + (formState.step + 1) + ' of ' + total + ': ' + step.title);
+                'Langkah ' + (formState.step + 1) + ' dari ' + total + ': ' + step.title);
         }
     }
     const counter = el('llStepCounter');
-    if (counter) counter.textContent = 'Step ' + (formState.step + 1) + ' of ' + total;
+    if (counter) counter.textContent = 'Langkah ' + (formState.step + 1) + ' dari ' + total;
 
     const body = el('llStepBody');
     if (!body) return;
@@ -857,7 +830,7 @@ function renderStep() {
     const nextBtn = el('llNextBtn');
     if (backBtn) backBtn.hidden = isFirst;
     if (nextBtn) {
-        nextBtn.textContent = isLast ? 'Submit Application' : 'Continue';
+        nextBtn.textContent = isLast ? 'Kirim Pendaftaran' : 'Lanjut';
         nextBtn.classList.toggle('ll-btn-submit', isLast);
     }
 
@@ -912,7 +885,7 @@ function bindStepInputs() {
                     b.closest('.ll-check').classList.toggle('ll-check-disabled', b.disabled);
                 });
                 if (counter) {
-                    counter.textContent = chosen.length + ' of ' + field.maxSelections + ' selected';
+                    counter.textContent = chosen.length + ' dari ' + field.maxSelections + ' dipilih';
                 }
                 commit(chosen);
             };
@@ -957,7 +930,7 @@ function goToStep(index) {
 function nextStep() {
     const { ok, firstInvalidId } = validateStep(formState.step);
     if (!ok) {
-        showFormError('Almost there — check the highlighted fields above.');
+        showFormError('Dikit lagi — cek bagian yang ditandai di atas ya.');
         const wrap = document.querySelector('[data-field="' + firstInvalidId + '"]');
         if (wrap) {
             wrap.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
@@ -1025,7 +998,7 @@ function setSubmitting(isSubmitting) {
     const backBtn = el('llBackBtn');
     if (nextBtn) {
         nextBtn.disabled  = isSubmitting;
-        nextBtn.textContent = isSubmitting ? 'Submitting…' : 'Submit Application';
+        nextBtn.textContent = isSubmitting ? 'Mengirim…' : 'Kirim Pendaftaran';
         nextBtn.setAttribute('aria-busy', isSubmitting ? 'true' : 'false');
     }
     if (backBtn) backBtn.disabled = isSubmitting;
@@ -1092,16 +1065,16 @@ async function submitApplication() {
 
         const wa = 'https://wa.me/' + LOK_LOVE_CONFIG.whatsappNumber +
             '?text=' + encodeURIComponent(
-                "Hi LOK GITEW! I tried to apply for LOK & LOVE but the form wouldn't submit.");
+                'Halo LOK GITEW! Saya coba daftar LOK & LOVE tapi formulirnya nggak bisa terkirim.');
         showFormError(null,
-            '<strong>Something went wrong 😭</strong>' +
-            '<span>Your application wasn\'t submitted, but nothing you typed is lost. ' +
-            'Please try again.</span>' +
-            '<span class="ll-error-alt">Still stuck? ' +
-                '<a href="' + wa + '" target="_blank" rel="noopener">WhatsApp us instead →</a>' +
+            '<strong>Ada yang error 😭</strong>' +
+            '<span>Pendaftaran kamu belum terkirim, tapi semua yang kamu isi masih aman. ' +
+            'Coba lagi ya.</span>' +
+            '<span class="ll-error-alt">Masih gagal? ' +
+                '<a href="' + wa + '" target="_blank" rel="noopener">Langsung WhatsApp kami →</a>' +
             '</span>');
         const nextBtn = el('llNextBtn');
-        if (nextBtn) nextBtn.textContent = 'Try Again';
+        if (nextBtn) nextBtn.textContent = 'Coba Lagi';
         const box = el('llFormError');
         if (box) box.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
     }

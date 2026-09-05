@@ -467,13 +467,6 @@ a:focus-visible {
     color: var(--ll-cream);
     line-height: 1.45;
 }
-.ll-label-en {
-    display: block;
-    font-size: 0.82rem;
-    color: var(--ll-muted);
-    font-weight: 400;
-    margin-top: 0.15rem;
-}
 .ll-req { color: var(--ll-ember); }
 .ll-optional { color: var(--ll-muted); font-weight: 400; font-size: 0.84rem; }
 
@@ -576,7 +569,6 @@ a:focus-visible {
     outline: 3px solid var(--tangerine);
     outline-offset: 2px;
 }
-.ll-opt-en { color: var(--ll-muted); font-size: 0.83rem; }
 
 /* ── Multi-select (checkbox groups) ────────────────────────────────── */
 .ll-check-group {

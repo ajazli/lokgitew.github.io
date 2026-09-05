@@ -134,8 +134,8 @@ function initHeroOpenStatus() {
     statusDot.classList.toggle('is-open', isOpen);
     statusDot.classList.toggle('is-closed', !isOpen);
     statusText.textContent = isOpen
-        ? 'Open now until 3AM WIB'
-        : (isMonday ? 'Closed today' : 'Opens today at 3PM WIB');
+        ? 'Buka sekarang sampai 03.00 WIB'
+        : (isMonday ? 'Hari ini tutup' : 'Buka hari ini jam 15.00 WIB');
 }
 
 // Menu Book / Page Viewer
@@ -323,7 +323,7 @@ function renderCalendarGrid() {
     if (!label || !grid) return;
 
     const monthName = new Date(_calYear, _calMonth, 1)
-        .toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+        .toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
     label.textContent = monthName.toUpperCase();
 
     const today    = _today();
@@ -380,7 +380,7 @@ function selectCalDate(dateStr, dayNum) {
     // Update button text
     const btn = document.getElementById('resDateBtn');
     const [y, m, d] = dateStr.split('-').map(Number);
-    const readable = new Date(y, m - 1, d).toLocaleDateString('en-GB', {
+    const readable = new Date(y, m - 1, d).toLocaleDateString('id-ID', {
         weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
     });
     if (btn) {
@@ -415,7 +415,7 @@ async function loadTimeSlots(dateStr) {
     if (hiddenTime) hiddenTime.value = '';
 
     timeGroup.style.display = 'block';
-    slotsDiv.innerHTML = '<div class="res-slots-loading">⏳ Checking availability…</div>';
+    slotsDiv.innerHTML = '<div class="res-slots-loading">⏳ Mengecek ketersediaan…</div>';
 
     // Determine hours for this day
     const [y, m, d] = dateStr.split('-').map(Number);
@@ -423,7 +423,7 @@ async function loadTimeSlots(dateStr) {
     const hours = RES_HOURS[dow];
 
     if (!hours) {
-        slotsDiv.innerHTML = '<div class="res-slots-loading" style="color:#e53e3e;">We are closed on Mondays. Please pick another day.</div>';
+        slotsDiv.innerHTML = '<div class="res-slots-loading" style="color:#e53e3e;">Hari Senin kami tutup. Silakan pilih hari lain.</div>';
         return;
     }
 
@@ -468,7 +468,7 @@ async function loadTimeSlots(dateStr) {
                 <div class="slot-bar" style="width:${fillPct}%;background:${barColor}"></div>
             </div>
             <span class="slot-avail" style="color:${isFull ? '#e53e3e' : barColor}">
-                ${isFull ? 'Full' : paxLeft + ' pax left'}
+                ${isFull ? 'Penuh' : 'sisa ' + paxLeft + ' pax'}
             </span>`;
 
         btn.onclick = () => selectSlot(slotKey, btn);
@@ -477,9 +477,9 @@ async function loadTimeSlots(dateStr) {
     }
 
     if (slotsDiv.children.length === 0) {
-        slotsDiv.innerHTML = '<div class="res-slots-loading">No available time slots for today. Please choose another date.</div>';
+        slotsDiv.innerHTML = '<div class="res-slots-loading">Tidak ada jam tersisa untuk hari ini. Silakan pilih tanggal lain.</div>';
     } else if (!anyAvailable) {
-        slotsDiv.innerHTML += '<div class="res-slots-loading" style="color:#e53e3e;margin-top:.5rem;">All slots are fully booked for this day. Please choose another date.</div>';
+        slotsDiv.innerHTML += '<div class="res-slots-loading" style="color:#e53e3e;margin-top:.5rem;">Semua jam di hari ini sudah penuh. Silakan pilih tanggal lain.</div>';
     }
 }
 
@@ -496,10 +496,8 @@ function selectSlot(slotKey, btnEl) {
 
 // ── Format 24h int → "12:00 PM" ───────────────────────────────────────────────
 function fmtHour(h) {
-    h = h % 24;
-    if (h === 0)  return '12:00 AM';
-    if (h === 12) return '12:00 PM';
-    return h < 12 ? h + ':00 AM' : (h - 12) + ':00 PM';
+    // Indonesian convention: 24-hour clock, dot separator (19.00).
+    return _pad(h % 24) + '.00';
 }
 
 // kept for backwards-compat (called by old onchange, now unused but harmless)
@@ -508,11 +506,11 @@ function updateTimeSlots() {}
 // ── Form validation ────────────────────────────────────────────────────────────
 function validateResForm() {
     const fields = [
-        { id: 'resName',  label: 'your name'            },
-        { id: 'resPhone', label: 'your phone number'    },
-        { id: 'resDate',  label: 'a date'               },
-        { id: 'resTime',  label: 'a time slot'          },
-        { id: 'resPax',   label: 'the number of guests' },
+        { id: 'resName',  label: 'nama kamu'        },
+        { id: 'resPhone', label: 'nomor telepon kamu' },
+        { id: 'resDate',  label: 'tanggal'           },
+        { id: 'resTime',  label: 'jam'               },
+        { id: 'resPax',   label: 'jumlah tamu'       },
     ];
     let first = null;
     fields.forEach(({ id, label }) => {
@@ -527,7 +525,7 @@ function validateResForm() {
         } else {
             el.classList.toggle('res-invalid', empty);
         }
-        if (empty && !first) first = `Please select ${label}.`;
+        if (empty && !first) first = `Mohon isi ${label}.`;
     });
     return first;
 }
@@ -587,7 +585,7 @@ function submitReservation() {
         if (match) {
             const paxLeft = parseInt(match[1]);
             if (paxNum > paxLeft) {
-                errBox.textContent   = `⚠  Only ${paxLeft} pax left for that slot. Please choose a different time or reduce your group size.`;
+                errBox.textContent   = `⚠  Sisa ${paxLeft} pax untuk jam itu. Silakan pilih jam lain atau kurangi jumlah tamu.`;
                 errBox.style.display = 'flex';
                 errBox.scrollIntoView({ behavior: scrollBehavior(), block: 'nearest' });
                 submitBtn.disabled    = false;
@@ -602,9 +600,9 @@ function submitReservation() {
         showReservationSuccess(data);
     }).catch(() => {
         const timeStr = fmtHour(parseInt(data.time, 10));
-        const waText = `Hi! I'd like to book a table.\nName: ${data.name}\nDate: ${data.date}\nTime: ${timeStr}\nGuests: ${data.pax}`;
+        const waText = `Halo! Saya mau pesan meja.\nNama: ${data.name}\nTanggal: ${data.date}\nJam: ${timeStr}\nJumlah tamu: ${data.pax}`;
         const waLink = `https://wa.me/6285122333769?text=${encodeURIComponent(waText)}`;
-        errBox.innerHTML = `⚠&nbsp; Could not reach our booking system. <a href="${waLink}" target="_blank" rel="noopener" class="res-error-wa-link">WhatsApp us directly &rarr;</a>`;
+        errBox.innerHTML = `⚠&nbsp; Sistem pemesanan tidak bisa dihubungi. <a href="${waLink}" target="_blank" rel="noopener" class="res-error-wa-link">Langsung WhatsApp kami &rarr;</a>`;
         errBox.style.display = 'flex';
         submitBtn.disabled    = false;
         btnText.style.display = 'inline';
@@ -626,21 +624,21 @@ function showReservationSuccess(data) {
 
     const [y, m, d] = data.date.split('-').map(Number);
     const [hh]      = data.time.split(':').map(Number);
-    const dateStr   = new Date(y, m - 1, d).toLocaleDateString('en-GB',
+    const dateStr   = new Date(y, m - 1, d).toLocaleDateString('id-ID',
         { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     const timeStr   = fmtHour(hh);
     const name      = escapeHtml(data.name);
     const phone     = escapeHtml(data.phone);
     const pax       = escapeHtml(data.pax);
-    const occasion  = data.occasion ? `<div class="sc-row"><span class="sc-label">Occasion</span><span class="sc-val">${escapeHtml(data.occasion)}</span></div>` : '';
-    const requests  = data.requests ? `<div class="sc-row"><span class="sc-label">Requests</span><span class="sc-val">${escapeHtml(data.requests)}</span></div>` : '';
+    const occasion  = data.occasion ? `<div class="sc-row"><span class="sc-label">Acara</span><span class="sc-val">${escapeHtml(data.occasion)}</span></div>` : '';
+    const requests  = data.requests ? `<div class="sc-row"><span class="sc-label">Permintaan</span><span class="sc-val">${escapeHtml(data.requests)}</span></div>` : '';
 
     document.getElementById('resSuccessCard').innerHTML = `
-        <div class="sc-row"><span class="sc-label">Name</span><span class="sc-val">${name}</span></div>
-        <div class="sc-row"><span class="sc-label">Phone</span><span class="sc-val">${phone}</span></div>
-        <div class="sc-row"><span class="sc-label">Date</span><span class="sc-val">${dateStr}</span></div>
-        <div class="sc-row"><span class="sc-label">Time</span><span class="sc-val">${timeStr}</span></div>
-        <div class="sc-row"><span class="sc-label">Guests</span><span class="sc-val">${pax} ${data.pax == 1 ? 'person' : 'people'}</span></div>
+        <div class="sc-row"><span class="sc-label">Nama</span><span class="sc-val">${name}</span></div>
+        <div class="sc-row"><span class="sc-label">Telepon</span><span class="sc-val">${phone}</span></div>
+        <div class="sc-row"><span class="sc-label">Tanggal</span><span class="sc-val">${dateStr}</span></div>
+        <div class="sc-row"><span class="sc-label">Jam</span><span class="sc-val">${timeStr}</span></div>
+        <div class="sc-row"><span class="sc-label">Jumlah tamu</span><span class="sc-val">${pax} orang</span></div>
         ${occasion}${requests}`;
 }
 
@@ -661,7 +659,7 @@ function resetReservationForm() {
     renderCalendarGrid();
     const btn = document.getElementById('resDateBtn');
     if (btn) {
-        document.getElementById('resDateBtnText').textContent = 'Select a date';
+        document.getElementById('resDateBtnText').textContent = 'Pilih tanggal';
         btn.classList.remove('has-value', 'res-invalid');
     }
     document.getElementById('resDate').value = '';

@@ -2504,3 +2504,18 @@ footer {
         display: none;
     }
 }
+
+/* ── Reveal containment ──────────────────────────────────
+   .reveal-left / .reveal-right start off-position on the X axis
+   (translateX ±50px). Below 768px the two-column blocks that use them
+   collapse to one column, so there is no sideways room to animate into
+   and the pre-animation offset pushes ~53px past the viewport. body has
+   overflow-x:hidden, which masks it on desktop but is unreliable on iOS
+   Safari. Reveal vertically at those widths instead; the horizontal
+   slide returns once the layout is genuinely two-column. */
+@media (max-width: 768px) {
+    .reveal.reveal-left,
+    .reveal.reveal-right { transform: translateY(40px); }
+    .reveal.reveal-left.revealed,
+    .reveal.reveal-right.revealed { transform: translate(0, 0); }
+}
