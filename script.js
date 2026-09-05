@@ -234,7 +234,14 @@ window.addEventListener('scroll', () => {
    Update POS_SERVER_URL to your POS server address.
 ════════════════════════════════════════════════════════ */
 
-const POS_SERVER_URL = 'https://pos.lokgitew.com';
+/* The POS app is one of the GitewOS apps behind the shared RouterGitew
+   gateway on lokgitew.gitew.com, mounted at /pos — hence the path in the
+   base URL. Requests append their own /api/... to it, so this must not
+   carry a trailing slash.
+
+   (Was https://pos.lokgitew.com before the apps were consolidated into
+   the single "Lok Gitew" Railway project.) */
+const POS_SERVER_URL = 'https://lokgitew.gitew.com/pos';
 const PAX_CAP        = 10;   // max pax per hourly slot
 
 // Opening hours by JS day-of-week (0=Sun … 6=Sat), times in WIB

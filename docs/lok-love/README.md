@@ -288,10 +288,10 @@ POST  <apiEndpoint>
 200   { status: "error",     message: "…" }
 ```
 
-To move to PostgreSQL (or the existing POS server at `pos.lokgitew.com`, which
-already serves `/api/reservations`), stand up an endpoint that honours that
-contract and change `apiEndpoint` in `LOK_LOVE_CONFIG`. No other frontend
-change is required.
+To move to PostgreSQL (or the existing POS server at
+`lokgitew.gitew.com/pos`, which already serves `/api/reservations`), stand up
+an endpoint that honours that contract and change `apiEndpoint` in
+`LOK_LOVE_CONFIG`. No other frontend change is required.
 
 Preserve on migration: the `LL-YYYY-NNNNN` ID format, the ISO 8601 timestamp,
 duplicate checks on WhatsApp **and** email, and the internal status columns.
