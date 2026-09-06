@@ -10,13 +10,19 @@ Keep these five places in sync:
 |---|---|
 | Website form questions | `lok-love/lok-love.js` → `LOK_LOVE_FORM_SCHEMA` |
 | Request validation | POSGitew `packages/contracts/src/lok-love.schema.js` |
-| Table columns | POSGitew `server/db/schema/49-…sql`, `50-lok-love-v2-questions.sql`, `51-lok-love-email-back.sql` |
+| Table columns | POSGitew `server/db/schema/49-…sql` through `52-lok-love-referred-by-staff.sql` |
 | Row → JSON mapping | POSGitew `server/modules/lok-love/lok-love.mapper.ts` |
 | This document | `docs/lok-love/question-mapping.md` |
 
 A field's `id` in the schema is its JSON payload key. The request schema is
 `.strict()`, so an unknown key is rejected rather than silently dropped —
 change an `id` and you must change all of the above.
+
+**One question is conditional.** `referredByStaff` (Q18b) carries
+`showWhen: { field: 'hearAboutUs', equals: 'Lok Gitew' }`. A field whose
+condition is unmet is not rendered, not validated, not shown on the review
+screen and sends an empty answer — so a hidden follow-up can never block a
+step it is not visible on.
 
 **Two questions carry two answers each** and use a composite field type.
 Their sub-keys, not the field `id`, are what reach the payload:
@@ -66,6 +72,17 @@ Their sub-keys, not the field `id`, are what reach the payload:
 | 16 | Alergi / pantangan | `dietary` | `dietary` | ✅ free text |
 | 17 | Bersedia difoto / direkam | `photoConsent` | `photo_consent` | ✅ |
 | 18 | Tahu 6×6 dari mana | `hearAboutUs` | `hear_about_us` | ✅ |
+| 18b | Siapa yang memberitahu kamu | `referredByStaff` | `referred_by_staff` | ⚠️ conditional |
+
+> **Q18b only appears when Q18 is answered `Lok Gitew`**, so the team can
+> tell which server brought a walk-in applicant in. It is required once
+> shown and empty otherwise.
+>
+> The pairing is enforced in both places: the form hides the field and
+> skips its validation (`showWhen` — see `isFieldVisible`), and the request
+> schema carries a matching refinement, so the rule does not live only in
+> the browser. Switching Q18 away from `Lok Gitew` clears any answer
+> already typed, including from a saved draft.
 
 ## Section 4 — Final Check
 

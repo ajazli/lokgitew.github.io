@@ -715,6 +715,22 @@ a:focus-visible {
     color: var(--ll-muted);
 }
 
+/* ── Conditional follow-up ─────────────────────────────────────────── */
+/* Indented and rule-marked so it reads as belonging to the question above
+   it, rather than as a new question that appeared from nowhere. */
+.ll-field-followup {
+    margin-top: -0.6rem;
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--primary-orange);
+}
+@media (prefers-reduced-motion: no-preference) {
+    .ll-field-followup:not([hidden]) { animation: llFollowupIn 0.22s ease-out; }
+}
+@keyframes llFollowupIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+}
+
 /* ── Age range (min / max) ─────────────────────────────────────────── */
 .ll-range { display: flex; align-items: flex-end; gap: 0.7rem; }
 .ll-range-box { flex: 1 1 0; min-width: 0; }
