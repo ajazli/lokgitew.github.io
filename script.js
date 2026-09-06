@@ -249,10 +249,11 @@ const POS_SERVER_URL = 'https://lokgitew.gitew.com/pos';
    customer-facing call has to carry ?outlet=. The POS server strips the
    parameter again before the route sees it.
 
-   The key is read from the gateway's own public outlet list rather than
-   hardcoded, so renaming or re-provisioning an outlet cannot silently
-   break the booking form. Set POS_OUTLET_KEY_PINNED to override. */
-const POS_OUTLET_KEY_PINNED = '';
+   The key below is the one the gateway reports for this outlet, and the
+   comparison there is case-sensitive, so it has to match exactly. Blank it
+   out to fall back to reading the key from the gateway's own public outlet
+   list instead. */
+const POS_OUTLET_KEY_PINNED = 'LG-HA-01';
 const POS_OUTLETS_URL = POS_SERVER_URL + '/api/v1/auth/outlets';
 
 let _posOutletKeyPromise = null;
