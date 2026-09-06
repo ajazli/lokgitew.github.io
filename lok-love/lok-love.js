@@ -35,14 +35,13 @@ const LOK_LOVE_CONFIG = {
     maxMaleParticipants:  6,
     maxFemaleParticipants: 6,
     totalParticipants:    12,
-    /* Two different ages, on purpose. minimumAge is what the event
-       advertises and what the final confirmation asks the applicant to
-       attest to; formMinimumAge is the floor the age field itself
-       enforces. The organisers' question sheet specifies 18 for the field
-       and 21 in the confirmation, so both are kept until they say which
-       one wins. */
-    minimumAge:           21,
-    formMinimumAge:       18,
+    /* One age, everywhere: the landing page copy, the age field's floor
+       and the final confirmation clause all read from this. The question
+       sheet originally gave 18 in the age question and 21 in the
+       confirmation; the organisers settled it at 19 (6 September 2026).
+       Keep POSGitew's LOK_LOVE_MINIMUM_AGE in step — it is the authority,
+       this copy is only for fast feedback. */
+    minimumAge:           19,
     applicationDeadline:  'Jumat, 11 September 2026',
     announcementNote:     'Pendaftar terpilih dihubungi lewat WhatsApp.',
     paymentWindowHours:   24,
@@ -105,11 +104,11 @@ const LOK_LOVE_FORM_SCHEMA = [
                 label: 'Usia',
                 type: 'number',
                 required: true,
-                min: LOK_LOVE_CONFIG.formMinimumAge,
+                min: LOK_LOVE_CONFIG.minimumAge,
                 max: 99,
                 inputmode: 'numeric',
                 placeholder: '21',
-                help: 'Minimal ' + LOK_LOVE_CONFIG.formMinimumAge + ' tahun.'
+                help: 'Minimal ' + LOK_LOVE_CONFIG.minimumAge + ' tahun.'
             },
             {
                 id: 'gender',
@@ -176,6 +175,21 @@ const LOK_LOVE_FORM_SCHEMA = [
                 body: [
                     'Akun ini digunakan oleh tim LokGitew sebagai salah satu referensi dalam proses seleksi dan matching. Kami tidak akan mempublikasikan atau membagikan akunmu kepada peserta lain tanpa persetujuan.'
                 ]
+            },
+            {
+                /* Not on the organisers' sheet; added back at their request
+                   (6 September 2026) as a second contact channel. It is also
+                   the second key duplicate detection matches on, alongside
+                   the WhatsApp number. */
+                id: 'email',
+                label: 'Alamat email',
+                type: 'email',
+                required: true,
+                autocomplete: 'email',
+                inputmode: 'email',
+                placeholder: 'kamu@email.com',
+                maxLength: 160,
+                help: 'Kami pakai ini sebagai cadangan kalau WhatsApp kamu nggak bisa dihubungi.'
             }
         ]
     },
@@ -206,7 +220,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                 maxField: 'preferredAgeMax',
                 minLabel: 'Usia minimum',
                 maxLabel: 'Usia maksimum',
-                floor: LOK_LOVE_CONFIG.formMinimumAge,
+                floor: LOK_LOVE_CONFIG.minimumAge,
                 ceiling: 99
             },
             {

@@ -10,7 +10,7 @@ Keep these five places in sync:
 |---|---|
 | Website form questions | `lok-love/lok-love.js` → `LOK_LOVE_FORM_SCHEMA` |
 | Request validation | POSGitew `packages/contracts/src/lok-love.schema.js` |
-| Table columns | POSGitew `server/db/schema/49-…sql` + `50-lok-love-v2-questions.sql` |
+| Table columns | POSGitew `server/db/schema/49-…sql`, `50-lok-love-v2-questions.sql`, `51-lok-love-email-back.sql` |
 | Row → JSON mapping | POSGitew `server/modules/lok-love/lok-love.mapper.ts` |
 | This document | `docs/lok-love/question-mapping.md` |
 
@@ -33,7 +33,7 @@ Their sub-keys, not the field `id`, are what reach the payload:
 | # | Question | Payload key | Column | Required |
 |---|---|---|---|---|
 | 1 | Nama lengkap | `name` | `name` | ✅ |
-| 2 | Usia | `age` | `age` | ✅ min 18 |
+| 2 | Usia | `age` | `age` | ✅ min 19 |
 | 3 | Jenis kelamin | `gender` | `gender` | ✅ Pria \| Wanita |
 | 4 | Siapa yang ingin kamu temui | `lookingToMeet` | `looking_to_meet` | ✅ Pria \| Wanita |
 | 5 | Kota atau daerah | `city` | `city` | ✅ |
@@ -41,13 +41,17 @@ Their sub-keys, not the field `id`, are what reach the payload:
 | 7 | Nomor WhatsApp | `whatsapp` | `whatsapp` | ✅ normalised to `+62…` |
 | 8 | Drop your social — platform | `socialPlatform` | `social_platform` | ✅ Instagram \| TikTok |
 | 8 | Drop your social — username | `socialHandle` | `social_handle` | ✅ stored without `@` |
+| 8b | Alamat email | `email` | `email` | ✅ stored lower-cased |
+
+> Q8b is not on the organisers' sheet. It was added back at their request
+> (6 September 2026) as a second contact channel and a second duplicate key.
 
 ## Section 2 — Your Vibe
 
 | # | Question | Payload key | Column | Required |
 |---|---|---|---|---|
 | 9 | Sedang lajang? | `relationshipStatus` | `relationship_status` | ✅ |
-| 10 | Rentang usia — minimum | `preferredAgeMin` | `preferred_age_min` | ✅ |
+| 10 | Rentang usia — minimum | `preferredAgeMin` | `preferred_age_min` | ✅ min 19 |
 | 10 | Rentang usia — maksimum | `preferredAgeMax` | `preferred_age_max` | ✅ must be ≥ min |
 | 11 | Fleksibilitas rentang usia | `ageFlexibility` | `age_flexibility` | ✅ |
 | 12 | Ceritakan tentang dirimu | `selfDescription` | `self_description` | ✅ ≤ 600 |
@@ -91,26 +95,40 @@ any single clause is rejected.
 
 ## Duplicate detection
 
-Keyed on **`event_key` + `whatsapp`** only, enforced by the unique index
-`idx_lok_love_event_whatsapp` and checked in the same transaction as the
-insert. WhatsApp is the only contact identity the current sheet collects.
+Either contact detail identifies a repeat applicant: **`event_key` +
+`whatsapp`**, or **`event_key` + `lower(email)`**. Both are enforced by
+unique indexes and checked in the same transaction as the insert.
 
-A second submission from the same number returns `{"status":"duplicate"}`
-with a 200, not an error — the applicant is told they have already applied.
+The email index is **partial** — `WHERE email IS NOT NULL AND email <> ''`.
+Applications written while the form had no email question carry none, and
+must not all read as duplicates of each other. The runtime check applies
+the same condition.
 
-## The age discrepancy
+A second submission from either matching detail returns
+`{"status":"duplicate"}` with a 200, not an error — the applicant is told
+they have already applied.
 
-The question sheet gives two different minimum ages, and both are
-implemented as written:
+The `email` column is deliberately **nullable** even though the form now
+requires an address. Requiring it is the request schema's job and applies
+to submissions from here on; the column has to keep accommodating rows
+written while there was no question to answer.
 
-- **Q2** says *minimal 18 tahun* → the age field and the request schema
-  enforce 18 (`LOK_LOVE_MINIMUM_AGE`, `LOK_LOVE_CONFIG.formMinimumAge`).
-- **Q22** says *berusia minimal 21 tahun* → reproduced verbatim in the
-  confirmation checkbox, which is an attestation, not a validated value.
-- The landing page still advertises 21 (`LOK_LOVE_CONFIG.minimumAge`).
+## Minimum age
 
-So a 19-year-old can complete the form but cannot truthfully tick Q22.
-**This needs an organiser decision**; align all three once it is made.
+**19**, everywhere. The sheet as first written gave 18 in the age question
+and 21 in the final confirmation; the organisers settled it at 19
+(6 September 2026).
+
+One value drives all three places it appears — the age field's floor, the
+Q22 confirmation text and the landing-page copy:
+
+| Where | Constant |
+|---|---|
+| Request validation (**authority**) | `LOK_LOVE_MINIMUM_AGE` in `lok-love.schema.js` |
+| Form field, Q22 text, landing copy | `LOK_LOVE_CONFIG.minimumAge` in `lok-love.js` |
+
+The landing page's static `21` fallbacks were updated too, not just the
+`data-ll` placeholders, so the page is correct before JS runs.
 
 ## Questions no longer asked
 
@@ -119,13 +137,12 @@ applications collected under the previous version stay readable. Nothing
 writes them, and the admin dashboard shows them only for rows that have
 them, under "Formulir versi sebelumnya".
 
-`email` · `personality` · `interests` · `weekend_vibe` · `intention` ·
+`personality` · `interests` · `weekend_vibe` · `intention` ·
 `preferred_age_range` · `deal_breakers` · `dietary_notes` ·
 `additional_info`
 
-`email` is the significant one: the form no longer collects an email
-address at all, so it is no longer part of duplicate detection and
-`NOT NULL` was dropped from the column.
+`email` was briefly in this list — migration 50 dropped the question, and
+migration 51 brought it back as Q8b. It is a current answer again.
 
 ## Photo upload
 
