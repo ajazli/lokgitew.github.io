@@ -346,6 +346,20 @@ const LOK_LOVE_FORM_SCHEMA = [
                     { value: 'Lok Gitew', label: 'Lok Gitew' },
                     { value: 'Lainnya',   label: 'Lainnya' }
                 ]
+            },
+            {
+                /* Only asked of someone who heard about the event in the
+                   café itself, so the team can tell which server brought
+                   them in. showWhen keeps it out of everyone else's way —
+                   see isFieldVisible(). */
+                id: 'referredByStaff',
+                label: 'Siapa yang memberitahu kamu?',
+                type: 'text',
+                required: true,
+                maxLength: 100,
+                placeholder: 'Nama server LokGitew',
+                help: 'Nama staf LokGitew yang cerita soal 6×6 dan mengajak kamu daftar. Kalau nggak ingat namanya, tulis "Tidak ingat".',
+                showWhen: { field: 'hearAboutUs', equals: 'Lok Gitew' }
             }
         ]
     },
@@ -482,6 +496,40 @@ function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 function scrollBehavior() { return prefersReducedMotion() ? 'auto' : 'smooth'; }
+
+/* A field with `showWhen` only applies when its controlling answer
+   matches. Everything downstream keys off this one predicate: an unmet
+   condition means the field is not rendered, not validated, not reviewed
+   and contributes nothing to the payload — so a follow-up question cannot
+   silently block a step it is not even visible on. */
+function isFieldVisible(field) {
+    const rule = field.showWhen;
+    if (!rule) return true;
+    return formState.answers[rule.field] === rule.equals;
+}
+
+/* Show or hide every conditional field in the current step. Toggling the
+   wrapper is deliberate: re-rendering the step would take focus away from
+   the radio the applicant just pressed. */
+function syncConditionalFields() {
+    const step = LOK_LOVE_FORM_SCHEMA[formState.step];
+    if (!step) return;
+    step.fields.forEach(field => {
+        if (!field.showWhen) return;
+        const wrap = document.querySelector('[data-field="' + field.id + '"]');
+        if (!wrap) return;
+        const visible = isFieldVisible(field);
+        wrap.hidden = !visible;
+        // A hidden field must not keep a validation error on screen, and
+        // must not hold an answer the applicant can no longer see or edit.
+        if (!visible) {
+            setFieldError(field.id, null);
+            delete formState.answers[field.id];
+            const input = wrap.querySelector('input, select, textarea');
+            if (input) input.value = '';
+        }
+    });
+}
 
 /* Flatten every field in the schema, in order. */
 function allFields() {
@@ -661,6 +709,10 @@ function validateStep(stepIndex) {
     let firstInvalidId = null;
 
     step.fields.forEach(field => {
+        if (!isFieldVisible(field)) {
+            setFieldError(field.id, null);
+            return;
+        }
         const error = validateField(field, formState.answers[field.id]);
         setFieldError(field.id, error);
         if (error && !firstInvalidId) firstInvalidId = field.id;
@@ -886,7 +938,8 @@ function renderField(field) {
         }
     }
 
-    return '<div class="ll-field" data-field="' + field.id + '">' +
+    const followup = field.showWhen ? ' ll-field-followup' : '';
+    return '<div class="ll-field' + followup + '" data-field="' + field.id + '">' +
         '<label class="ll-label" for="' + field.id + '">' + fieldLabelHtml(field) + '</label>' +
         help + control + errNode +
     '</div>';
@@ -897,7 +950,7 @@ function renderReview() {
     const rows = [];
     LOK_LOVE_FORM_SCHEMA.forEach((step, idx) => {
         if (step.isReview) return;
-        const items = step.fields.map(field => {
+        const items = step.fields.filter(isFieldVisible).map(field => {
             let v;
             if (field.type === 'social') {
                 const handle = formState.answers[field.handleField];
@@ -971,6 +1024,7 @@ function renderStep() {
         nextBtn.classList.toggle('ll-btn-submit', isLast);
     }
 
+    syncConditionalFields();
     bindStepInputs();
 
     // Move focus to the step heading so screen-reader and keyboard users
@@ -992,6 +1046,8 @@ function bindStepInputs() {
 
         const commit = (value) => {
             formState.answers[field.id] = value;
+            // Answering one question can reveal or retire another.
+            syncConditionalFields();
             saveDraft();
             // Clear a visible error as soon as the field becomes valid,
             // but never introduce a new error while the user is typing.
@@ -1157,6 +1213,12 @@ function clearFormError() {
 function buildPayload() {
     const payload = {};
     allFields().forEach(field => {
+        // A question that was never shown has no answer to send.
+        if (!isFieldVisible(field)) {
+            payload[field.id] = '';
+            return;
+        }
+
         // Composites contribute their sub-keys and no key of their own.
         if (field.type === 'social') {
             payload[field.platformField] = String(formState.answers[field.platformField] || '');
