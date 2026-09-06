@@ -54,7 +54,7 @@ const LOK_LOVE_CONFIG = {
        Left blank on purpose: the key is looked up at submit time from the
        gateway's own public outlet list, so it cannot drift out of sync
        with the POS. Set it to pin a specific outlet instead. */
-    outletKey:            '',
+    outletKey:            'LG-HA-01',
     outletsEndpoint:      'https://lokgitew.gitew.com/pos/api/v1/auth/outlets'
 };
 
@@ -1002,8 +1002,10 @@ function setSubmitting(isSubmitting) {
  * for the case where several outlets exist and the event belongs to one.
  */
 let _outletKeyPromise = null;
-function resolveOutletKey() {
-    if (LOK_LOVE_CONFIG.outletKey) return Promise.resolve(LOK_LOVE_CONFIG.outletKey);
+function resolveOutletKey(forceLookup) {
+    if (!forceLookup && LOK_LOVE_CONFIG.outletKey) {
+        return Promise.resolve(LOK_LOVE_CONFIG.outletKey);
+    }
     if (_outletKeyPromise) return _outletKeyPromise;
 
     _outletKeyPromise = fetch(LOK_LOVE_CONFIG.outletsEndpoint)
@@ -1021,6 +1023,20 @@ function resolveOutletKey() {
         });
 
     return _outletKeyPromise;
+}
+
+function postApplication(payload, outletKey) {
+    const endpoint = LOK_LOVE_CONFIG.apiEndpoint +
+        (LOK_LOVE_CONFIG.apiEndpoint.indexOf('?') === -1 ? '?' : '&') +
+        'outlet=' + encodeURIComponent(outletKey);
+
+    /* The POS gateway parses application/json and answers the CORS
+       preflight, the same path the reservation form already uses. */
+    return fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
 }
 
 async function submitApplication() {
@@ -1041,18 +1057,19 @@ async function submitApplication() {
     const payload = buildPayload();
 
     try {
-        /* The POS gateway parses application/json and answers the CORS
-           preflight, the same path the reservation form already uses. */
-        const outletKey = await resolveOutletKey();
-        const endpoint = LOK_LOVE_CONFIG.apiEndpoint +
-            (LOK_LOVE_CONFIG.apiEndpoint.indexOf('?') === -1 ? '?' : '&') +
-            'outlet=' + encodeURIComponent(outletKey);
+        let res = await postApplication(payload, await resolveOutletKey(false));
 
-        const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        /* 403 is the gateway saying it does not recognise the outlet key we
+           sent, which is what a rename or a re-provision looks like from
+           here. Ask it which outlets it actually serves and try that once,
+           rather than turning a fixable config drift into a dead form. */
+        if (res.status === 403) {
+            const looked = await resolveOutletKey(true).catch(() => null);
+            if (looked && looked !== LOK_LOVE_CONFIG.outletKey) {
+                LOK_LOVE_CONFIG.outletKey = looked;
+                res = await postApplication(payload, looked);
+            }
+        }
 
         let data = null;
         try { data = await res.json(); } catch (e) { /* handled below */ }
