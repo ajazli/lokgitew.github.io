@@ -35,7 +35,13 @@ const LOK_LOVE_CONFIG = {
     maxMaleParticipants:  6,
     maxFemaleParticipants: 6,
     totalParticipants:    12,
-    minimumAge:           21,
+    /* One age, everywhere: the landing page copy, the age field's floor
+       and the final confirmation clause all read from this. The question
+       sheet originally gave 18 in the age question and 21 in the
+       confirmation; the organisers settled it at 19 (6 September 2026).
+       Keep POSGitew's LOK_LOVE_MINIMUM_AGE in step — it is the authority,
+       this copy is only for fast feedback. */
+    minimumAge:           19,
     applicationDeadline:  'Jumat, 11 September 2026',
     announcementNote:     'Pendaftar terpilih dihubungi lewat WhatsApp.',
     paymentWindowHours:   24,
@@ -68,17 +74,16 @@ const LOK_LOVE_INCLUDES = [
 ];
 
 /* ── Form schema ───────────────────────────────────────────────────────
-   STEP 1 is transcribed verbatim from the live Google Form (page 1).
-   Do not reword those nine questions without organiser approval.
+   Transcribed from the organisers' question sheet: 23 questions across
+   four sections. Wording is theirs — do not reword a question, an option
+   or a consent clause without their approval. The consent text in the
+   final section is what applicants are held to, so it is reproduced
+   exactly.
 
-   Steps 2–4 were designed for this form. The Google Form had taken no
-   responses, so the organisers cleared us to write them from scratch
-   rather than mirror the old pages; they follow the PRD's groupings and
-   the selection criteria the event itself publishes — usia, kepribadian,
-   minat, preferensi pasangan.
-
-   Question wording is Indonesian throughout, matching the rest of the
-   site.                                                                  */
+   Two questions capture two answers each and carry a composite type:
+   `social` (socialPlatform + socialHandle) and `agerange`
+   (preferredAgeMin + preferredAgeMax). Those sub-keys, not the field id,
+   are what reach the payload.                                            */
 const LOK_LOVE_FORM_SCHEMA = [
     {
         id: 'about-you',
@@ -103,7 +108,7 @@ const LOK_LOVE_FORM_SCHEMA = [
                 max: 99,
                 inputmode: 'numeric',
                 placeholder: '21',
-                help: 'Usia minimal ' + LOK_LOVE_CONFIG.minimumAge + ' tahun untuk ikut.'
+                help: 'Minimal ' + LOK_LOVE_CONFIG.minimumAge + ' tahun.'
             },
             {
                 id: 'gender',
@@ -152,259 +157,282 @@ const LOK_LOVE_FORM_SCHEMA = [
                 help: 'Lewat nomor ini kami hubungi kamu kalau terpilih.'
             },
             {
-                id: 'socialHandle',
-                label: 'Username Instagram/TikTok',
-                type: 'text',
+                /* One question, two answers: the platform and the handle
+                   travel together as socialPlatform + socialHandle. */
+                id: 'social',
+                label: 'Drop your social 👀',
+                type: 'social',
                 required: true,
-                placeholder: '@usernamekamu',
-                maxLength: 80
+                help: 'Username Instagram atau TikTok yang paling sering kamu pakai.',
+                platformField: 'socialPlatform',
+                handleField: 'socialHandle',
+                handleMaxLength: 80,
+                platformOptions: [
+                    { value: 'Instagram', label: 'Instagram' },
+                    { value: 'TikTok',    label: 'TikTok' }
+                ],
+                note: 'Wajib menggunakan akun yang bersifat publik (tidak di-private).',
+                body: [
+                    'Akun ini digunakan oleh tim LokGitew sebagai salah satu referensi dalam proses seleksi dan matching. Kami tidak akan mempublikasikan atau membagikan akunmu kepada peserta lain tanpa persetujuan.'
+                ]
             },
             {
+                /* Not on the organisers' sheet; added back at their request
+                   (6 September 2026) as a second contact channel. It is also
+                   the second key duplicate detection matches on, alongside
+                   the WhatsApp number. */
                 id: 'email',
                 label: 'Alamat email',
                 type: 'email',
                 required: true,
                 autocomplete: 'email',
+                inputmode: 'email',
                 placeholder: 'kamu@email.com',
-                maxLength: 160
+                maxLength: 160,
+                help: 'Kami pakai ini sebagai cadangan kalau WhatsApp kamu nggak bisa dihubungi.'
             }
         ]
     },
 
     {
         id: 'your-vibe',
-        title: 'Vibe Kamu',
+        title: 'Your Vibe',
         blurb: 'Ini yang kami pakai buat nyusun meja yang nyambung.',
         fields: [
             {
-                id: 'personality',
-                label: 'Kepribadian kamu',
+                id: 'relationshipStatus',
+                label: 'Apakah kamu saat ini sedang lajang?',
                 type: 'radio',
                 required: true,
                 options: [
-                    { value: 'Sangat introvert',    label: 'Sangat introvert' },
-                    { value: 'Cenderung introvert', label: 'Cenderung introvert' },
-                    { value: 'Di antara keduanya',  label: 'Di antara keduanya' },
-                    { value: 'Cenderung ekstrovert',label: 'Cenderung ekstrovert' },
-                    { value: 'Sangat ekstrovert',   label: 'Sangat ekstrovert' }
+                    { value: 'Ya',                  label: 'Ya' },
+                    { value: 'Tidak',               label: 'Tidak' },
+                    { value: 'Status saya rumit',   label: 'Status saya rumit' }
                 ]
             },
             {
-                id: 'interests',
-                label: 'Minat & hobi',
-                type: 'checkbox',
+                /* One question, two answers: preferredAgeMin + preferredAgeMax. */
+                id: 'preferredAge',
+                label: 'Rentang usia berapa yang ingin kamu temui?',
+                type: 'agerange',
                 required: true,
-                maxSelections: 6,
-                help: 'Pilih maksimal 6 — ini bantu kami mendudukkan kamu dekat orang yang nyambung.',
-                options: [
-                    { value: 'Kuliner & jajan',      label: 'Kuliner & jajan' },
-                    { value: 'Musik',                label: 'Musik' },
-                    { value: 'Film & series',        label: 'Film & series' },
-                    { value: 'Olahraga & gym',       label: 'Olahraga & gym' },
-                    { value: 'Traveling',            label: 'Traveling' },
-                    { value: 'Gaming',               label: 'Gaming' },
-                    { value: 'Seni & desain',        label: 'Seni & desain' },
-                    { value: 'Membaca',              label: 'Membaca' },
-                    { value: 'Fotografi',            label: 'Fotografi' },
-                    { value: 'Fashion',              label: 'Fashion' },
-                    { value: 'Nongkrong di kafe',    label: 'Nongkrong di kafe' },
-                    { value: 'Alam & hiking',        label: 'Alam & hiking' },
-                    { value: 'Konser & live music',  label: 'Konser & live music' },
-                    { value: 'Otomotif',             label: 'Otomotif' },
-                    { value: 'Bisnis & startup',     label: 'Bisnis & startup' },
-                    { value: 'Hewan peliharaan',     label: 'Hewan peliharaan' }
-                ]
+                minField: 'preferredAgeMin',
+                maxField: 'preferredAgeMax',
+                minLabel: 'Usia minimum',
+                maxLabel: 'Usia maksimum',
+                floor: LOK_LOVE_CONFIG.minimumAge,
+                ceiling: 99
             },
             {
-                id: 'weekendVibe',
-                label: 'Akhir pekan idealmu',
-                type: 'select',
+                id: 'ageFlexibility',
+                label: 'Seberapa fleksibel dengan rentang usia pilihanmu?',
+                type: 'radio',
                 required: true,
                 options: [
-                    { value: 'Nongkrong di kafe',            label: 'Nongkrong di kafe' },
-                    { value: 'Petualangan di luar ruangan',  label: 'Petualangan di luar ruangan' },
-                    { value: 'Santai di rumah',              label: 'Santai di rumah' },
-                    { value: 'Keluar malam & live music',    label: 'Keluar malam & live music' },
-                    { value: 'Coba tempat makan baru',       label: 'Coba tempat makan baru' },
-                    { value: 'Olahraga atau gym',            label: 'Olahraga atau gym' },
-                    { value: 'Ngerjain hobi atau proyek',    label: 'Ngerjain hobi atau proyek' }
+                    { value: 'Saya ingin tetap di dalam rentang usia pilihan saya',
+                      label: 'Saya ingin tetap di dalam rentang usia pilihan saya' },
+                    { value: 'Saya masih terbuka sedikit di luar rentang tersebut',
+                      label: 'Saya masih terbuka sedikit di luar rentang tersebut' },
+                    { value: 'Tergantung orangnya 👀',
+                      label: 'Tergantung orangnya 👀' }
                 ]
             },
             {
                 id: 'selfDescription',
-                label: 'Ceritakan sedikit tentang dirimu',
+                label: 'Ceritakan sedikit tentang dirimu.',
                 type: 'textarea',
                 required: true,
-                maxLength: 300,
-                placeholder: 'Kerja di bidang apa, lagi suka apa, hal random yang bikin kamu semangat…',
-                help: 'Beberapa kalimat aja cukup. Tulis santai kayak kamu ngomong.'
-            }
-        ]
-    },
-
-    {
-        id: 'looking-for',
-        title: 'Yang Kamu Cari',
-        blurb: 'Nggak ada jawaban salah — ini cuma bantu kami masangin kamu dengan pas.',
-        fields: [
+                maxLength: 600,
+                placeholder: 'Kepribadian, lifestyle, hobi, pekerjaan, hal yang kamu suka…',
+                help: 'Kepribadian, lifestyle, hobi, pekerjaan, hal yang kamu suka, atau apa pun yang menurutmu menarik.'
+            },
             {
-                id: 'intention',
-                label: 'Apa yang kamu cari di acara ini?',
+                id: 'socialStyle',
+                label: 'Kalau soal bersosialisasi, kamu lebih seperti…',
                 type: 'radio',
                 required: true,
                 options: [
-                    { value: 'Hubungan serius',                    label: 'Hubungan serius' },
-                    { value: 'Kenalan dulu, lihat ke mana arahnya',label: 'Kenalan dulu, lihat ke mana arahnya' },
-                    { value: 'Teman baru & memperluas relasi',     label: 'Teman baru & memperluas relasi' },
-                    { value: 'Belum tahu, mau coba dulu',          label: 'Belum tahu, mau coba dulu' }
-                ]
-            },
-            {
-                id: 'preferredAgeRange',
-                label: 'Rentang usia yang kamu harapkan',
-                type: 'select',
-                required: true,
-                options: [
-                    { value: '21–25',          label: '21–25' },
-                    { value: '24–30',          label: '24–30' },
-                    { value: '28–35',          label: '28–35' },
-                    { value: '33–40',          label: '33–40' },
-                    { value: '40+',            label: '40+' },
-                    { value: 'Tidak masalah',  label: 'Tidak masalah' }
+                    { value: 'Gampang ngobrol sama siapa aja',
+                      label: '🗣️ Gampang ngobrol sama siapa aja' },
+                    { value: 'Awalnya agak malu, tapi cepat cair',
+                      label: '🙂 Awalnya agak malu, tapi cepat cair' },
+                    { value: 'Tergantung situasi',
+                      label: '⚖️ Tergantung situasi' },
+                    { value: 'Lebih nyaman ngobrol one-on-one',
+                      label: '🌱 Lebih nyaman ngobrol one-on-one' },
+                    { value: 'Cenderung pendiam dan butuh waktu untuk nyaman',
+                      label: '🙈 Cenderung pendiam dan butuh waktu untuk nyaman' }
                 ]
             },
             {
                 id: 'valuedQualities',
-                label: 'Kualitas yang paling kamu cari',
+                label: 'Apa yang paling kamu cari dari seseorang?',
                 type: 'checkbox',
                 required: true,
                 maxSelections: 3,
-                help: 'Pilih 3 teratas kamu.',
+                help: 'Pilih maksimal 3.',
                 options: [
-                    { value: 'Humoris',              label: 'Humoris' },
-                    { value: 'Cerdas',               label: 'Cerdas' },
-                    { value: 'Penyayang',            label: 'Penyayang' },
+                    { value: 'Sense of humor',       label: 'Sense of humor' },
+                    { value: 'Nyambung diajak ngobrol', label: 'Nyambung diajak ngobrol' },
+                    { value: 'Kind / penyayang',     label: 'Kind / penyayang' },
                     { value: 'Ambisius',             label: 'Ambisius' },
-                    { value: 'Mandiri',              label: 'Mandiri' },
-                    { value: 'Petualang',            label: 'Petualang' },
-                    { value: 'Tenang & sabar',       label: 'Tenang & sabar' },
-                    { value: 'Kreatif',              label: 'Kreatif' },
-                    { value: 'Aktif & sporty',       label: 'Aktif & sporty' },
-                    { value: 'Religius',             label: 'Religius' },
-                    { value: 'Pendengar yang baik',  label: 'Pendengar yang baik' }
-                ]
-            },
-            {
-                id: 'dealBreakers',
-                label: 'Hal yang kurang cocok buatmu',
-                type: 'checkbox',
-                required: false,
-                help: 'Opsional — kosongin aja kalau nggak ada yang mengganggu buat kamu.',
-                options: [
-                    { value: 'Merokok',                    label: 'Merokok' },
-                    { value: 'Sering minum alkohol',       label: 'Sering minum alkohol' },
-                    { value: 'Tidak suka hewan peliharaan',label: 'Tidak suka hewan peliharaan' },
-                    { value: 'Jarang komunikasi',          label: 'Jarang komunikasi' },
-                    { value: 'Beda prinsip agama',         label: 'Beda prinsip agama' }
+                    { value: 'Family-oriented',      label: 'Family-oriented' },
+                    { value: 'Easy-going',           label: 'Easy-going' },
+                    { value: 'Adventurous',          label: 'Adventurous' },
+                    { value: 'Intelligent',          label: 'Intelligent' },
+                    { value: 'Confident',            label: 'Confident' },
+                    { value: 'Good communication',   label: 'Good communication' },
+                    { value: 'Religious / spiritual',label: 'Religious / spiritual' },
+                    { value: 'Lainnya',              label: 'Lainnya' }
                 ]
             }
         ]
     },
 
     {
-        id: 'event-details',
-        title: 'Detail Acara',
-        blurb: 'Terakhir — hal teknis biar malamnya lancar.',
+        id: 'the-night',
+        title: 'The Night',
+        blurb: 'Hal teknis biar malamnya lancar.',
         fields: [
             {
                 id: 'availability',
-                label: 'Bisa hadir pada ' + LOK_LOVE_CONFIG.eventDate + ', ' + LOK_LOVE_CONFIG.eventTime + '?',
+                label: 'Bisa mengikuti acara dari jam 19.00 sampai selesai?',
                 type: 'radio',
                 required: true,
+                help: 'Karena setiap peserta akan mengikuti seluruh rangkaian mini date dan aktivitas, kehadiran penuh sangat penting.',
                 options: [
-                    { value: 'Ya, saya bisa hadir',      label: 'Ya, saya bisa hadir' },
-                    { value: 'Belum pasti',              label: 'Belum pasti' },
-                    { value: 'Tidak bisa di tanggal ini',label: 'Tidak bisa di tanggal ini' }
+                    { value: 'Ya, pasti',                  label: 'Ya, pasti' },
+                    { value: 'Kemungkinan terlambat',      label: 'Kemungkinan terlambat' },
+                    { value: 'Kemungkinan pulang lebih awal', label: 'Kemungkinan pulang lebih awal' },
+                    { value: 'Belum yakin',                label: 'Belum yakin' }
                 ]
             },
             {
                 id: 'dietary',
-                label: 'Preferensi makanan atau alergi',
-                type: 'checkbox',
+                label: 'Ada alergi makanan atau pantangan tertentu?',
+                type: 'text',
                 required: true,
-                help: 'Pilih "Tidak ada" kalau nggak ada — rice bowl kamu tergantung ini.',
-                options: [
-                    { value: 'Tidak ada',        label: 'Tidak ada' },
-                    { value: 'Halal',            label: 'Halal' },
-                    { value: 'Vegetarian',       label: 'Vegetarian' },
-                    { value: 'Vegan',            label: 'Vegan' },
-                    { value: 'Tidak makan pedas',label: 'Tidak makan pedas' },
-                    { value: 'Alergi seafood',   label: 'Alergi seafood' },
-                    { value: 'Alergi kacang',    label: 'Alergi kacang' },
-                    { value: 'Lainnya',          label: 'Lainnya' }
-                ]
+                maxLength: 200,
+                placeholder: 'mis. Alergi seafood',
+                help: 'Jika tidak ada, tulis "Tidak ada".'
             },
             {
-                id: 'dietaryNotes',
-                label: 'Detail alergi atau catatan makanan',
-                type: 'text',
-                required: false,
-                maxLength: 200,
-                placeholder: 'Alergi udang, nggak makan sapi, dll.'
+                id: 'photoConsent',
+                label: 'Bersedia difoto atau direkam selama acara?',
+                type: 'radio',
+                required: true,
+                help: 'Dokumentasi dapat digunakan untuk kebutuhan dokumentasi dan promosi LokGitew. Jawaban ini tidak akan memengaruhi proses seleksi.',
+                options: [
+                    { value: 'Ya, saya bersedia difoto dan direkam',
+                      label: 'Ya, saya bersedia difoto dan direkam' },
+                    { value: 'Saya hanya bersedia difoto',
+                      label: 'Saya hanya bersedia difoto' },
+                    { value: 'Saya hanya bersedia berada dalam foto kelompok',
+                      label: 'Saya hanya bersedia berada dalam foto kelompok' },
+                    { value: 'Tidak, mohon jangan mengambil foto atau video saya',
+                      label: 'Tidak, mohon jangan mengambil foto atau video saya' }
+                ]
             },
             {
                 id: 'hearAboutUs',
-                label: 'Dari mana kamu tahu acara ini?',
-                type: 'select',
+                label: 'Kamu tahu 6×6 dari mana?',
+                type: 'radio',
                 required: true,
                 options: [
-                    { value: 'Instagram',                  label: 'Instagram' },
-                    { value: 'TikTok',                     label: 'TikTok' },
-                    { value: 'Teman',                      label: 'Teman' },
-                    { value: 'Pernah datang ke LokGitew',  label: 'Pernah datang ke LokGitew' },
-                    { value: 'Lainnya',                    label: 'Lainnya' }
+                    { value: 'Instagram', label: 'Instagram' },
+                    { value: 'TikTok',    label: 'TikTok' },
+                    { value: 'WhatsApp',  label: 'WhatsApp' },
+                    { value: 'Teman',     label: 'Teman' },
+                    { value: 'Lok Gitew', label: 'Lok Gitew' },
+                    { value: 'Lainnya',   label: 'Lainnya' }
                 ]
-            },
-            {
-                id: 'additionalInfo',
-                label: 'Ada hal lain yang perlu kami tahu?',
-                type: 'textarea',
-                required: false,
-                maxLength: 400,
-                placeholder: 'Opsional — apa pun yang menurutmu penting.'
             }
         ]
     },
 
     {
-        id: 'confirm',
-        title: 'Cek & Kirim',
+        id: 'final-check',
+        title: 'Final Check',
         blurb: 'Cek sekali lagi sebelum dikirim.',
         isReview: true,
         fields: [
             {
-                id: 'consentAccurate',
+                id: 'consentPayment',
                 type: 'consent',
                 required: true,
-                label: 'Semua yang saya isi di sini benar dan akurat.'
-            },
-            {
-                id: 'consentSelection',
-                type: 'consent',
-                required: true,
-                label: 'Saya paham bahwa mendaftar tidak menjamin dapat tempat, dan peserta dipilih oleh tim LOK GITEW.'
-            },
-            {
-                id: 'consentContact',
-                type: 'consent',
-                required: true,
-                label: 'LOK GITEW boleh menghubungi saya lewat WhatsApp atau email terkait acara ini.'
+                heading: 'Persetujuan Pembayaran & Pembatalan',
+                body: [
+                    'Saya memahami bahwa mengisi formulir ini tidak menjamin saya akan terpilih sebagai peserta.',
+                    'Jika terpilih, saya bersedia melakukan pembayaran penuh sebesar ' +
+                        LOK_LOVE_CONFIG.ticketPrice + ' dalam waktu ' +
+                        LOK_LOVE_CONFIG.paymentWindowHours +
+                        ' jam setelah menerima undangan untuk mengamankan tempat.',
+                    'Saya memahami bahwa pembayaran tidak dapat dikembalikan apabila saya membatalkan kehadiran dalam waktu 48 jam sebelum acara.',
+                    'Saya memahami bahwa pembayaran akan dikembalikan sepenuhnya apabila acara dibatalkan oleh LokGitew.',
+                    'Saya bersedia segera memberi tahu penyelenggara apabila saya tidak dapat menghadiri acara.'
+                ],
+                label: 'Saya telah membaca, memahami, dan menyetujui ketentuan pembayaran dan pembatalan di atas.'
             },
             {
                 id: 'consentPrivacy',
                 type: 'consent',
                 required: true,
-                label: 'Saya setuju data yang saya kirim dipakai untuk meninjau pendaftaran saya, dan kontak saya tidak dibagikan ke peserta lain tanpa persetujuan saya.'
+                heading: 'Persetujuan Privasi',
+                body: [
+                    'Data yang saya berikan melalui formulir ini dapat digunakan oleh LokGitew untuk proses seleksi, matching, komunikasi, dan kebutuhan operasional terkait acara 6×6.',
+                    'Saya memahami bahwa data pribadi saya tidak akan dipublikasikan atau diberikan kepada peserta lain tanpa persetujuan saya.'
+                ],
+                label: 'Saya menyetujui penggunaan data saya untuk keperluan 6×6.'
+            },
+            {
+                id: 'conductRespect',
+                type: 'consent',
+                required: true,
+                heading: 'Persetujuan Perilaku Peserta',
+                label: 'Saya bersedia berkomunikasi dengan sopan dan menghormati seluruh peserta serta staf.'
+            },
+            {
+                id: 'conductHarassment',
+                type: 'consent',
+                required: true,
+                label: 'Saya memahami bahwa pelecehan, kontak fisik tanpa persetujuan, perilaku agresif, dan ucapan diskriminatif tidak diperbolehkan.'
+            },
+            {
+                id: 'conductRejection',
+                type: 'consent',
+                required: true,
+                label: 'Saya akan menghormati keputusan peserta lain apabila mereka tidak tertarik kepada saya.'
+            },
+            {
+                id: 'conductPhotos',
+                type: 'consent',
+                required: true,
+                label: 'Saya tidak akan memotret, merekam, atau mempublikasikan identitas peserta lain tanpa izin mereka.'
+            },
+            {
+                id: 'conductRemoval',
+                type: 'consent',
+                required: true,
+                label: 'Saya memahami bahwa penyelenggara berhak meminta saya meninggalkan acara apabila perilaku saya membuat peserta lain merasa tidak aman atau tidak nyaman.'
+            },
+            {
+                id: 'consentFinal',
+                type: 'consent',
+                required: true,
+                heading: 'Konfirmasi Akhir',
+                label: 'Saya mengonfirmasi bahwa saya berusia minimal ' +
+                    LOK_LOVE_CONFIG.minimumAge +
+                    ' tahun, sedang berstatus lajang, dan benar-benar tertarik untuk mengenal peserta lajang lainnya.'
+            },
+            {
+                id: 'signature',
+                label: 'Persetujuan Elektronik',
+                type: 'text',
+                required: true,
+                maxLength: 100,
+                autocomplete: 'name',
+                placeholder: 'Nama lengkapmu',
+                help: 'Ketik nama lengkapmu sebagai bentuk persetujuan elektronik.'
             }
         ]
     }
@@ -527,10 +555,51 @@ function normaliseWhatsapp(raw) {
     return '+' + v;
 }
 
+/* A composite field's answer lives under its sub-keys, not its own id, so
+   these read straight from formState rather than taking a `value`. */
+function validateComposite(field) {
+    const answers = formState.answers;
+
+    if (field.type === 'social') {
+        if (!answers[field.platformField]) return 'Pilih Instagram atau TikTok dulu ya.';
+        const handle = String(answers[field.handleField] || '').trim();
+        if (!handle) return 'Isi username kamu ya.';
+        if (handle.replace(/^@/, '').length < 2) return 'Username-nya kependekan.';
+        if (handle.length > field.handleMaxLength) {
+            return 'Maksimal ' + field.handleMaxLength + ' karakter ya.';
+        }
+        return null;
+    }
+
+    if (field.type === 'agerange') {
+        const rawMin = answers[field.minField];
+        const rawMax = answers[field.maxField];
+        if (rawMin == null || rawMin === '' || rawMax == null || rawMax === '') {
+            return 'Isi usia minimum dan maksimum ya.';
+        }
+        const min = Number(rawMin);
+        const max = Number(rawMax);
+        if (!Number.isFinite(min) || !Number.isFinite(max)) return 'Masukkan angka ya.';
+        if (min < field.floor || max < field.floor) {
+            return 'Minimal ' + field.floor + ' tahun.';
+        }
+        if (min > field.ceiling || max > field.ceiling) {
+            return 'Maksimal ' + field.ceiling + ' tahun.';
+        }
+        if (min > max) return 'Usia minimum tidak boleh lebih besar dari maksimum.';
+        return null;
+    }
+
+    return null;
+}
+
 function validateField(field, value) {
     const isBlank = value == null || value === '' ||
                     (Array.isArray(value) && value.length === 0);
 
+    if (field.type === 'social' || field.type === 'agerange') {
+        return validateComposite(field);
+    }
     if (field.type === 'consent') {
         return value === true ? null : 'Centang kotak ini dulu untuk lanjut.';
     }
@@ -698,7 +767,16 @@ function renderField(field) {
 
         case 'consent': {
             const checked = val === true ? ' checked' : '';
-            return '<div class="ll-field ll-field-consent" data-field="' + field.id + '">' +
+            const heading = field.heading
+                ? '<h4 class="ll-consent-heading">' + escapeHtml(field.heading) + '</h4>'
+                : '';
+            const body = (field.body || []).map(
+                p => '<p class="ll-consent-body">' + escapeHtml(p) + '</p>'
+            ).join('');
+            return '<div class="ll-field ll-field-consent' +
+                    (field.heading ? ' ll-field-consent-lead' : '') +
+                    '" data-field="' + field.id + '">' +
+                heading + body +
                 '<div class="ll-consent">' +
                     '<input type="checkbox" id="' + field.id + '" name="' + field.id + '"' +
                         checked + ' aria-describedby="' + errId + '">' +
@@ -707,6 +785,67 @@ function renderField(field) {
                         '<span class="ll-sr-only"> (wajib diisi)</span></label>' +
                 '</div>' +
                 errNode +
+            '</div>';
+        }
+
+        case 'social': {
+            const platform = formState.answers[field.platformField] || '';
+            const handle   = formState.answers[field.handleField] || '';
+            const opts = field.platformOptions.map((o, i) => {
+                const oid = field.platformField + '-' + i;
+                return '<div class="ll-radio">' +
+                    '<input type="radio" id="' + oid + '" name="' + field.platformField +
+                        '" value="' + escapeHtml(o.value) + '"' +
+                        (platform === o.value ? ' checked' : '') + '>' +
+                    '<label for="' + oid + '">' + escapeHtml(o.label) + '</label>' +
+                '</div>';
+            }).join('');
+            const note = field.note
+                ? '<p class="ll-field-note">' + escapeHtml(field.note) + '</p>'
+                : '';
+            const body = (field.body || []).map(
+                p => '<p class="ll-field-body">' + escapeHtml(p) + '</p>'
+            ).join('');
+            return '<div class="ll-field" data-field="' + field.id + '">' +
+                '<fieldset class="ll-fieldset">' +
+                    '<legend class="ll-label">' + fieldLabelHtml(field) + '</legend>' +
+                    help +
+                    '<div class="ll-radio-group ll-radio-inline" role="radiogroup">' + opts + '</div>' +
+                    '<div class="ll-social-handle">' +
+                        '<label class="ll-sr-only" for="' + field.handleField + '">Username</label>' +
+                        '<span class="ll-social-at" aria-hidden="true">@</span>' +
+                        '<input type="text" id="' + field.handleField + '" name="' + field.handleField +
+                            '" value="' + escapeHtml(handle) + '" placeholder="username" ' +
+                            'autocapitalize="none" autocorrect="off" spellcheck="false" ' +
+                            'maxlength="' + field.handleMaxLength + '" ' +
+                            'aria-describedby="' + describedBy + '">' +
+                    '</div>' +
+                    note + body + errNode +
+                '</fieldset>' +
+            '</div>';
+        }
+
+        case 'agerange': {
+            const lo = formState.answers[field.minField];
+            const hi = formState.answers[field.maxField];
+            const box = (key, labelText, v) =>
+                '<div class="ll-range-box">' +
+                    '<label for="' + key + '">' + escapeHtml(labelText) + '</label>' +
+                    '<input type="text" inputmode="numeric" id="' + key + '" name="' + key +
+                        '" value="' + escapeHtml(v == null ? '' : v) + '" maxlength="2" ' +
+                        'aria-describedby="' + describedBy + '">' +
+                '</div>';
+            return '<div class="ll-field" data-field="' + field.id + '">' +
+                '<fieldset class="ll-fieldset">' +
+                    '<legend class="ll-label">' + fieldLabelHtml(field) + '</legend>' +
+                    help +
+                    '<div class="ll-range">' +
+                        box(field.minField, field.minLabel, lo) +
+                        '<span class="ll-range-dash" aria-hidden="true">–</span>' +
+                        box(field.maxField, field.maxLabel, hi) +
+                    '</div>' +
+                    errNode +
+                '</fieldset>' +
             '</div>';
         }
 
@@ -759,7 +898,19 @@ function renderReview() {
     LOK_LOVE_FORM_SCHEMA.forEach((step, idx) => {
         if (step.isReview) return;
         const items = step.fields.map(field => {
-            let v = formState.answers[field.id];
+            let v;
+            if (field.type === 'social') {
+                const handle = formState.answers[field.handleField];
+                v = handle
+                    ? (formState.answers[field.platformField] || '') + ' @' + String(handle).replace(/^@+/, '')
+                    : '';
+            } else if (field.type === 'agerange') {
+                const lo = formState.answers[field.minField];
+                const hi = formState.answers[field.maxField];
+                v = (lo && hi) ? lo + '–' + hi + ' tahun' : '';
+            } else {
+                v = formState.answers[field.id];
+            }
             if (Array.isArray(v)) v = v.join(', ');
             if (v == null || v === '') v = '—';
             return '<div class="ll-review-row">' +
@@ -854,7 +1005,50 @@ function bindStepInputs() {
             }
         };
 
-        if (field.type === 'radio') {
+        /* Composites write their own sub-keys, so they bypass commit(),
+           which is keyed on field.id. */
+        const commitPart = (key, value) => {
+            formState.answers[key] = value;
+            saveDraft();
+            if (wrap.classList.contains('ll-invalid') && !validateField(field, null)) {
+                setFieldError(field.id, null);
+            }
+            if (!formState.startedTracked) {
+                formState.startedTracked = true;
+                trackEvent('lok_love_form_started');
+            }
+        };
+
+        if (field.type === 'social') {
+            wrap.querySelectorAll('input[type="radio"]').forEach(input => {
+                input.addEventListener('change', () => commitPart(field.platformField, input.value));
+            });
+            const handle = wrap.querySelector('#' + field.handleField);
+            if (handle) {
+                const write = () => commitPart(field.handleField, handle.value.trim());
+                handle.addEventListener('input', write);
+                handle.addEventListener('change', write);
+                handle.addEventListener('blur', () => {
+                    // Applicants type the @ about half the time; accept both.
+                    handle.value = handle.value.trim().replace(/^@+/, '');
+                    write();
+                    if (handle.value) setFieldError(field.id, validateField(field, null));
+                });
+            }
+        } else if (field.type === 'agerange') {
+            [field.minField, field.maxField].forEach(key => {
+                const input = wrap.querySelector('#' + key);
+                if (!input) return;
+                const write = () => commitPart(key, input.value.replace(/[^0-9]/g, ''));
+                input.addEventListener('input', () => { input.value = input.value.replace(/[^0-9]/g, ''); write(); });
+                input.addEventListener('change', write);
+                input.addEventListener('blur', () => {
+                    if (formState.answers[field.minField] && formState.answers[field.maxField]) {
+                        setFieldError(field.id, validateField(field, null));
+                    }
+                });
+            });
+        } else if (field.type === 'radio') {
             wrap.querySelectorAll('input[type="radio"]').forEach(input => {
                 input.addEventListener('change', () => commit(input.value));
             });
@@ -963,6 +1157,21 @@ function clearFormError() {
 function buildPayload() {
     const payload = {};
     allFields().forEach(field => {
+        // Composites contribute their sub-keys and no key of their own.
+        if (field.type === 'social') {
+            payload[field.platformField] = String(formState.answers[field.platformField] || '');
+            payload[field.handleField] =
+                String(formState.answers[field.handleField] || '').trim().replace(/^@+/, '');
+            return;
+        }
+        if (field.type === 'agerange') {
+            const lo = formState.answers[field.minField];
+            const hi = formState.answers[field.maxField];
+            payload[field.minField] = lo === '' || lo == null ? null : Number(lo);
+            payload[field.maxField] = hi === '' || hi == null ? null : Number(hi);
+            return;
+        }
+
         let v = formState.answers[field.id];
         if (typeof v === 'string') v = v.trim();
 

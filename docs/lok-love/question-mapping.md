@@ -1,16 +1,16 @@
-# LOK & LOVE — Question → Field → Sheet Column Mapping
+# LOK & LOVE — Question → Field → Column Mapping
 
-Required by PRD §11. This is the contract between the original Google Form,
-the website form, the API payload and the database. Keep it current: a
-question that exists in one place and not the others fails silently.
+Required by PRD §11. This is the contract between the organisers' question
+sheet, the website form, the API payload and the database. Keep it current:
+a question that exists in one place and not the others fails silently.
 
-Keep these four places in sync:
+Keep these five places in sync:
 
 | Where | File |
 |---|---|
 | Website form questions | `lok-love/lok-love.js` → `LOK_LOVE_FORM_SCHEMA` |
 | Request validation | POSGitew `packages/contracts/src/lok-love.schema.js` |
-| Table columns | POSGitew `server/db/schema/49-lok-love-applications.sql` |
+| Table columns | POSGitew `server/db/schema/49-…sql`, `50-lok-love-v2-questions.sql`, `51-lok-love-email-back.sql` |
 | Row → JSON mapping | POSGitew `server/modules/lok-love/lok-love.mapper.ts` |
 | This document | `docs/lok-love/question-mapping.md` |
 
@@ -18,206 +18,135 @@ A field's `id` in the schema is its JSON payload key. The request schema is
 `.strict()`, so an unknown key is rejected rather than silently dropped —
 change an `id` and you must change all of the above.
 
----
+**Two questions carry two answers each** and use a composite field type.
+Their sub-keys, not the field `id`, are what reach the payload:
 
-## Status of this mapping
-
-| | |
-|---|---|
-| **Step 1** | Transcribed **verbatim** from Google Form page 1 — 9 questions |
-| **Steps 2–4** | **Designed for this form.** The Google Form had taken zero responses, so the organisers cleared us (5 September 2026) to write these from scratch rather than mirror the old pages |
-| **Confirmation** | Consents derived from the Google Form's "Informasi Penting" notice |
-| **Photo upload** | **Deliberately not carried over** — see [Photo upload](#photo-upload) |
-
-Because there were no responses to preserve, Steps 2–4 were written against
-the PRD's groupings (§10) and the selection criteria the event itself
-publishes: *"usia, kepribadian, minat, preferensi pasangan, dan penampilan
-secara keseluruhan."* Every question earns its place by feeding one of those.
-
-Question wording is Indonesian — the applicants' language, as in the original
-form — with a smaller English gloss shown underneath as a reading aid. The
-gloss is presentational and is not stored.
-
-Per PRD §12, controlled options are used wherever they beat free text. Only
-three fields are free text, and two of those are optional.
-
-## Step 1 — About You
-
-All nine questions below are transcribed **verbatim** from Google Form page 1,
-in their original order and original Indonesian wording. Meaning must not
-change without organiser approval (PRD §11).
-
-| # | Existing Google Form question | Website field | Type | Required | Database column |
-|---|---|---|---|---|---|
-| 1 | Nama lengkap | `name` | Text | Yes | `Name` |
-| 2 | Usia | `age` | Number (min 21, max 99) | Yes | `Age` |
-| 3 | Jenis kelamin | `gender` | Radio — Pria / Wanita | Yes | `Gender` |
-| 4 | Siapa yang ingin kamu temui dalam acara ini? | `lookingToMeet` | Radio — Pria / Wanita | Yes | `Looking To Meet` |
-| 5 | Kota atau daerah tempat tinggal saat ini | `city` | Text | Yes | `City` |
-| 6 | Pekerjaan atau aktivitas saat ini | `occupation` | Text | Yes | `Occupation` |
-| 7 | Nomor WhatsApp | `whatsapp` | Tel (normalised to `+62…`) | Yes | `WhatsApp` |
-| 8 | Username Instagram/TikTok | `socialHandle` | Text | Yes | `Instagram/TikTok` |
-| 9 | Alamat email | `email` | Email | Yes | `Email` |
-
-### Notes on Step 1
-
-- **Question order is unchanged** from the Google Form.
-- **Wording is unchanged.** Each field also shows a smaller English gloss
-  beneath the Indonesian label (e.g. *Nama lengkap* / "Full name") as a reading
-  aid. The gloss is presentational only — it does not alter the question.
-- **Q2 (Usia)** was free text in the Google Form. On the website it is
-  constrained to 21–99, enforced both client- and server-side, because the
-  event's own rules require participants to be 21+. This tightens data quality
-  without changing what is asked (PRD §12, §13).
-- **Q3 / Q4** keep exactly the two options the Google Form offers (Pria,
-  Wanita). No option was added or removed.
-- **Q7 (Nomor WhatsApp)** is stored normalised to international format
-  (`0812…` → `+62812…`) so duplicate detection is reliable. The applicant may
-  type it in any common format.
-- **Q9 (Alamat email)** replaces the Google Form's automatic Google-account
-  capture. The Google Form recorded the signed-in Google account; the website
-  has no sign-in, so email is asked directly — it was already an explicit
-  required question on page 1, so nothing is lost.
+| Field `id` | Type | Payload keys |
+|---|---|---|
+| `social` | `social` | `socialPlatform`, `socialHandle` |
+| `preferredAge` | `agerange` | `preferredAgeMin`, `preferredAgeMax` |
 
 ---
 
-## Final step — Confirmation
+## Section 1 — Tentang Kamu
 
-These are **not** Google Form questions. They implement the consent
-requirements the PRD specifies for the confirmation step (§10 Step 5) and turn
-the Google Form's "Informasi Penting" notice — previously just text above the
-form — into explicit, auditable tick-boxes.
-
-| Consent | Website field | Type | Required | Database column |
+| # | Question | Payload key | Column | Required |
 |---|---|---|---|---|
-| Information supplied is accurate | `consentAccurate` | Checkbox | Yes | `Consent — Accurate` |
-| Applying does not guarantee selection | `consentSelection` | Checkbox | Yes | `Consent — Selection` |
-| LOK GITEW may make contact about the event | `consentContact` | Checkbox | Yes | `Consent — Contact` |
-| Privacy / data-use terms | `consentPrivacy` | Checkbox | Yes | `Consent — Privacy` |
+| 1 | Nama lengkap | `name` | `name` | ✅ |
+| 2 | Usia | `age` | `age` | ✅ min 19 |
+| 3 | Jenis kelamin | `gender` | `gender` | ✅ Pria \| Wanita |
+| 4 | Siapa yang ingin kamu temui | `lookingToMeet` | `looking_to_meet` | ✅ Pria \| Wanita |
+| 5 | Kota atau daerah | `city` | `city` | ✅ |
+| 6 | Pekerjaan atau aktivitas | `occupation` | `occupation` | ✅ |
+| 7 | Nomor WhatsApp | `whatsapp` | `whatsapp` | ✅ normalised to `+62…` |
+| 8 | Drop your social — platform | `socialPlatform` | `social_platform` | ✅ Instagram \| TikTok |
+| 8 | Drop your social — username | `socialHandle` | `social_handle` | ✅ stored without `@` |
+| 8b | Alamat email | `email` | `email` | ✅ stored lower-cased |
 
-Each is stored as `YES` / `NO`. All four must be ticked before the form will
-submit.
+> Q8b is not on the organisers' sheet. It was added back at their request
+> (6 September 2026) as a second contact channel and a second duplicate key.
 
----
+## Section 2 — Your Vibe
 
-## System-generated columns
+| # | Question | Payload key | Column | Required |
+|---|---|---|---|---|
+| 9 | Sedang lajang? | `relationshipStatus` | `relationship_status` | ✅ |
+| 10 | Rentang usia — minimum | `preferredAgeMin` | `preferred_age_min` | ✅ min 19 |
+| 10 | Rentang usia — maksimum | `preferredAgeMax` | `preferred_age_max` | ✅ must be ≥ min |
+| 11 | Fleksibilitas rentang usia | `ageFlexibility` | `age_flexibility` | ✅ |
+| 12 | Ceritakan tentang dirimu | `selfDescription` | `self_description` | ✅ ≤ 600 |
+| 13 | Gaya bersosialisasi | `socialStyle` | `social_style` | ✅ |
+| 14 | Yang dicari dari seseorang | `valuedQualities` | `valued_qualities` | ✅ max 3, comma-joined |
 
-Written by the server on every successful submission; never supplied by the
-applicant (PRD §16, §17).
+## Section 3 — The Night
 
-| Column | Source | Format |
-|---|---|---|
-| `Application ID` | `nextApplicationId()` | `LL-2026-00001` |
-| `Submitted At` | `new Date().toISOString()` | ISO 8601 UTC |
+| # | Question | Payload key | Column | Required |
+|---|---|---|---|---|
+| 15 | Bisa ikut 19.00 – selesai | `availability` | `availability` | ✅ |
+| 16 | Alergi / pantangan | `dietary` | `dietary` | ✅ free text |
+| 17 | Bersedia difoto / direkam | `photoConsent` | `photo_consent` | ✅ |
+| 18 | Tahu 6×6 dari mana | `hearAboutUs` | `hear_about_us` | ✅ |
 
----
+## Section 4 — Final Check
 
-## Internal / administrative columns
+Every clause is stored individually. "Which terms did this applicant agree
+to, and when" has to be answerable from the row alone, so these are not
+collapsed into one boolean. All are `z.literal(true)`: a submission missing
+any single clause is rejected.
 
-Created empty on every row and maintained by hand by the LOK GITEW team. The
-website never reads or writes these, never returns them in any response, and
-never exposes them to applicants (PRD §19–§21, §26).
+| # | Clause | Payload key | Column |
+|---|---|---|---|
+| 19 | Pembayaran & pembatalan | `consentPayment` | `consent_payment` |
+| 20 | Privasi | `consentPrivacy` | `consent_privacy_v2` |
+| 21 | Perilaku — sopan & menghormati | `conductRespect` | `conduct_respect` |
+| 21 | Perilaku — tanpa pelecehan | `conductHarassment` | `conduct_harassment` |
+| 21 | Perilaku — hormati penolakan | `conductRejection` | `conduct_rejection` |
+| 21 | Perilaku — tanpa foto peserta lain | `conductPhotos` | `conduct_photos` |
+| 21 | Perilaku — penyelenggara boleh mengeluarkan | `conductRemoval` | `conduct_removal` |
+| 22 | Konfirmasi akhir | `consentFinal` | `consent_final` |
+| 23 | Persetujuan elektronik (nama) | `signature` | `signature` |
+| — | Waktu persetujuan | *(server)* | `consented_at` |
 
-| Column | Purpose | Allowed values |
-|---|---|---|
-| `Status` | Application status | `PENDING` (default), `APPROVED`, `REJECTED`, `WAITLIST`, `MATCHED`, `CONFIRMED`, `CANCELLED` |
-| `Admin Notes` | Free-text internal notes | Any |
-| `Match ID` | Internal match reference | e.g. `LL-2026-00021` |
-| `Match Status` | Matching progress | Team's convention |
-| `Contact Status` | Whether/when contacted | Team's convention |
-| `Event Status` | Attendance on the night | Team's convention |
-
----
-
-## Step 2 — Your Vibe
-
-Feeds the *kepribadian* and *minat* selection criteria.
-
-| # | Question | Website field | Type | Required | Database column |
-|---|---|---|---|---|---|
-| 10 | Kepribadian kamu | `personality` | Radio — 5-point introvert↔extrovert | Yes | `Personality` |
-| 11 | Minat & hobi | `interests` | Multi-select, 16 options, max 6 | Yes | `Interests` |
-| 12 | Akhir pekan idealmu | `weekendVibe` | Dropdown — 7 options | Yes | `Ideal Weekend` |
-| 13 | Ceritakan sedikit tentang dirimu | `selfDescription` | Textarea, max 300 | Yes | `Self Description` |
-
-The interests cap of 6 keeps the data useful for seating: an applicant who
-ticks everything tells you nothing. The UI greys out the remaining options
-once the cap is hit rather than rejecting the choice afterwards.
-
----
-
-## Step 3 — What You're Looking For
-
-Feeds the *preferensi pasangan* criterion.
-
-| # | Question | Website field | Type | Required | Database column |
-|---|---|---|---|---|---|
-| 14 | Apa yang kamu cari di acara ini? | `intention` | Radio — 4 options | Yes | `Intention` |
-| 15 | Rentang usia yang kamu harapkan | `preferredAgeRange` | Dropdown — 6 bands | Yes | `Preferred Age Range` |
-| 16 | Kualitas yang paling kamu cari | `valuedQualities` | Multi-select, 11 options, max 3 | Yes | `Valued Qualities` |
-| 17 | Hal yang kurang cocok buatmu | `dealBreakers` | Multi-select, 5 options | No | `Deal Breakers` |
-
-The age bands deliberately overlap (21–25, 24–30, 28–35…) so nobody sits
-awkwardly on a boundary. `dealBreakers` is optional and its options are kept
-factual and behavioural — nothing that invites applicants to rule people out
-on appearance or background.
+> `consent_privacy_v2` carries a suffix because the previous sheet already
+> had a `consent_privacy` column with different wording behind it. Reusing
+> the name would have made two different agreements indistinguishable.
 
 ---
 
-## Step 4 — Event Details
+## Duplicate detection
 
-Practical logistics for the night.
+Either contact detail identifies a repeat applicant: **`event_key` +
+`whatsapp`**, or **`event_key` + `lower(email)`**. Both are enforced by
+unique indexes and checked in the same transaction as the insert.
 
-| # | Question | Website field | Type | Required | Database column |
-|---|---|---|---|---|---|
-| 18 | Bisa hadir pada *(event date and time)*? | `availability` | Radio — 3 options | Yes | `Availability` |
-| 19 | Preferensi makanan atau alergi | `dietary` | Multi-select, 8 options | Yes | `Dietary Requirements` |
-| 20 | Detail alergi atau catatan makanan | `dietaryNotes` | Text, max 200 | No | `Dietary Notes` |
-| 21 | Dari mana kamu tahu acara ini? | `hearAboutUs` | Dropdown — 5 options | Yes | `Heard About Us Via` |
-| 22 | Ada hal lain yang perlu kami tahu? | `additionalInfo` | Textarea, max 400 | No | `Additional Information` |
+The email index is **partial** — `WHERE email IS NOT NULL AND email <> ''`.
+Applications written while the form had no email question carry none, and
+must not all read as duplicates of each other. The runtime check applies
+the same condition.
 
-Q18's label is built from `LOK_LOVE_CONFIG` at runtime, so the date and time in
-the question always match the event details shown on the page.
+A second submission from either matching detail returns
+`{"status":"duplicate"}` with a 200, not an error — the applicant is told
+they have already applied.
 
-Q19 is required and includes an explicit **"Tidak ada"** option — an applicant
-must actively say they have no requirements rather than skipping the question,
-because a missed allergy is the one blank that matters on the night.
+The `email` column is deliberately **nullable** even though the form now
+requires an address. Requiring it is the request schema's job and applies
+to submissions from here on; the column has to keep accommodating rows
+written while there was no question to answer.
 
-Q21 is not used for selection; it tells you which channel actually fills tables.
+## Minimum age
 
----
+**19**, everywhere. The sheet as first written gave 18 in the age question
+and 21 in the final confirmation; the organisers settled it at 19
+(6 September 2026).
+
+One value drives all three places it appears — the age field's floor, the
+Q22 confirmation text and the landing-page copy:
+
+| Where | Constant |
+|---|---|
+| Request validation (**authority**) | `LOK_LOVE_MINIMUM_AGE` in `lok-love.schema.js` |
+| Form field, Q22 text, landing copy | `LOK_LOVE_CONFIG.minimumAge` in `lok-love.js` |
+
+The landing page's static `21` fallbacks were updated too, not just the
+`data-ll` placeholders, so the page is correct before JS runs.
+
+## Questions no longer asked
+
+Dropped from the sheet, but their columns are **kept and made nullable** so
+applications collected under the previous version stay readable. Nothing
+writes them, and the admin dashboard shows them only for rows that have
+them, under "Formulir versi sebelumnya".
+
+`personality` · `interests` · `weekend_vibe` · `intention` ·
+`preferred_age_range` · `deal_breakers` · `dietary_notes` ·
+`additional_info`
+
+`email` was briefly in this list — migration 50 dropped the question, and
+migration 51 brought it back as Q8b. It is a current answer again.
 
 ## Photo upload
 
-The original Google Form collected photos. **The website form does not**, and
-this was a deliberate decision (recommended 5 September 2026, not overturned).
-
-Reasoning:
-
-- The stated purpose is reviewing *"penampilan secara keseluruhan."* The
-  Instagram/TikTok handle collected in Step 1 (Q8, required) already serves
-  that purpose, from a profile the applicant curates and controls.
-- Uploading forced applicants to sign in to a Google account — friction that
-  moving off Google Forms was meant to remove.
-- Storing personal photographs raises the stakes of the data considerably for
-  a system where they would sit alongside applicant contact details.
-
-If the organisers want uploads back, the two workable routes are a
-Drive-backed upload via `DriveApp.createFile()` in `Code.gs` (needs a ~5 MB cap
-and client-side downscaling to survive 4G), or simply requesting a photo over
-WhatsApp after selection, when the team is already in contact. The second keeps
-personal images out of the application store entirely.
-
----
-
-## Adding a question later
-
-1. Add a field object to the relevant step in `LOK_LOVE_FORM_SCHEMA`
-   (`lok-love/lok-love.js`). Supported types: `text`, `tel`, `email`, `number`,
-   `textarea`, `select`, `radio`, `checkbox` (multi-select), `consent`.
-2. Append a row to `COLUMNS` in `Code.gs` — **at the end**, so existing rows
-   stay aligned with their headers.
-3. For a `select`/`radio`, add its allowed values to `CHOICE_FIELDS`; for a
-   `checkbox`, add an entry to `MULTI_FIELDS`. Plain text needs neither — the
-   catch-all loop in `validate()` carries unknown keys through.
-4. Re-run `setupSheet`, redeploy the script, and update this document.
+Still deliberately not carried over. Accepting applicant photographs
+through a public endpoint means storing biometric-adjacent personal data
+with no retention policy, no moderation path and no deletion flow. The
+social handle in Q8 serves the same selection purpose.

@@ -655,6 +655,84 @@ a:focus-visible {
     cursor: pointer;
 }
 
+/* ── Consent sections ──────────────────────────────────────────────── */
+/* A consent that opens a section carries its heading and the terms the
+   applicant is agreeing to; the ones that follow are bare checkboxes
+   belonging to the same section, so only the lead gets the top rule. */
+.ll-field-consent-lead {
+    margin-top: 1.9rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--ll-line);
+}
+.ll-field-consent-lead:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+
+.ll-consent-heading {
+    margin: 0 0 0.7rem;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.04rem;
+    color: var(--ll-cream);
+}
+.ll-consent-body {
+    margin: 0 0 0.6rem;
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--ll-muted);
+}
+.ll-consent-body:last-of-type { margin-bottom: 1rem; }
+
+/* ── Social handle (platform + username) ───────────────────────────── */
+.ll-radio-inline { margin-bottom: 0.75rem; }
+@media (min-width: 520px) {
+    /* Two options only — let them sit side by side without stretching. */
+    .ll-radio-inline { grid-template-columns: repeat(2, minmax(0, 200px)); }
+}
+
+.ll-social-handle { position: relative; display: block; }
+.ll-social-at {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--ll-muted);
+    pointer-events: none;
+}
+/* Needs to outrank `.ll-field input[type="text"]`'s own padding, or the
+   value sits underneath the @. */
+.ll-field .ll-social-handle input[type="text"] { padding-left: 2.35rem; }
+
+.ll-field-note {
+    margin: 0.7rem 0 0;
+    font-size: 0.83rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--ll-cream);
+}
+.ll-field-body {
+    margin: 0.5rem 0 0;
+    font-size: 0.81rem;
+    line-height: 1.6;
+    color: var(--ll-muted);
+}
+
+/* ── Age range (min / max) ─────────────────────────────────────────── */
+.ll-range { display: flex; align-items: flex-end; gap: 0.7rem; }
+.ll-range-box { flex: 1 1 0; min-width: 0; }
+.ll-range-box label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.83rem;
+    color: var(--ll-muted);
+}
+/* Two-digit fields: keep them narrow enough to read as a range, but not
+   so narrow the value crowds the border on a small phone. */
+.ll-range-box input { text-align: center; max-width: 100%; }
+.ll-range-dash {
+    padding-bottom: 0.95rem;
+    color: var(--ll-muted);
+    font-size: 1.1rem;
+}
+
 /* ── Validation ────────────────────────────────────────────────────── */
 .ll-field-error {
     display: flex;
