@@ -42,7 +42,6 @@ const LOK_LOVE_CONFIG = {
        Keep POSGitew's LOK_LOVE_MINIMUM_AGE in step — it is the authority,
        this copy is only for fast feedback. */
     minimumAge:           19,
-    applicationDeadline:  'Jumat, 11 September 2026',
     announcementNote:     'Pendaftar terpilih dihubungi lewat WhatsApp.',
     paymentWindowHours:   24,
     whatsappNumber:       '6285122333769',
