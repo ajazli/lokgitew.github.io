@@ -89,10 +89,17 @@ Multi-selects travel as a JSON array and are stored comma-separated.
 
 ### Event details
 
-Dates, times, venue, price, deadline and capacity live in `LOK_LOVE_CONFIG` at
-the top of `lok-love.js`. The landing-page markup carries the same values as
-static text for crawlers and no-JS, and every `[data-ll="key"]` placeholder is
+Dates, times, venue, price and capacity live in `LOK_LOVE_CONFIG` at the top
+of `lok-love.js`. The landing-page markup carries the same values as static
+text for crawlers and no-JS, and every `[data-ll="key"]` placeholder is
 re-rendered from the config on load — the config wins.
+
+There is deliberately **no closing date**. Applications stay open, and
+nothing in the form gates on a date — the page says only that seats are
+limited and that selected applicants are contacted. Reintroducing a
+deadline means adding the key back to `LOK_LOVE_CONFIG` *and* deciding
+whether the form should actually refuse submissions after it, which it
+currently has no mechanism to do.
 
 ### Before the endpoint is live
 
